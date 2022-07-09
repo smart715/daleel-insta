@@ -178,6 +178,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(InstaDaleelColors.backgroundColor),
+      //
       body: WillPopScope(
         onWillPop: () {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('press BACK again to quit'), duration: Duration(seconds: 2),));
