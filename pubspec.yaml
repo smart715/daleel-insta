@@ -1,0 +1,174 @@
+name: insta_daleel
+description: A new Flutter project.
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.3 <3.0.0"
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  flutter:
+    sdk: flutter
+
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.2
+  flutter_rating_bar: ^4.0.1
+  connectivity_plus: ^2.3.5
+  dio: ^4.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^2.0.0
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/images/intro_sliders/slider_image_one.png
+    - assets/images/intro_sliders/slider_image_two.png
+    - assets/images/intro_sliders/slider_image_three.png
+    - assets/images/sign_in_sign_up_screens/sign_in_sign_up_text_field_background.png
+    - assets/images/sign_in_sign_up_screens/sign_in_sign_up_send_button_background.png
+    - assets/images/main_page/app_bar/add_button_icon.png
+    - assets/images/main_page/bottom_navigation_bar/badge.png
+    - assets/images/main_page/bottom_navigation_bar/categories.png
+    - assets/images/main_page/bottom_navigation_bar/home.png
+    - assets/images/main_page/bottom_navigation_bar/search.png
+    - assets/images/main_page/bottom_navigation_bar/setting.png
+    - assets/images/main_page/app_bar/dp_to_delete.png
+    - assets/images/main_page/home_page/guide_tab/first_slider_image.png
+    - assets/images/main_page/home_page/guide_tab/guid_tab_guide_section_circular_avatar_background.png
+    - assets/images/main_page/home_page/guide_tab/hospital.png
+    - assets/images/main_page/home_page/guide_tab/shopping_cart.png
+    - assets/images/main_page/home_page/guide_tab/information_system.png
+    - assets/images/main_page/home_page/guide_tab/restaurants.png
+    - assets/images/main_page/home_page/guide_tab/guide_tab_second_slider_image.png
+    - assets/images/main_page/home_page/guide_tab/rectangle_one.png
+    - assets/images/main_page/home_page/guide_tab/rectangle_two.png
+    - assets/images/main_page/home_page/guide_tab/ingots.png
+    - assets/images/main_page/home_page/guide_tab/exchange.png
+    - assets/images/main_page/home_page/guide_tab/rating_image_two.png
+    - assets/images/main_page/home_page/guide_tab/rating_image_three.png
+    - assets/images/main_page/home_page/guide_tab/rating_image_one.png
+    - assets/images/main_page/home_page/guide_tab/rating_card_background.png
+    - assets/images/main_page/home_page/guide_tab/rating_card_slider_image.png
+    - assets/images/main_page/home_page/guide_tab/dp_to_delete_two.png
+    - assets/images/main_page/home_page/guide_tab/contact_us_call_icon.png
+    - assets/images/main_page/home_page/guide_tab/online_status_icon.png
+    - assets/images/main_page/home_page/guide_tab/query_stats_icon.png
+    - assets/images/main_page/home_page/guide_tab/guide_tab_search_view_trailing_icon.png
+    - assets/images/main_page/app_bar/main_screen_appbar_help_info_icon.png
+    - assets/images/main_page/app_bar/main_screen_appbar_notification_icon.png
+    - assets/images/shopping_malls/abayas_burqa.png
+    - assets/images/shopping_malls/all_categories.png
+    - assets/images/shopping_malls/baby_clothing.png
+    - assets/images/shopping_malls/beauty_perfumes.png
+    - assets/images/shopping_malls/clothing_for_female.png
+    - assets/images/shopping_malls/clothing_for_male.png
+    - assets/images/shopping_malls/electronics_electricals.png
+    - assets/images/shopping_malls/furniture_decoration.png
+    - assets/images/shopping_malls/glass _accessoriees.png
+    - assets/images/shopping_malls/gold_jewellry.png
+    - assets/images/shopping_malls/malls_commercial_centers.png
+    - assets/images/comapny_inner_page/fluent_arrow_turn_right.png
+    - assets/images/comapny_inner_page/map.png
+    - assets/images/comapny_inner_page/university_rating_card_image.png
+    - assets/images/comapny_inner_page/address.png
+    - assets/images/comapny_inner_page/city.png
+    - assets/images/comapny_inner_page/contact_number.png
+    - assets/images/comapny_inner_page/email_address.png
+    - assets/images/comapny_inner_page/instagram_account.png
+    - assets/images/comapny_inner_page/office_hour.png
+    - assets/images/comapny_inner_page/website.png
+    - assets/images/comapny_inner_page/whats_app.png
+    - assets/images/comapny_inner_page/facebook.png
+    - assets/images/comapny_inner_page/youtube.png
+    - assets/images/comapny_inner_page/telegram.png
+    - assets/images/comapny_inner_page/twitter.png
+    - assets/images/comapny_inner_page/image_one.png
+    - assets/images/comapny_inner_page/image_two.png
+    - assets/images/comapny_inner_page/review_and_rating_image1.png
+    - assets/images/comapny_inner_page/review_and_rating_image2.png
+    - assets/images/main_page/home_page/community_tab/bg1.png
+    - assets/images/main_page/home_page/community_tab/bg2.png
+    - assets/images/main_page/home_page/community_tab/dp1.png
+    - assets/images/main_page/home_page/community_tab/dp2.png
+    - assets/images/main_page/home_page/community_tab/dp3.png
+    - assets/images/main_page/home_page/community_tab/dp4.png
+    - assets/images/main_page/home_page/community_tab/dp5.png
+    - assets/images/main_page/home_page/events_tab/bg1.png
+    - assets/images/main_page/home_page/events_tab/bg2.png
+    - assets/images/main_page/home_page/events_tab/bg3.png
+    - assets/images/main_page/home_page/events_tab/bg4.png
+    - assets/images/main_page/home_page/events_tab/calender_add_icon.png
+  #   - images/a_dot_ham.jpeg
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  fonts:
+    - family: PoppinsRegular
+      fonts:
+        - asset: assets/fonts/poppins_regular.ttf
+    - family: PoppinsBold
+      fonts:
+        - asset: assets/fonts/poppins_bold.ttf
+    - family: PoppinsMedium
+      fonts:
+        - asset: assets/fonts/poppins_medium.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages
