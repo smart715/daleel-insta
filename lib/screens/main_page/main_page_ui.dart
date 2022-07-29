@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:insta_daleel/screens/main_page/home_page/home_page_ui.dart';
+import 'package:insta_daleel/screens/main_page/settings_page/settings_ui.dart';
 import '../../constants/colors.dart';
+import 'featured_page/featured_page_ui.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -86,12 +88,7 @@ class _MainPageState extends State<MainPage> {
       }
 
       case 1 : {
-        return Container(
-          color: Colors.black45,
-          child: const Center(
-            child: Text('Featured'),
-          ),
-        );
+        return const FeaturedCompanies();
       }
 
       case 2 : {
@@ -108,12 +105,7 @@ class _MainPageState extends State<MainPage> {
       }
 
       case 4 :  {
-        return Container(
-          color: Colors.deepOrange,
-          child: const Center(
-            child: Text('Settings'),
-          ),
-        );
+        return const SettingsPage();
       }
 
       default : {

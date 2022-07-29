@@ -20,4 +20,3 @@ class InstaDaleelApp extends StatelessWidget {
     return const IntroSlider();
   }
 }
-

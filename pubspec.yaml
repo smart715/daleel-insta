@@ -97,6 +97,7 @@ flutter:
     - assets/images/main_page/home_page/guide_tab/guide_tab_search_view_trailing_icon.png
     - assets/images/main_page/app_bar/main_screen_appbar_help_info_icon.png
     - assets/images/main_page/app_bar/main_screen_appbar_notification_icon.png
+    # Shopping malls assets
     - assets/images/shopping_malls/abayas_burqa.png
     - assets/images/shopping_malls/all_categories.png
     - assets/images/shopping_malls/baby_clothing.png
@@ -139,6 +140,62 @@ flutter:
     - assets/images/main_page/home_page/events_tab/bg3.png
     - assets/images/main_page/home_page/events_tab/bg4.png
     - assets/images/main_page/home_page/events_tab/calender_add_icon.png
+    # Health and care assets
+    - assets/images/health_and_care/all_categories.png
+    - assets/images/health_and_care/balloon_heart.png
+    - assets/images/health_and_care/brain.png
+    - assets/images/health_and_care/child.png
+    - assets/images/health_and_care/ear.png
+    - assets/images/health_and_care/eye.png
+    - assets/images/health_and_care/female.png
+    - assets/images/health_and_care/hand_open.png
+    - assets/images/health_and_care/hospital_health_center.png
+    - assets/images/health_and_care/injection.png
+    - assets/images/health_and_care/x_ray_scan.png
+    # offers tab card assets
+    - assets/images/main_page/home_page/offers_tab/1.png
+    - assets/images/main_page/home_page/offers_tab/2.png
+    - assets/images/main_page/home_page/offers_tab/3.png
+    - assets/images/main_page/home_page/offers_tab/4.png
+    - assets/images/main_page/home_page/offers_tab/5.png
+    - assets/images/main_page/home_page/offers_tab/6.png
+    # event detail page
+    - assets/images/event_detail/event_image.png
+    - assets/images/event_detail/location.png
+    - assets/images/event_detail/mobile.png
+    - assets/images/event_detail/time.png
+    - assets/images/event_detail/map.png
+    # settings page
+    - assets/images/main_page/settings_page/1.png
+    - assets/images/main_page/settings_page/2.png
+    - assets/images/main_page/settings_page/3.png
+    - assets/images/main_page/settings_page/4.png
+    - assets/images/main_page/settings_page/5.png
+    - assets/images/main_page/settings_page/6.png
+    - assets/images/main_page/settings_page/7.png
+    # featured page
+    - assets/images/main_page/featured_page/1.png
+    - assets/images/main_page/featured_page/2.png
+    - assets/images/main_page/featured_page/3.png
+    - assets/images/main_page/featured_page/4.png
+    - assets/images/main_page/featured_page/5.png
+    - assets/images/main_page/featured_page/carbon_badge.png
+    # gold buying and selling page
+    - assets/images/gold_buying_and_selling_price/gold.png
+    # profile page
+    - assets/images/profile_page/1.png
+    - assets/images/profile_page/2.png
+    - assets/images/profile_page/3.png
+    - assets/images/profile_page/4.png
+    - assets/images/profile_page/5.png
+    # offer details page
+    - assets/images/offer_details/offer_detail_image.png
+    # latest reviews
+    - assets/images/latest_reviews/dp1.png
+    - assets/images/latest_reviews/dp2.png
+    - assets/images/latest_reviews/dp3.png
+    - assets/images/latest_reviews/dp4.png
+    - assets/images/latest_reviews/dp5.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

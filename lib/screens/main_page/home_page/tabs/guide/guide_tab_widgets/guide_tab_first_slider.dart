@@ -61,10 +61,7 @@ class _GuideTabFirstSliderState extends State<GuideTabFirstSlider> {
                         ),
                       ),
                       GestureDetector(
-                        // onTap: widget.guideTabFirstSliderModelList[index].onTap,
-                        onTap: () {
-                          Navigator.pushNamed(context, 'ShoppingMalls');
-                        },
+                        onTap: widget.guideTabFirstSliderModelList[index].onTap,
                         child: Container(
                           height: 40,
                           width: 130,

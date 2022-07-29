@@ -140,9 +140,6 @@ class _ShoppingMallsState extends State<ShoppingMalls> {
                           title: 'Malls &\nCommercial\nCenters',
                           imagePath: 'assets/images/shopping_malls/malls_commercial_centers.png',
                         ),
-                        const SizedBox(
-                          width: leftRightGlobalMargin * 4.0,
-                        ),
                         ShoppingMallsCard(
                           onTap: (){},
                           title: 'All\nCategories',
@@ -162,9 +159,6 @@ class _ShoppingMallsState extends State<ShoppingMalls> {
                           onTap: (){},
                           title: 'Electronics\n& Electricals',
                           imagePath: 'assets/images/shopping_malls/electronics_electricals.png',
-                        ),
-                        const SizedBox(
-                          width: leftRightGlobalMargin * 4.0,
                         ),
                         ShoppingMallsCard(
                           onTap: (){},
@@ -186,9 +180,6 @@ class _ShoppingMallsState extends State<ShoppingMalls> {
                           title: 'Clothing\nFor Female',
                           imagePath: 'assets/images/shopping_malls/clothing_for_female.png',
                         ),
-                        const SizedBox(
-                          width: leftRightGlobalMargin * 4.0,
-                        ),
                         ShoppingMallsCard(
                           onTap: (){},
                           title: 'Beauty\n& Perfumes',
@@ -208,9 +199,6 @@ class _ShoppingMallsState extends State<ShoppingMalls> {
                           onTap: (){},
                           title: 'Furniture\n& Decoration',
                           imagePath: 'assets/images/shopping_malls/furniture_decoration.png',
-                        ),
-                        const SizedBox(
-                          width: leftRightGlobalMargin * 4.0,
                         ),
                         ShoppingMallsCard(
                           onTap: (){},
@@ -232,9 +220,6 @@ class _ShoppingMallsState extends State<ShoppingMalls> {
                           title: 'Baby\nClothing',
                           imagePath: 'assets/images/shopping_malls/baby_clothing.png',
                         ),
-                        const SizedBox(
-                          width: leftRightGlobalMargin * 4.0,
-                        ),
                         ShoppingMallsCard(
                           onTap: (){},
                           title: 'Glass &\nAccessoriees',
@@ -250,12 +235,10 @@ class _ShoppingMallsState extends State<ShoppingMalls> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        const SizedBox(
+                        Container(
+                          margin: const EdgeInsets.only(top: 15, left: leftRightGlobalMargin, right: leftRightGlobalMargin), // it was 10.0
                           height: 90,
-                          width: 170,
-                        ),
-                        const SizedBox(
-                          width: leftRightGlobalMargin * 4.0,
+                          width: 160,
                         ),
                         ShoppingMallsCard(
                           onTap: (){},

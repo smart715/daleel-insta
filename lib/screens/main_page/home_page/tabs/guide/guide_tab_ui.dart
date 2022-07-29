@@ -291,13 +291,17 @@ class _GuideTabState extends State<GuideTab> {
                   iconAssetPath:
                       'assets/images/main_page/home_page/guide_tab/shopping_cart.png',
                   description: 'Shopping And\nCommercial\nFacilities',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, 'ShoppingMalls');
+                  },
                 ),
                 GuideTabGuideSectionCircularAvatar(
                   iconAssetPath:
                       'assets/images/main_page/home_page/guide_tab/hospital.png',
                   description: 'Hospitals\nAnd\nHealth Center',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, 'HospitalAndHealth');
+                  },
                 ),
                 GuideTabGuideSectionCircularAvatar(
                   iconAssetPath: 'assets/images/main_page/home_page/guide_tab/restaurants.png',
@@ -331,36 +335,41 @@ class _GuideTabState extends State<GuideTab> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Container(
-                  // margin: const EdgeInsets.only(left: 0), // it was 10.0
-                  height: 90,
-                  width: MediaQuery.of(context).size.width / 2 - 0, // it was 2 - 15
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(
+                GestureDetector(
+                  onTap: (){
+                    Navigator.pushNamed(context, 'GoldBuyingAndSellingPrice');
+                  },
+                  child: Container(
+                    // margin: const EdgeInsets.only(left: 0), // it was 10.0
+                    height: 90,
+                    width: MediaQuery.of(context).size.width / 2 - 0, // it was 2 - 15
+                    decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage(
+                      'assets/images/main_page/home_page/guide_tab/rectangle_two.png',
+                    ))),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: const [
+                        Image(
+                          height: 30,
+                          width: 30,
+                          fit: BoxFit.contain,
                           image: AssetImage(
-                    'assets/images/main_page/home_page/guide_tab/rectangle_two.png',
-                  ))),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: const [
-                      Image(
-                        height: 30,
-                        width: 30,
-                        fit: BoxFit.contain,
-                        image: AssetImage(
-                          'assets/images/main_page/home_page/guide_tab/ingots.png',
+                            'assets/images/main_page/home_page/guide_tab/ingots.png',
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Gold Buying\n& Selling\nPrice',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
+                        Text(
+                          'Gold Buying\n& Selling\nPrice',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 Container(
@@ -447,7 +456,6 @@ class _GuideTabState extends State<GuideTab> {
             alignment: Alignment.centerRight,
             child: TextButton(
               onPressed: () {
-
               },
               child: const Text(
                 'See More',
@@ -472,7 +480,7 @@ class _GuideTabState extends State<GuideTab> {
             alignment: Alignment.centerRight,
             child: TextButton(
               onPressed: () {
-
+                Navigator.pushNamed(context, 'LatestCompanyReviews');
               },
               child: const Text(
                 'Latest Review',

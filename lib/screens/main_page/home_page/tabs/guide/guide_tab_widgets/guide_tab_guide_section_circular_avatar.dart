@@ -8,40 +8,43 @@ class GuideTabGuideSectionCircularAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Container(
-          height: 75,
-          width: 75,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(40),
-            image: const DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage(
-                'assets/images/main_page/home_page/guide_tab/guid_tab_guide_section_circular_avatar_background.png',
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            height: 75,
+            width: 75,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(40),
+              image: const DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage(
+                  'assets/images/main_page/home_page/guide_tab/guid_tab_guide_section_circular_avatar_background.png',
+                )
               )
-            )
-          ),
-          child: Center(
-            child: Image(
-              height: 30,
-              width: 30,
-              image: AssetImage(
-                iconAssetPath,
+            ),
+            child: Center(
+              child: Image(
+                height: 30,
+                width: 30,
+                image: AssetImage(
+                  iconAssetPath,
+                ),
               ),
             ),
           ),
-        ),
-        Text(
-          description,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 12,
-          ),
-        )
-      ],
+          Text(
+            description,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 12,
+            ),
+          )
+        ],
+      ),
     );
   }
 }

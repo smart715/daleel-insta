@@ -98,7 +98,9 @@ class _EventsTabState extends State<EventsTab> {
             iconPath: 'assets/images/main_page/home_page/events_tab/calender_add_icon.png',
           ),
           EventCard(
-            onTap: (){},
+            onTap: (){
+              Navigator.pushNamed(context, 'EventDetail');
+            },
             title: 'Annual Musical Event',
             subTitle: 'Today At 8:00 PM',
             backgroundImagePath: 'assets/images/main_page/home_page/events_tab/bg2.png',
