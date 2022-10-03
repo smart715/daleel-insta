@@ -9,15 +9,23 @@ mixin ConnectivityHandler {
   late StreamSubscription<ConnectivityResult> connectivitySubscription;
   bool isConnectedToNetwork = false;
 
-  Future<bool> _checkMyInitialConnectionState(BuildContext context, {bool allowSnackBar = true}) async {
+  Future<bool> _checkMyInitialConnectionState(BuildContext context,
+      {bool allowSnackBar = true}) async {
     try {
-      _connectivityResult =  await connectivity.checkConnectivity();
+      _connectivityResult = await connectivity.checkConnectivity();
       _checkMyConnectivity(_connectivityResult);
       return true;
     } on Exception {
       if (allowSnackBar) {
         ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('something went wrong, please try again', style: TextStyle(fontFamily: 'Roboto',),),));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            'something went wrong, please try again',
+            style: TextStyle(
+              fontFamily: 'Roboto',
+            ),
+          ),
+        ));
       }
       return false;
     }
@@ -25,41 +33,66 @@ mixin ConnectivityHandler {
 
   void _checkMyConnectivity(ConnectivityResult result) async {
     _connectivityResult = result;
-    if (_connectivityResult == ConnectivityResult.wifi || _connectivityResult == ConnectivityResult.mobile) {
+    if (_connectivityResult == ConnectivityResult.wifi ||
+        _connectivityResult == ConnectivityResult.mobile) {
       isConnectedToNetwork = true;
-    }
-    else {
+    } else {
       isConnectedToNetwork = false;
     }
   }
 
-  Future<bool> checkForInternetServiceAvailability(BuildContext context, {bool allowSnackBar = true}) async {
-    if (await _checkMyInitialConnectionState(context, allowSnackBar: allowSnackBar)) {
+  Future<bool> checkForInternetServiceAvailability(BuildContext context,
+      {bool allowSnackBar = true}) async {
+    if (await _checkMyInitialConnectionState(context,
+        allowSnackBar: allowSnackBar)) {
       if (isConnectedToNetwork) {
         try {
-          List<InternetAddress> result = await InternetAddress.lookup('example.com').timeout(const Duration(seconds: 10));
+          return true;
+          List<InternetAddress> result =
+              await InternetAddress.lookup('example.com')
+                  .timeout(const Duration(seconds: 10));
           if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
             return true;
           } else {
             if (allowSnackBar) {
               // ignore: use_build_context_synchronously
               ScaffoldMessenger.of(context).clearSnackBars();
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('unable to connect, please try again', style: TextStyle(fontFamily: 'Roboto',),),));
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text(
+                  'unable to connect, please try again',
+                  style: TextStyle(
+                    fontFamily: 'Roboto',
+                  ),
+                ),
+              ));
             }
             return false;
           }
         } catch (e) {
-            if (allowSnackBar) {
-              ScaffoldMessenger.of(context).clearSnackBars();
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('timeout, no internet access', style: TextStyle(fontFamily: 'Roboto',),),));
-            }
-            return false;
+          if (allowSnackBar) {
+            ScaffoldMessenger.of(context).clearSnackBars();
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text(
+                'timeout, no internet access',
+                style: TextStyle(
+                  fontFamily: 'Roboto',
+                ),
+              ),
+            ));
+          }
+          return false;
         }
-      }
-      else {
+      } else {
         if (allowSnackBar) {
           ScaffoldMessenger.of(context).clearSnackBars();
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('you are not connected to internet', style: TextStyle(fontFamily: 'Roboto',),),));
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+              'you are not connected to internet',
+              style: TextStyle(
+                fontFamily: 'Roboto',
+              ),
+            ),
+          ));
         }
         return false;
       }
