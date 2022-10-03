@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:insta_daleel/screens/main_page/home_page/home_page_ui.dart';
 import 'package:insta_daleel/screens/main_page/settings_page/settings_ui.dart';
 import '../../constants/colors.dart';
+import 'categories_page/categories_screen.dart';
 import 'featured_page/featured_page_ui.dart';
+import 'main_page_behavior.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -11,9 +13,7 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
-  int currentIndex = 2;
-  DateTime? time;
+class _MainPageState extends State<MainPage> with MainPageBehavior {
 
   BottomNavigationBarItem getBottomNavigationBarItem({required String iconAssetPath, required String title}) {
     return BottomNavigationBarItem(
@@ -77,14 +77,9 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget getBottomNavigationPage() {
-    switch(currentIndex) {
+    switch(MainPageBehavior.currentIndex) {
       case 0 : {
-        return Container(
-          color: Colors.amber,
-          child: const Center(
-            child: Text('Category'),
-          ),
-        );
+        return const CategoriesPageNavigator();
       }
 
       case 1 : {
@@ -167,10 +162,15 @@ class _MainPageState extends State<MainPage> {
   }*/
 
   @override
+  void initState() {
+    MainPageBehavior.setStateOfMainPageScreen = (){setState(() {});};
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(InstaDaleelColors.backgroundColor),
-      //
       body: WillPopScope(
         onWillPop: () {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('press BACK again to quit'), duration: Duration(seconds: 2),));
@@ -181,6 +181,7 @@ class _MainPageState extends State<MainPage> {
           }
           return Future.value(true);
         },
+
         child: SafeArea(
           child: Column(
             children: [
@@ -197,7 +198,7 @@ class _MainPageState extends State<MainPage> {
         ),
         elevation: 0.0,
         backgroundColor: const Color(InstaDaleelColors.backgroundColor),
-        currentIndex: currentIndex,
+        currentIndex: MainPageBehavior.currentIndex,
         items: [
           getBottomNavigationBarItem(iconAssetPath: 'assets/images/main_page/bottom_navigation_bar/categories.png', title: 'Categories'),
           getBottomNavigationBarItem(iconAssetPath: 'assets/images/main_page/bottom_navigation_bar/badge.png', title: 'Featured'),
@@ -207,7 +208,7 @@ class _MainPageState extends State<MainPage> {
         ],
         onTap: (int index) {
           setState(() {
-            currentIndex = index;
+            MainPageBehavior.currentIndex = index;
           });
         },
       ),

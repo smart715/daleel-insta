@@ -1,10 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:insta_daleel/constants/colors.dart';
 
 class EventCard extends StatelessWidget {
-  const EventCard({Key? key, required this.title, required this.subTitle, required this.backgroundImagePath, required this.iconPath, required this.onTap}) : super(key: key);
+  const EventCard({Key? key, required this.title, required this.dateAndTime, required this.backgroundImageLink, required this.iconPath, required this.onTap}) : super(key: key);
 
-  final String title, subTitle, backgroundImagePath, iconPath;
+  final String title, dateAndTime, backgroundImageLink, iconPath;
   final VoidCallback onTap;
 
   @override
@@ -17,11 +18,16 @@ class EventCard extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         child: Stack(
           children: [
-            Image(
-              fit: BoxFit.contain,
-              image: AssetImage(
-                backgroundImagePath,
+            CachedNetworkImage(
+              fit: BoxFit.fill,
+              imageUrl: backgroundImageLink,
+              placeholder: (BuildContext context, String url) => const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 2,
+                ),
               ),
+              errorWidget: (context, url, error) => const Center(child: Icon(Icons.error_outline_outlined, color: Colors.white,)),
             ),
             Positioned(
               right: 30,
@@ -45,7 +51,7 @@ class EventCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          subTitle,
+                          dateAndTime,
                           textAlign: TextAlign.end,
                           style: const TextStyle(
                             color: Colors.white,

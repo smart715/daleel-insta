@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-bool isKeyboardOpen = false;
-typedef Validator = String? Function(String? value);
+
+import '../global_members.dart';
+
 class SignInAndSignUpTextField extends StatelessWidget {
   const SignInAndSignUpTextField({Key? key, required this.labelText, required this.hintText, required this.textEditingController, this.isObscureText = false, required this.validator, this.textInputType}) : super(key: key);
 

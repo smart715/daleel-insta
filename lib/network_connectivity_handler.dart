@@ -16,6 +16,7 @@ mixin ConnectivityHandler {
       return true;
     } on Exception {
       if (allowSnackBar) {
+        ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('something went wrong, please try again', style: TextStyle(fontFamily: 'Roboto',),),));
       }
       return false;
@@ -42,12 +43,14 @@ mixin ConnectivityHandler {
           } else {
             if (allowSnackBar) {
               // ignore: use_build_context_synchronously
+              ScaffoldMessenger.of(context).clearSnackBars();
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('unable to connect, please try again', style: TextStyle(fontFamily: 'Roboto',),),));
             }
             return false;
           }
         } catch (e) {
             if (allowSnackBar) {
+              ScaffoldMessenger.of(context).clearSnackBars();
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('timeout, no internet access', style: TextStyle(fontFamily: 'Roboto',),),));
             }
             return false;
@@ -55,6 +58,7 @@ mixin ConnectivityHandler {
       }
       else {
         if (allowSnackBar) {
+          ScaffoldMessenger.of(context).clearSnackBars();
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('you are not connected to internet', style: TextStyle(fontFamily: 'Roboto',),),));
         }
         return false;

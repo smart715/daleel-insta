@@ -97,6 +97,11 @@ class _SignUpState extends State<SignUp> with SignUpBehavior, ConnectivityHandle
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('something went wrong, please try again',),));
         }
       }
+      else {
+        isSigningUp = false;
+        signingUpIndicator();
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('server not responding, please try again',),));
+      }
     }
     else {
       isSigningUp = false;
@@ -217,7 +222,7 @@ class _SignUpState extends State<SignUp> with SignUpBehavior, ConnectivityHandle
                       hintText: 'Enter full name',
                       textEditingController: signUpFullNameFieldTextEditingController,
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
+                        if (value == null || value.trim().isEmpty) {
                           return 'Name can\'t be empty.';
                         }
                         return null;
@@ -228,7 +233,7 @@ class _SignUpState extends State<SignUp> with SignUpBehavior, ConnectivityHandle
                       hintText: 'Enter email address',
                       textEditingController: signUpEmailAddressFieldTextEditingController,
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
+                        if (value == null || value.trim().isEmpty) {
                           return 'Email can\'t be empty.';
                         }
                         return null;
@@ -240,7 +245,7 @@ class _SignUpState extends State<SignUp> with SignUpBehavior, ConnectivityHandle
                       textEditingController: signUpMobileNumberFieldTextEditingController,
                       textInputType: TextInputType.number,
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
+                        if (value == null || value.trim().isEmpty) {
                           return 'Mobile number can\'t be empty.';
                         }
                         return null;

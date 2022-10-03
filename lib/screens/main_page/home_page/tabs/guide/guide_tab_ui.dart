@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:insta_daleel/constants/colors.dart';
+import 'package:insta_daleel/screens/main_page/home_page/tabs/guide/guide_tab_behavior.dart';
 import 'package:insta_daleel/screens/main_page/home_page/tabs/guide/guide_tab_widgets/guide_tab_rating_card.dart';
 import 'package:insta_daleel/screens/main_page/home_page/tabs/guide/guide_tab_widgets/guide_tab_rating_slider.dart';
 import 'package:insta_daleel/screens/main_page/home_page/tabs/guide/guide_tab_widgets/guide_tab_second_slider.dart';
-import 'package:insta_daleel/screens/main_page/home_page/tabs/guide/guide_tab_widgets/guide_tab_third_slider.dart';
+import 'package:insta_daleel/screens/main_page/home_page/tabs/guide/guide_tab_widgets/latest_post_section.dart';
+import 'package:insta_daleel/screens/main_page/main_page_behavior.dart';
 import '../../../../../global_members.dart';
+import '../../home_page_behavior.dart';
+import 'guide_tab_widgets/guide_tab_box_section.dart';
 import 'guide_tab_widgets/guide_tab_contact_us_section.dart';
-import 'guide_tab_widgets/guide_tab_first_slider.dart';
-import 'guide_tab_widgets/guide_tab_guide_section_circular_avatar.dart';
+import 'guide_tab_widgets/guide_tab_ad_banner.dart';
+import 'guide_tab_widgets/guide_tab_category_section.dart';
 import 'guide_tab_widgets/guide_tab_online_now_section.dart';
 
 class GuideTab extends StatefulWidget {
@@ -18,32 +22,6 @@ class GuideTab extends StatefulWidget {
 }
 
 class _GuideTabState extends State<GuideTab> {
-  List<GuideTabFirstSliderModel> guideTabFirstSliderModelList = [
-    GuideTabFirstSliderModel(
-      description: 'Get The Best\nShopping Offer From\nThe App 1!',
-      imageAssetPath:
-          'assets/images/main_page/home_page/guide_tab/first_slider_image.png',
-      onTap: () {
-        debugPrint('1');
-      },
-    ),
-    GuideTabFirstSliderModel(
-      description: 'Get The Best\nShopping Offer From\nThe App 2!',
-      imageAssetPath:
-          'assets/images/main_page/home_page/guide_tab/first_slider_image.png',
-      onTap: () {
-        debugPrint('2');
-      },
-    ),
-    GuideTabFirstSliderModel(
-      description: 'Get The Best\nShopping Offer From\nThe App 3!',
-      imageAssetPath:
-          'assets/images/main_page/home_page/guide_tab/first_slider_image.png',
-      onTap: () {
-        debugPrint('3');
-      },
-    ),
-  ];
 
   List<GuideTabSecondSliderModel> guideTabSecondSliderModel = [
     GuideTabSecondSliderModel(
@@ -150,61 +128,14 @@ class _GuideTabState extends State<GuideTab> {
     ),
   ];
 
-  List<GuideTabThirdSliderModel> guideTabThirdSliderModelList = [
-    GuideTabThirdSliderModel(
-      personName: 'Abdul Rashid',
-      favouritiesCount: 22,
-      messageCount: 32,
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vitae, at orci mattis augue est eu. Ac ullamcorper amet .......amet nullam sagittis malesuada. ',
-      onTap: () {
-        debugPrint('1');
-      },
-      favouritiesIconOnTap: () {
-        debugPrint('2');
-      },
-      messageIconOnTap: () {
-        debugPrint('3');
-      },
-    ),
-    GuideTabThirdSliderModel(
-      personName: 'Abdul Rashid',
-      favouritiesCount: 22,
-      messageCount: 32,
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vitae, at orci mattis augue est eu. Ac ullamcorper amet .......amet nullam sagittis malesuada. ',
-      // imageAssetPath: 'assets/images/main_page/home_page/guide_tab/rating_card_slider_image.png',
-      onTap: () {
-        debugPrint('2');
-      },
-      favouritiesIconOnTap: () {},
-      messageIconOnTap: () {},
-    ),
-    GuideTabThirdSliderModel(
-      personName: 'Abdul Rashid',
-      favouritiesCount: 22,
-      messageCount: 32,
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vitae, at orci mattis augue est eu. Ac ullamcorper amet .......amet nullam sagittis malesuada. ',
-      // imageAssetPath: 'assets/images/main_page/home_page/guide_tab/rating_card_slider_image.png',
-      onTap: () {
-        debugPrint('3');
-      },
-      favouritiesIconOnTap: () {},
-      messageIconOnTap: () {},
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: Column(
         children: [
-          // first slider
-          SizedBox(
-              height: 250,
-              width: MediaQuery.of(context).size.width,
-              child: GuideTabFirstSlider(
-                guideTabFirstSliderModelList: guideTabFirstSliderModelList,
-              )),
+          // Ad Banner
+          const GuideTabAdBanner(),
 
           // search view
           Container(
@@ -265,7 +196,8 @@ class _GuideTabState extends State<GuideTab> {
                   ),
                   TextButton(
                     onPressed: () {
-                      debugPrint('View All');
+                      MainPageBehavior.currentIndex = 0;
+                      MainPageBehavior.setStateOfMainPageScreen();
                     },
                     child: const Text(
                       'View All',
@@ -281,45 +213,15 @@ class _GuideTabState extends State<GuideTab> {
           ),
 
           // circular avatar (guide) section
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
             height: 130,
             width: MediaQuery.of(context).size.width,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                GuideTabGuideSectionCircularAvatar(
-                  iconAssetPath:
-                      'assets/images/main_page/home_page/guide_tab/shopping_cart.png',
-                  description: 'Shopping And\nCommercial\nFacilities',
-                  onTap: () {
-                    Navigator.pushNamed(context, 'ShoppingMalls');
-                  },
-                ),
-                GuideTabGuideSectionCircularAvatar(
-                  iconAssetPath:
-                      'assets/images/main_page/home_page/guide_tab/hospital.png',
-                  description: 'Hospitals\nAnd\nHealth Center',
-                  onTap: () {
-                    Navigator.pushNamed(context, 'HospitalAndHealth');
-                  },
-                ),
-                GuideTabGuideSectionCircularAvatar(
-                  iconAssetPath: 'assets/images/main_page/home_page/guide_tab/restaurants.png',
-                  description: 'Restaurants\nAnd\nCafeterias',
-                  onTap: () {},
-                ),
-                GuideTabGuideSectionCircularAvatar(
-                  iconAssetPath: 'assets/images/main_page/home_page/guide_tab/information_system.png',
-                  description: 'Information\nSystem\nSoftware',
-                  onTap: () {},
-                ),
-              ],
-            ),
+            child: const GuideTabCategorySection(),
           ),
 
           // second slider
-          Container(
-            margin: const EdgeInsets.only(top: 20),
+          SizedBox(
             height: 250,
             width: MediaQuery.of(context).size.width,
             child: GuideTabSecondSlider(
@@ -327,85 +229,12 @@ class _GuideTabState extends State<GuideTab> {
             ),
           ),
 
-          // gold and currency card section
+          // box section
           Container(
             alignment: Alignment.topCenter,
             height: 100,
             width: MediaQuery.of(context).size.width,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                GestureDetector(
-                  onTap: (){
-                    Navigator.pushNamed(context, 'GoldBuyingAndSellingPrice');
-                  },
-                  child: Container(
-                    // margin: const EdgeInsets.only(left: 0), // it was 10.0
-                    height: 90,
-                    width: MediaQuery.of(context).size.width / 2 - 0, // it was 2 - 15
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage(
-                      'assets/images/main_page/home_page/guide_tab/rectangle_two.png',
-                    ))),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: const [
-                        Image(
-                          height: 30,
-                          width: 30,
-                          fit: BoxFit.contain,
-                          image: AssetImage(
-                            'assets/images/main_page/home_page/guide_tab/ingots.png',
-                          ),
-                        ),
-                        Text(
-                          'Gold Buying\n& Selling\nPrice',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(right: 0), // it was 10.0
-                  height: 90,
-                  width: MediaQuery.of(context).size.width / 2 - 0, // it was 2 - 15
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage(
-                    'assets/images/main_page/home_page/guide_tab/rectangle_one.png',
-                  ))),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: const [
-                      Image(
-                        height: 30,
-                        width: 30,
-                        fit: BoxFit.contain,
-                        image: AssetImage(
-                          'assets/images/main_page/home_page/guide_tab/exchange.png',
-                        ),
-                      ),
-                      Text(
-                        'Foreign\nCurrency\nExchange',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            child: const BoxSection(),
           ),
 
           // Latest Addition button
@@ -525,31 +354,51 @@ class _GuideTabState extends State<GuideTab> {
             thickness: 3,
           ),
 
-          // Latest Community button
-          Container(
-            padding: const EdgeInsets.only(right: leftRightGlobalMargin),
-            height: 50,
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              onPressed: () {
-
-              },
-              child: const Text(
-                'Latest Community',
-                style: TextStyle(
-                  fontSize: 18,
+          // Latest Community text
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // refresh post
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: InkWell(
+                  onTap: () {
+                    GuideTabBehavior.latestPostSliderIndex = 0;
+                    GuideTabBehavior.setStateOfGuideTabLatestPostListView();
+                  },
+                  child: SizedBox(
+                    height: 40,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(
+                          Icons.replay_circle_filled_rounded,
+                          color: Color(InstaDaleelColors.primaryColor),
+                          size: 25,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
+              const Padding(
+                padding: EdgeInsets.only(right: leftRightGlobalMargin),
+                child: Text(
+                  'Latest Community',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Color(InstaDaleelColors.primaryColor)
+                  ),
+                ),
+              ),
+            ],
           ),
 
-          // third slider
+          // Latest Posts PageView.Builder
           SizedBox(
-              height: 200,
+              height: 175,
               width: MediaQuery.of(context).size.width,
-              child: GuideTabThirdSlider(
-                guideTabThirdSliderModelList: guideTabThirdSliderModelList,
-              )),
+              child: const LatestPost()),
 
           // third 'see more'
           Container(
@@ -558,7 +407,7 @@ class _GuideTabState extends State<GuideTab> {
             alignment: Alignment.centerRight,
             child: TextButton(
               onPressed: () {
-
+                HomePageBehavior.homePageTabController.index = 3;
               },
               child: const Text(
                 'See More',

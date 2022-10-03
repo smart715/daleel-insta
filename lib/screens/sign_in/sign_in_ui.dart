@@ -60,6 +60,19 @@ class _SignInState extends State<SignIn> with SignInBehavior, ConnectivityHandle
           signInResponseStatus = signInResponseMap['status'] is String ? signInResponseMap['status'] : '';
 
           if(signInResponseStatus == 'success') {
+            bearerToken = signInResponseMap['access_token'] is String ? signInResponseMap['access_token'] : '';
+            userId = signInResponseMap['data'] is Map<String, dynamic> ?
+            signInResponseMap['data']['id'] is int ?
+            signInResponseMap['data']['id'] : -1 : -1;
+
+            userName = signInResponseMap['data'] is Map<String, dynamic> ?
+            signInResponseMap['data']['name'] is String ?
+            signInResponseMap['data']['name'] : '---' : '---';
+
+            userProfilePicLink = signInResponseMap['data'] is Map<String, dynamic> ?
+            signInResponseMap['data']['image'] is String ?
+            'https://insta-daleel.emicon.tech/images/customer/${signInResponseMap['data']['image']}' : null : null;
+
             isSigningIn = false;
             signingInIndicator();
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('signed in successfully',),));
@@ -83,7 +96,6 @@ class _SignInState extends State<SignIn> with SignInBehavior, ConnectivityHandle
           isSigningIn = false;
           signingInIndicator();
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('something went wrong, please try again',),));
-          // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('........$signInResponseStatus',),));
         }
 
       } on Exception {

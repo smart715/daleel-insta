@@ -1,22 +1,30 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:insta_daleel/screens/add_comment_page/add_comment_ui.dart';
 import 'package:insta_daleel/screens/add_company_page/add_company_ui.dart';
-import 'package:insta_daleel/screens/edit_profile_page/edit_profile_ui.dart';
+import 'package:insta_daleel/screens/add_post_page/add_post_ui.dart';
+import 'package:insta_daleel/screens/all_category_page/all_category_ui.dart';
+import 'package:insta_daleel/screens/edit_profile_page/update_profile_ui.dart';
 import 'package:insta_daleel/screens/event_detail_page/event_detail_ui.dart';
-import 'package:insta_daleel/screens/gold_buying_and_selling_price_page/gold_buying_and_selling_price_ui.dart';
+import 'package:insta_daleel/screens/get_specific_person_post_page/get_specific_person_post_behavior.dart';
+import 'package:insta_daleel/screens/get_specific_person_post_page/get_specific_person_post_ui.dart';
 import 'package:insta_daleel/screens/latest_company_reviews_page/latest_company_reviews_ui.dart';
 import 'package:insta_daleel/screens/latest_reviews_page/latest_reviews_ui.dart';
 import 'package:insta_daleel/screens/main_page/home_page/home_page_behavior.dart';
 import 'package:insta_daleel/screens/main_page/home_page/tabs/community/community_tab_ui.dart';
 import 'package:insta_daleel/screens/main_page/home_page/tabs/events/events_tab_ui.dart';
+import 'package:insta_daleel/screens/main_page/home_page/tabs/guide/guide_tab_behavior.dart';
 import 'package:insta_daleel/screens/main_page/home_page/tabs/guide/guide_tab_ui.dart';
 import 'package:insta_daleel/screens/main_page/home_page/tabs/offers/offers_tab_ui.dart';
 import 'package:insta_daleel/screens/offer_details_page/offer_details_ui.dart';
 import 'package:insta_daleel/screens/profile_page/profile_page_ui.dart';
+import 'package:insta_daleel/screens/update_post_page/update_post_ui.dart';
 import '../../../constants/colors.dart';
-import '../../community_inside_photo_page/community_inside_photo_ui.dart';
+import '../../../global_members.dart';
+import '../../box_detail_page/box_detail_ui.dart';
 import '../../company_inner_page/company_inner_page_ui.dart';
-import '../../hospital_and_health/hospital_and_health_ui.dart';
-import '../../shopping_malls/shopping_malls_ui.dart';
+import '../../post_detail_page/post_detail_ui.dart';
+import '../../sub_category_page/sub_category_ui.dart';
 
 class HomePageNavigator extends StatefulWidget {
   const HomePageNavigator({Key? key}) : super(key: key);
@@ -28,7 +36,8 @@ class HomePageNavigator extends StatefulWidget {
 class _HomePageNavigatorState extends State<HomePageNavigator> {
   @override
   Widget build(BuildContext context) {
-    return Navigator(
+    return
+      Navigator(
       initialRoute: HomePage.homePageRoute,
       onGenerateRoute: (settings) {
         switch(settings.name) {
@@ -37,23 +46,20 @@ class _HomePageNavigatorState extends State<HomePageNavigator> {
               return const HomePage();
             },);
           }
-          case ShoppingMalls.shoppingMallsRoute: {
-            return MaterialPageRoute(builder: (context) => const ShoppingMalls(),);
-          }
           case CompanyInnerPage.companyInnerPageRoute: {
             return MaterialPageRoute(builder: (context) => const CompanyInnerPage(),);
           }
-          case CommunityInsidePhotoPage.communityInsidePhotoRoute: {
-            return MaterialPageRoute(builder: (context) => const CommunityInsidePhotoPage(),);
-          }
-          case HospitalAndHealth.hospitalAndHealthRoute: {
-            return MaterialPageRoute(builder: (context) => const HospitalAndHealth(),);
+          case PostDetailPage.postDetailPageRoute: {
+            List<int> idsList = settings.arguments as List<int>;
+            return MaterialPageRoute(builder: (context) => PostDetailPage(customerId: idsList[0], postId: idsList[1]),);
           }
           case EventDetail.eventDetailRoute: {
-            return MaterialPageRoute(builder: (context) => const EventDetail(),);
+            int eventId = settings.arguments as int;
+            return MaterialPageRoute(builder: (context) => EventDetail(eventId: eventId),);
           }
-          case GoldBuyingAndSellingPrice.goldBuyingAndSellingPriceRoute: {
-            return MaterialPageRoute(builder: (context) => const GoldBuyingAndSellingPrice(),);
+          case BoxDetail.boxDetailRoute: {
+            int boxId = settings.arguments as int;
+            return MaterialPageRoute(builder: (context) => BoxDetail(boxId: boxId),);
           }
           case LatestCompanyReviews.latestCompanyReviewsRoute: {
             return MaterialPageRoute(builder: (context) => const LatestCompanyReviews(),);
@@ -70,8 +76,33 @@ class _HomePageNavigatorState extends State<HomePageNavigator> {
           case AddCompany.addCompanyRoute: {
             return MaterialPageRoute(builder: (context) => const AddCompany(),);
           }
-          case EditProfile.editProfileRoute: {
-            return MaterialPageRoute(builder: (context) => const EditProfile(),);
+          case UpdateProfile.editProfileRoute: {
+            return MaterialPageRoute(builder: (context) => const UpdateProfile(),);
+          }
+          case GetSpecificPersonPost.getSpecificPersonPostRoute: {
+            int id = settings.arguments as int;
+            return MaterialPageRoute(builder: (context) => GetSpecificPersonPost(customerId: id,),);
+          }
+          case AddPostScreen.addPostScreenRoute: {
+            return MaterialPageRoute(builder: (context) => const AddPostScreen(),);
+          }
+          case AddCommentScreen.addCommentScreenRoute: {
+            int id = settings.arguments as int;
+            return MaterialPageRoute(builder: (context) => AddCommentScreen(postId: id),);
+          }
+          case UpdatePostScreen.updatePostScreenRoute: {
+            List<dynamic> list = settings.arguments as List<dynamic>;
+            return MaterialPageRoute(builder: (context) => UpdatePostScreen(
+              postId: list[0],
+              descriptionToBeUpdated: list[1],
+            ),);
+          }
+          case SubCategories.subCategoriesRoute: {
+            List<String> argumentList = settings.arguments as List<String>;
+            return MaterialPageRoute(builder: (context) => SubCategories(
+              categoryId: argumentList[0],
+              categoryName: argumentList[1],
+            ),);
           }
           default: {
             return MaterialPageRoute(builder: (context) => const Center(child: Text('Default Screen'),),);
@@ -93,10 +124,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with HomePageBehavior, TickerProviderStateMixin{
 
+
   @override
   void initState() {
-    homePageTabController = TabController(length: 4, vsync: this);
-    homePageTabController.index = 0;
+    HomePageBehavior.homePageTabController = TabController(length: 4, vsync: this);
+    HomePageBehavior.homePageTabController.index = 0;
+    HomePageBehavior.homePageTabController.addListener(() {
+      GuideTabBehavior.latestPostSliderIndex = 0;
+    });
     super.initState();
   }
 
@@ -108,31 +143,7 @@ class _HomePageState extends State<HomePage> with HomePageBehavior, TickerProvid
           height: 70,
           width: MediaQuery.of(context).size.width,
           child: ListTile(
-            leading: Material(
-              borderRadius: BorderRadius.circular(25),
-              elevation: 5.0,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, 'ProfilePage');
-                },
-                child: Container(
-                  height: 50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 1.0,
-                      style: BorderStyle.solid,
-                    ),
-                    image: const DecorationImage(
-                      image: AssetImage('assets/images/main_page/app_bar/dp_to_delete.png'),
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            leading: const HomePageProfilePic(),
             title: const Center(
               child: Text(
                 'Insta Daleel',
@@ -151,9 +162,7 @@ class _HomePageState extends State<HomePage> with HomePageBehavior, TickerProvid
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   InkWell(
-                    onTap: () {
-
-                    },
+                    onTap: () {},
                     borderRadius: BorderRadius.circular(15),
                     child: const Image(
                       height: 25,
@@ -165,9 +174,7 @@ class _HomePageState extends State<HomePage> with HomePageBehavior, TickerProvid
                     ),
                   ),
                   InkWell(
-                    onTap: () {
-
-                    },
+                    onTap: () {},
                     borderRadius: BorderRadius.circular(15),
                     child: const Image(
                       height: 25,
@@ -215,7 +222,7 @@ class _HomePageState extends State<HomePage> with HomePageBehavior, TickerProvid
           indicatorWeight: 5,
           unselectedLabelColor: const Color(InstaDaleelColors.primaryColor),
           labelColor: const Color(InstaDaleelColors.primaryColor),
-          controller: homePageTabController,
+          controller: HomePageBehavior.homePageTabController,
           tabs: const <Widget>[
             Tab(
               text: 'Guide',
@@ -234,7 +241,7 @@ class _HomePageState extends State<HomePage> with HomePageBehavior, TickerProvid
         ),
         Expanded(
           child: TabBarView(
-            controller: homePageTabController,
+            controller: HomePageBehavior.homePageTabController,
             children: const <Widget>[
               GuideTab(),
               OffersTab(),
@@ -244,6 +251,54 @@ class _HomePageState extends State<HomePage> with HomePageBehavior, TickerProvid
           ),
         ),
       ],
+    );
+  }
+}
+
+class HomePageProfilePic extends StatefulWidget {
+  const HomePageProfilePic({Key? key}) : super(key: key);
+
+  static VoidCallback setStateHomePageProfilePic = (){};
+
+  @override
+  State<HomePageProfilePic> createState() => _HomePageProfilePicState();
+}
+
+class _HomePageProfilePicState extends State<HomePageProfilePic> {
+
+  @override
+  void initState() {
+    HomePageProfilePic.setStateHomePageProfilePic = (){
+      setState(() {});
+    };
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      borderRadius: BorderRadius.circular(25),
+      elevation: 5.0,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, 'ProfilePage');
+        },
+        child: Container(
+          height: 50,
+          width: 50,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            border: Border.all(
+              color: Colors.white,
+              width: 1.0,
+              style: BorderStyle.solid,
+            ),
+            image: DecorationImage(
+              image: CachedNetworkImageProvider(userProfilePicLink != null ? userProfilePicLink! : 'https://www.freeiconspng.com/uploads/profile-icon-1.png',),
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
