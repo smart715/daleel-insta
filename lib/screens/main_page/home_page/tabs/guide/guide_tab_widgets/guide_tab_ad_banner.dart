@@ -8,59 +8,68 @@ import '../../../../../../widgets/intro_slider_dot.dart';
 import '../guide_tab_behavior.dart';
 
 class GuideTabAdBanner extends StatefulWidget {
-  const GuideTabAdBanner({Key? key,}) : super(key: key);
+  const GuideTabAdBanner({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<GuideTabAdBanner> createState() => _GuideTabAdBannerState();
 }
 
-class _GuideTabAdBannerState extends State<GuideTabAdBanner> with GuideTabBehavior, ConnectivityHandler {
-
+class _GuideTabAdBannerState extends State<GuideTabAdBanner>
+    with GuideTabBehavior, ConnectivityHandler {
   Future<List<dynamic>> getAdBannerResponseData() async {
-    if(await checkForInternetServiceAvailability(context)) {
+    if (await checkForInternetServiceAvailability(context)) {
       try {
-        adBannerResponse = await dio.get('https://insta-daleel.emicon.tech/api/get-banners', queryParameters: {
-          'token': bearerToken,
-        },);
+        adBannerResponse = await dio.get(
+          '$baseUrl/api/get-banners',
+          queryParameters: {
+            'token': bearerToken,
+          },
+        );
 
         GuideTabBehavior.isAdBannerResponseDataListFutureLoaded = true;
 
-        adBannerResponseMap = adBannerResponse.data is Map<String, dynamic> ? adBannerResponse.data : {};
+        adBannerResponseMap = adBannerResponse.data is Map<String, dynamic>
+            ? adBannerResponse.data
+            : {};
 
-        if(adBannerResponseMap.isNotEmpty) {
-          String status = adBannerResponseMap['status'] is String ? adBannerResponseMap['status'] : '';
-          if(status == 'success') {
-            Map<String, dynamic> dataMap = adBannerResponseMap['data'] is Map<String, dynamic> ? adBannerResponseMap['data'] : {};
-            if(dataMap.isNotEmpty) {
-              adBannerDataList = dataMap['data'] is List<dynamic> ? dataMap['data'] : [];
+        if (adBannerResponseMap.isNotEmpty) {
+          String status = adBannerResponseMap['status'] is String
+              ? adBannerResponseMap['status']
+              : '';
+          if (status == 'success') {
+            Map<String, dynamic> dataMap =
+                adBannerResponseMap['data'] is Map<String, dynamic>
+                    ? adBannerResponseMap['data']
+                    : {};
+            if (dataMap.isNotEmpty) {
+              adBannerDataList =
+                  dataMap['data'] is List<dynamic> ? dataMap['data'] : [];
               // GuideTabBehavior.isAdBannerResponseDataMapFutureLoaded = true;
               return adBannerDataList;
-            }
-            else {
+            } else {
               return [];
             }
-          }
-          else {
+          } else {
             return [];
           }
-        }
-        else {
+        } else {
           return [];
         }
-      }
-      catch(e) {
+      } catch (e) {
         return [];
       }
-    }
-    else {
+    } else {
       return [];
     }
   }
 
   @override
   void initState() {
-    if(!GuideTabBehavior.isAdBannerResponseDataListFutureLoaded) {
-      GuideTabBehavior.adBannerResponseDataListFuture = getAdBannerResponseData();
+    if (!GuideTabBehavior.isAdBannerResponseDataListFutureLoaded) {
+      GuideTabBehavior.adBannerResponseDataListFuture =
+          getAdBannerResponseData();
     }
     super.initState();
   }
@@ -71,7 +80,7 @@ class _GuideTabAdBannerState extends State<GuideTabAdBanner> with GuideTabBehavi
       future: GuideTabBehavior.adBannerResponseDataListFuture,
       initialData: const [],
       builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
-        if(snapshot.connectionState == ConnectionState.waiting) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return SizedBox(
             height: 250,
             width: MediaQuery.of(context).size.width,
@@ -79,8 +88,9 @@ class _GuideTabAdBannerState extends State<GuideTabAdBanner> with GuideTabBehavi
               child: CircularProgressIndicator(),
             ),
           );
-        }
-        else if(snapshot.connectionState == ConnectionState.done && snapshot.hasData && snapshot.data!.isNotEmpty) {
+        } else if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.hasData &&
+            snapshot.data!.isNotEmpty) {
           return SizedBox(
             height: 250,
             width: MediaQuery.of(context).size.width,
@@ -91,14 +101,16 @@ class _GuideTabAdBannerState extends State<GuideTabAdBanner> with GuideTabBehavi
                   height: 200,
                   child: PageView.builder(
                     onPageChanged: (int value) {
-                      setState ((){
+                      setState(() {
                         adBannerSliderIndex = value;
                       });
                     },
                     itemCount: snapshot.data!.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) => Container(
-                      margin: const EdgeInsets.only(left: leftRightGlobalMargin, right: leftRightGlobalMargin),
+                      margin: const EdgeInsets.only(
+                          left: leftRightGlobalMargin,
+                          right: leftRightGlobalMargin),
                       height: 200,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
@@ -112,32 +124,42 @@ class _GuideTabAdBannerState extends State<GuideTabAdBanner> with GuideTabBehavi
                             height: 150,
                             width: 150,
                             fit: BoxFit.fill,
-                            imageUrl: snapshot.data![index] is Map<String, dynamic> ?
-                                        snapshot.data![index]['image'] is String ?
-                                          snapshot.data![index]['image'] :
-                            'https://bitsofco.de/content/images/2018/12/broken-1.png'
-                            :
-                            'https://bitsofco.de/content/images/2018/12/broken-1.png',
-                            placeholder: (BuildContext context, String url) => const Center(
+                            imageUrl: snapshot.data![index]
+                                    is Map<String, dynamic>
+                                ? snapshot.data![index]['image'] is String
+                                    ? snapshot.data![index]['image']
+                                    : 'https://bitsofco.de/content/images/2018/12/broken-1.png'
+                                : 'https://bitsofco.de/content/images/2018/12/broken-1.png',
+                            placeholder: (BuildContext context, String url) =>
+                                const Center(
                               child: CircularProgressIndicator(
                                 color: Colors.white,
                                 strokeWidth: 2,
                               ),
                             ),
-                            errorWidget: (context, url, error) => const Center(child: Icon(Icons.error_outline_outlined, color: Colors.white,)),
+                            errorWidget: (context, url, error) => const Center(
+                                child: Icon(
+                              Icons.error_outline_outlined,
+                              color: Colors.white,
+                            )),
                           ),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               LimitedBox(
-                                maxWidth: MediaQuery.of(context).size.width - 220,
+                                maxWidth:
+                                    MediaQuery.of(context).size.width - 220,
                                 maxHeight: 100,
                                 child: SingleChildScrollView(
                                   physics: const BouncingScrollPhysics(),
                                   child: Text(
-                                    snapshot.data![index] is Map<String, dynamic> ?
-                                    snapshot.data![index]['title'] is String ?
-                                    snapshot.data![index]['title'] : '---' : '---',
+                                    snapshot.data![index]
+                                            is Map<String, dynamic>
+                                        ? snapshot.data![index]['title']
+                                                is String
+                                            ? snapshot.data![index]['title']
+                                            : '---'
+                                        : '---',
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                       color: Colors.white,
@@ -148,15 +170,21 @@ class _GuideTabAdBannerState extends State<GuideTabAdBanner> with GuideTabBehavi
                               ),
                               GestureDetector(
                                 onTap: () async {
-                                  String linkAddress = snapshot.data![index] is Map<String, dynamic> ?
-                                  snapshot.data![index]['link'] is String ?
-                                  snapshot.data![index]['link'] : '' : '';
+                                  String linkAddress = snapshot.data![index]
+                                          is Map<String, dynamic>
+                                      ? snapshot.data![index]['link'] is String
+                                          ? snapshot.data![index]['link']
+                                          : ''
+                                      : '';
                                   try {
-                                    final Uri url = Uri.parse('https://insta-daleel.emicon.tech${linkAddress.substring(21)}');
+                                    final Uri url = Uri.parse(
+                                        'https://insta-daleel.emicon.tech${linkAddress.substring(21)}');
                                     await launchUrl(url);
-                                  }
-                                  catch (e) {
-                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('unable to launch URL')));
+                                  } catch (e) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content:
+                                                Text('unable to launch URL')));
                                   }
                                 },
                                 child: Container(
@@ -171,11 +199,17 @@ class _GuideTabAdBannerState extends State<GuideTabAdBanner> with GuideTabBehavi
                                       physics: const BouncingScrollPhysics(),
                                       scrollDirection: Axis.horizontal,
                                       child: Text(
-                                          snapshot.data![index] is Map<String, dynamic> ?
-                                          snapshot.data![index]['button_text'] is String ?
-                                          snapshot.data![index]['button_text'] : '---' : '---',
+                                        snapshot.data![index]
+                                                is Map<String, dynamic>
+                                            ? snapshot.data![index]
+                                                    ['button_text'] is String
+                                                ? snapshot.data![index]
+                                                    ['button_text']
+                                                : '---'
+                                            : '---',
                                         style: const TextStyle(
-                                          color: Color(InstaDaleelColors.primaryColor),
+                                          color: Color(
+                                              InstaDaleelColors.primaryColor),
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -195,19 +229,25 @@ class _GuideTabAdBannerState extends State<GuideTabAdBanner> with GuideTabBehavi
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      for(int i = 0; i < snapshot.data!.length; i++)
-                      IntroSliderDot(color: Color(adBannerSliderIndex == i ? InstaDaleelColors.primaryColor : InstaDaleelColors.introSliderDotInActiveColor)),
+                      for (int i = 0; i < snapshot.data!.length; i++)
+                        IntroSliderDot(
+                            color: Color(adBannerSliderIndex == i
+                                ? InstaDaleelColors.primaryColor
+                                : InstaDaleelColors
+                                    .introSliderDotInActiveColor)),
                     ],
                   ),
                 ),
               ],
             ),
           );
-        }
-        else {
-          return const SizedBox(height: 10, width: 0,);
+        } else {
+          return const SizedBox(
+            height: 10,
+            width: 0,
+          );
         }
       },
     );
-}  }
-
+  }
+}

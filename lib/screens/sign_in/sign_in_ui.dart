@@ -14,10 +14,10 @@ class SignIn extends StatefulWidget {
   State<SignIn> createState() => _SignInState();
 }
 
-class _SignInState extends State<SignIn> with SignInBehavior, ConnectivityHandler {
-
+class _SignInState extends State<SignIn>
+    with SignInBehavior, ConnectivityHandler {
   void signingInIndicator() {
-    if(isSigningIn) {
+    if (isSigningIn) {
       setState(() {
         signInButtonContent = const SizedBox(
           height: 20,
@@ -28,8 +28,7 @@ class _SignInState extends State<SignIn> with SignInBehavior, ConnectivityHandle
           ),
         );
       });
-    }
-    else {
+    } else {
       setState(() {
         signInButtonContent = const Text(
           'Send',
@@ -44,69 +43,95 @@ class _SignInState extends State<SignIn> with SignInBehavior, ConnectivityHandle
   void signIn() async {
     isSigningIn = true;
     signingInIndicator();
-    if(await checkForInternetServiceAvailability(context)) {
+    if (await checkForInternetServiceAvailability(context)) {
       try {
-        response = await dio.post('https://insta-daleel.emicon.tech/api/auth/login', queryParameters: {
-          'phone': signInMobileNumberFieldTextEditingController.text,
-          'password': signInPasswordFieldTextEditingController.text,
-        },);
+        response = await dio.post(
+          '$baseUrl/api/auth/login',
+          queryParameters: {
+            'phone': signInMobileNumberFieldTextEditingController.text,
+            'password': signInPasswordFieldTextEditingController.text,
+          },
+        );
 
-        signInResponseMap = response.data is Map<String, dynamic> ?
-        response.data
-            :
-        {};
+        signInResponseMap =
+            response.data is Map<String, dynamic> ? response.data : {};
 
-        if(signInResponseMap.isNotEmpty) {
-          signInResponseStatus = signInResponseMap['status'] is String ? signInResponseMap['status'] : '';
+        if (signInResponseMap.isNotEmpty) {
+          signInResponseStatus = signInResponseMap['status'] is String
+              ? signInResponseMap['status']
+              : '';
 
-          if(signInResponseStatus == 'success') {
-            bearerToken = signInResponseMap['access_token'] is String ? signInResponseMap['access_token'] : '';
-            userId = signInResponseMap['data'] is Map<String, dynamic> ?
-            signInResponseMap['data']['id'] is int ?
-            signInResponseMap['data']['id'] : -1 : -1;
+          if (signInResponseStatus == 'success') {
+            bearerToken = signInResponseMap['access_token'] is String
+                ? signInResponseMap['access_token']
+                : '';
+            userId = signInResponseMap['data'] is Map<String, dynamic>
+                ? signInResponseMap['data']['id'] is int
+                    ? signInResponseMap['data']['id']
+                    : -1
+                : -1;
 
-            userName = signInResponseMap['data'] is Map<String, dynamic> ?
-            signInResponseMap['data']['name'] is String ?
-            signInResponseMap['data']['name'] : '---' : '---';
+            userName = signInResponseMap['data'] is Map<String, dynamic>
+                ? signInResponseMap['data']['name'] is String
+                    ? signInResponseMap['data']['name']
+                    : '---'
+                : '---';
 
-            userProfilePicLink = signInResponseMap['data'] is Map<String, dynamic> ?
-            signInResponseMap['data']['image'] is String ?
-            'https://insta-daleel.emicon.tech/images/customer/${signInResponseMap['data']['image']}' : null : null;
+            userProfilePicLink = signInResponseMap['data']
+                    is Map<String, dynamic>
+                ? signInResponseMap['data']['image'] is String
+                    ? '$baseUrl/images/customer/${signInResponseMap['data']['image']}'
+                    : null
+                : null;
 
             isSigningIn = false;
             signingInIndicator();
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('signed in successfully',),));
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainPage(),));
-          }
-          else if(signInResponseStatus == 'error') {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text(
+                'signed in successfully',
+              ),
+            ));
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MainPage(),
+                ));
+          } else if (signInResponseStatus == 'error') {
             isSigningIn = false;
             signingInIndicator();
 
             errorMessage = 'Phone number or password is invalid.';
             showErrorDialog(errorMessage: errorMessage);
-          }
-          else {
+          } else {
             isSigningIn = false;
             signingInIndicator();
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('something went wrong, please try again',),));
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text(
+                'something went wrong, please try again',
+              ),
+            ));
             // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('........$signInResponseStatus',),));
           }
-        }
-        else {
+        } else {
           isSigningIn = false;
           signingInIndicator();
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('something went wrong, please try again',),));
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+              'something went wrong, please try again',
+            ),
+          ));
         }
-
       } on Exception {
         isSigningIn = false;
         signingInIndicator();
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('something went wrong, please try again',),));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            'something went wrong, please try again',
+          ),
+        ));
         // showErrorDialog(errorMessage: '$response');
       }
-
-    }
-    else {
+    } else {
       isSigningIn = false;
       signingInIndicator();
     }
@@ -116,7 +141,9 @@ class _SignInState extends State<SignIn> with SignInBehavior, ConnectivityHandle
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Error',),
+        title: const Text(
+          'Error',
+        ),
         content: Text(
           errorMessage,
         ),
@@ -145,11 +172,10 @@ class _SignInState extends State<SignIn> with SignInBehavior, ConnectivityHandle
 
   @override
   void didChangeDependencies() {
-    if(MediaQuery.of(context).viewInsets.bottom > 0) {
+    if (MediaQuery.of(context).viewInsets.bottom > 0) {
       isKeyboardOpen = true;
-    }
-    else {
-      if(isKeyboardOpen) {
+    } else {
+      if (isKeyboardOpen) {
         isKeyboardOpen = false;
         singleChildScrollController.jumpTo(0.0);
       }
@@ -169,7 +195,9 @@ class _SignInState extends State<SignIn> with SignInBehavior, ConnectivityHandle
         backgroundColor: const Color(InstaDaleelColors.backgroundColor),
         body: SingleChildScrollView(
           controller: singleChildScrollController,
-          physics: (isKeyboardOpen || MediaQuery.of(context).size.height < 650) ? const AlwaysScrollableScrollPhysics() : const NeverScrollableScrollPhysics(),
+          physics: (isKeyboardOpen || MediaQuery.of(context).size.height < 650)
+              ? const AlwaysScrollableScrollPhysics()
+              : const NeverScrollableScrollPhysics(),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -177,16 +205,16 @@ class _SignInState extends State<SignIn> with SignInBehavior, ConnectivityHandle
                 alignment: Alignment.bottomCenter,
                 height: 170,
                 child: const Text(
-                    'Insta\nDaleel',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: 'PoppinsMedium',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 40,
-                      // fontFamily: 'Poppins',
-                      color: Color(InstaDaleelColors.primaryColor),
-                    ),
+                  'Insta\nDaleel',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'PoppinsMedium',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 40,
+                    // fontFamily: 'Poppins',
+                    color: Color(InstaDaleelColors.primaryColor),
                   ),
+                ),
               ),
               Container(
                 height: 70,
@@ -204,16 +232,16 @@ class _SignInState extends State<SignIn> with SignInBehavior, ConnectivityHandle
                 height: 50,
                 alignment: Alignment.center,
                 child: const Text(
-                    'Sign In',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: 'PoppinsRegular',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                      // fontFamily: 'Poppins',
-                      color: Color(InstaDaleelColors.primaryColor),
-                    ),
+                  'Sign In',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'PoppinsRegular',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                    // fontFamily: 'Poppins',
+                    color: Color(InstaDaleelColors.primaryColor),
                   ),
+                ),
               ),
               Form(
                 key: signInFormKey,
@@ -222,7 +250,8 @@ class _SignInState extends State<SignIn> with SignInBehavior, ConnectivityHandle
                     SignInAndSignUpTextField(
                       labelText: 'Mobile\nNumber',
                       hintText: 'Enter mobile number',
-                      textEditingController: signInMobileNumberFieldTextEditingController,
+                      textEditingController:
+                          signInMobileNumberFieldTextEditingController,
                       textInputType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -234,7 +263,8 @@ class _SignInState extends State<SignIn> with SignInBehavior, ConnectivityHandle
                     SignInAndSignUpTextField(
                       labelText: 'Password',
                       hintText: 'Enter password',
-                      textEditingController: signInPasswordFieldTextEditingController,
+                      textEditingController:
+                          signInPasswordFieldTextEditingController,
                       isObscureText: true,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -249,7 +279,7 @@ class _SignInState extends State<SignIn> with SignInBehavior, ConnectivityHandle
               GestureDetector(
                 onTap: () {
                   if (signInFormKey.currentState!.validate()) {
-                    if(!isSigningIn) {
+                    if (!isSigningIn) {
                       signIn();
                     }
                   }
@@ -263,8 +293,7 @@ class _SignInState extends State<SignIn> with SignInBehavior, ConnectivityHandle
                       width: MediaQuery.of(context).size.width - 30,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(25),
-                          color: const Color(InstaDaleelColors.primaryColor)
-                      ),
+                          color: const Color(InstaDaleelColors.primaryColor)),
                       child: Center(
                         child: signInButtonContent,
                       ),
@@ -283,8 +312,7 @@ class _SignInState extends State<SignIn> with SignInBehavior, ConnectivityHandle
                       style: TextStyle(
                           fontSize: 12,
                           color: Colors.black,
-                          fontWeight: FontWeight.bold
-                      ),
+                          fontWeight: FontWeight.bold),
                     ),
                     TextButton(
                       onPressed: () {
@@ -293,11 +321,11 @@ class _SignInState extends State<SignIn> with SignInBehavior, ConnectivityHandle
                           builder: (context) => const SignUp(),
                         ));
                       },
-                      child: const Text('Sign up now',
+                      child: const Text(
+                        'Sign up now',
                         style: TextStyle(
                             color: Color(InstaDaleelColors.primaryColor),
-                            fontWeight: FontWeight.bold
-                        ),
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                   ],
@@ -308,11 +336,11 @@ class _SignInState extends State<SignIn> with SignInBehavior, ConnectivityHandle
                 alignment: Alignment.center,
                 child: TextButton(
                   onPressed: () {},
-                  child: const Text('Forgot password ?',
+                  child: const Text(
+                    'Forgot password ?',
                     style: TextStyle(
                         color: Color(InstaDaleelColors.primaryColor),
-                        fontWeight: FontWeight.bold
-                    ),
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
               ),

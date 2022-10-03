@@ -12,36 +12,39 @@ class BoxSection extends StatefulWidget {
   State<BoxSection> createState() => _BoxSectionState();
 }
 
-class _BoxSectionState extends State<BoxSection> with GuideTabBehavior, ConnectivityHandler {
-
+class _BoxSectionState extends State<BoxSection>
+    with GuideTabBehavior, ConnectivityHandler {
   Future<List<dynamic>> getBoxResponseData() async {
     if (await checkForInternetServiceAvailability(context)) {
       try {
         boxResponse = await dio.get(
-          'https://insta-daleel.emicon.tech/api/get-boxes',
+          '$baseUrl/api/get-boxes',
           queryParameters: {
             'token': bearerToken,
           },
         );
         GuideTabBehavior.isBoxResponseDataListFutureLoaded = true;
 
-        boxResponseMap = boxResponse.data is Map<String, dynamic>
-            ? boxResponse.data
-            : {};
+        boxResponseMap =
+            boxResponse.data is Map<String, dynamic> ? boxResponse.data : {};
 
         if (boxResponseMap.isNotEmpty) {
-          String status = boxResponseMap['status'] is String ? boxResponseMap['status'] : '';
+          String status = boxResponseMap['status'] is String
+              ? boxResponseMap['status']
+              : '';
           if (status == 'success') {
-            Map<String, dynamic> dataMap = boxResponseMap['data'] is Map<String, dynamic> ? boxResponseMap['data'] : {};
-            if(dataMap.isNotEmpty) {
-              boxDataList = dataMap['data'] is List<dynamic> ? dataMap['data'] : [];
+            Map<String, dynamic> dataMap =
+                boxResponseMap['data'] is Map<String, dynamic>
+                    ? boxResponseMap['data']
+                    : {};
+            if (dataMap.isNotEmpty) {
+              boxDataList =
+                  dataMap['data'] is List<dynamic> ? dataMap['data'] : [];
               return boxDataList;
-            }
-            else {
+            } else {
               return [];
             }
-          }
-          else {
+          } else {
             return [];
           }
         } else {
@@ -84,8 +87,15 @@ class _BoxSectionState extends State<BoxSection> with GuideTabBehavior, Connecti
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) => GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, 'BoxDetail', arguments: snapshot.data![index] is Map<String, dynamic>
-                    ? snapshot.data![index]['id'] is int ? snapshot.data![index]['id'] : -1 : -1,);
+                Navigator.pushNamed(
+                  context,
+                  'BoxDetail',
+                  arguments: snapshot.data![index] is Map<String, dynamic>
+                      ? snapshot.data![index]['id'] is int
+                          ? snapshot.data![index]['id']
+                          : -1
+                      : -1,
+                );
               },
               child: Container(
                 // margin: const EdgeInsets.only(left: 0), // it was 10.0
@@ -95,8 +105,8 @@ class _BoxSectionState extends State<BoxSection> with GuideTabBehavior, Connecti
                 decoration: const BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage(
-                          'assets/images/main_page/home_page/guide_tab/rectangle_two.png',
-                        ))),
+                  'assets/images/main_page/home_page/guide_tab/rectangle_two.png',
+                ))),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -106,10 +116,11 @@ class _BoxSectionState extends State<BoxSection> with GuideTabBehavior, Connecti
                       fit: BoxFit.contain,
                       imageUrl: snapshot.data![index] is Map<String, dynamic>
                           ? snapshot.data![index]['image'] is String
-                          ? snapshot.data![index]['image']
-                          : 'https://cdn-icons-png.flaticon.com/512/159/159469.png'
+                              ? snapshot.data![index]['image']
+                              : 'https://cdn-icons-png.flaticon.com/512/159/159469.png'
                           : 'https://cdn-icons-png.flaticon.com/512/159/159469.png',
-                      placeholder: (BuildContext context, String url) => const Center(
+                      placeholder: (BuildContext context, String url) =>
+                          const Center(
                         child: CircularProgressIndicator(
                           color: Colors.white,
                           strokeWidth: 1,
@@ -117,9 +128,9 @@ class _BoxSectionState extends State<BoxSection> with GuideTabBehavior, Connecti
                       ),
                       errorWidget: (context, url, error) => const Center(
                           child: Icon(
-                            Icons.error_outline_outlined,
-                            color: Colors.black,
-                          )),
+                        Icons.error_outline_outlined,
+                        color: Colors.black,
+                      )),
                     ),
                     SizedBox(
                       width: 100,
@@ -128,9 +139,11 @@ class _BoxSectionState extends State<BoxSection> with GuideTabBehavior, Connecti
                         child: SingleChildScrollView(
                           physics: const BouncingScrollPhysics(),
                           child: Text(
-                            snapshot.data![index] is Map<String, dynamic> ?
-                            snapshot.data![index]['title'] is String ?
-                            snapshot.data![index]['title'] : '---' : '---',
+                            snapshot.data![index] is Map<String, dynamic>
+                                ? snapshot.data![index]['title'] is String
+                                    ? snapshot.data![index]['title']
+                                    : '---'
+                                : '---',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               color: Colors.white,

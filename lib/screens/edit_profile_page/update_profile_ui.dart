@@ -19,10 +19,10 @@ class UpdateProfile extends StatefulWidget {
   State<UpdateProfile> createState() => _UpdateProfileState();
 }
 
-class _UpdateProfileState extends State<UpdateProfile> with UpdateProfileBehavior, ConnectivityHandler {
-
+class _UpdateProfileState extends State<UpdateProfile>
+    with UpdateProfileBehavior, ConnectivityHandler {
   void savingDataIndicator() {
-    if(isUpdatingProfile) {
+    if (isUpdatingProfile) {
       setState(() {
         saveDataButtonContent = const SizedBox(
           height: 20,
@@ -33,8 +33,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UpdateProfileBehavio
           ),
         );
       });
-    }
-    else {
+    } else {
       setState(() {
         saveDataButtonContent = const Text(
           'Save Data',
@@ -50,91 +49,119 @@ class _UpdateProfileState extends State<UpdateProfile> with UpdateProfileBehavio
     late Response response;
     isUpdatingProfile = true;
     savingDataIndicator();
-    if(await checkForInternetServiceAvailability(context)) {
+    if (await checkForInternetServiceAvailability(context)) {
       try {
-        response = await dio.post('https://insta-daleel.emicon.tech/api/update-profile', queryParameters: {'token': bearerToken,},
-          options: Options(contentType: 'multipart/form-data'),
-          data: FormData.fromMap(
-            {
-              'customer_id': userId,
-              'name': nameFieldTextEditingController.text,
-              'about': aboutFieldTextEditingController.text,
-              'email': emailAddressFieldTextEditingController.text,
-              'address': liveInFieldTextEditingController.text,
-              'gender': gender,
-              'occupation': occupationFieldTextEditingController.text,
-              'latitude': '0.0',
-              'longitude': '0.0',
-              'image': profilePic != null ? MultipartFile(File(profilePic!.path).openRead(), await profilePic!.length(), filename: profilePic!.name) : null,
+        response = await dio.post('$baseUrl/api/update-profile',
+            queryParameters: {
+              'token': bearerToken,
             },
-          )
-        );
+            options: Options(contentType: 'multipart/form-data'),
+            data: FormData.fromMap(
+              {
+                'customer_id': userId,
+                'name': nameFieldTextEditingController.text,
+                'about': aboutFieldTextEditingController.text,
+                'email': emailAddressFieldTextEditingController.text,
+                'address': liveInFieldTextEditingController.text,
+                'gender': gender,
+                'occupation': occupationFieldTextEditingController.text,
+                'latitude': '0.0',
+                'longitude': '0.0',
+                'image': profilePic != null
+                    ? MultipartFile(File(profilePic!.path).openRead(),
+                        await profilePic!.length(),
+                        filename: profilePic!.name)
+                    : null,
+              },
+            ));
 
-        Map<String, dynamic> updateProfileResponseMap = response.data is Map<String, dynamic> ?
-        response.data : {};
+        Map<String, dynamic> updateProfileResponseMap =
+            response.data is Map<String, dynamic> ? response.data : {};
 
-        if(updateProfileResponseMap.isNotEmpty) {
-          String updateProfileResponseStatus = updateProfileResponseMap['status'] is String ? updateProfileResponseMap['status'] : '';
+        if (updateProfileResponseMap.isNotEmpty) {
+          String updateProfileResponseStatus =
+              updateProfileResponseMap['status'] is String
+                  ? updateProfileResponseMap['status']
+                  : '';
 
-          if(updateProfileResponseStatus == 'success') {
+          if (updateProfileResponseStatus == 'success') {
+            userName = updateProfileResponseMap['data'] is Map<String, dynamic>
+                ? updateProfileResponseMap['data']['name'] is String
+                    ? updateProfileResponseMap['data']['name']
+                    : '---'
+                : '---';
 
-            userName = updateProfileResponseMap['data'] is Map<String, dynamic> ?
-            updateProfileResponseMap['data']['name'] is String ?
-            updateProfileResponseMap['data']['name'] : '---' : '---';
-
-            userProfilePicLink = updateProfileResponseMap['data'] is Map<String, dynamic> ?
-            updateProfileResponseMap['data']['image'] is String ?
-            updateProfileResponseMap['data']['image'] : null : null;
+            userProfilePicLink =
+                updateProfileResponseMap['data'] is Map<String, dynamic>
+                    ? updateProfileResponseMap['data']['image'] is String
+                        ? updateProfileResponseMap['data']['image']
+                        : null
+                    : null;
 
             isUpdatingProfile = false;
             profilePic = null;
             savingDataIndicator();
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('profile updated successfully',),));
-          }
-          else if(updateProfileResponseStatus == 'error') {
-            String errorMessage = updateProfileResponseMap['data'] is Map<String, dynamic> ?
-            updateProfileResponseMap['data']['email'] is List<dynamic> ?
-            updateProfileResponseMap['data']['email'][0] is String ?
-            updateProfileResponseMap['data']['email'][0] :
-            'unable to update, please try again later' :
-            'unable to update, please try again later' :
-            'unable to update, please try again later';
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text(
+                'profile updated successfully',
+              ),
+            ));
+          } else if (updateProfileResponseStatus == 'error') {
+            String errorMessage =
+                updateProfileResponseMap['data'] is Map<String, dynamic>
+                    ? updateProfileResponseMap['data']['email'] is List<dynamic>
+                        ? updateProfileResponseMap['data']['email'][0] is String
+                            ? updateProfileResponseMap['data']['email'][0]
+                            : 'unable to update, please try again later'
+                        : 'unable to update, please try again later'
+                    : 'unable to update, please try again later';
 
             isUpdatingProfile = false;
             savingDataIndicator();
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage,),));
-          }
-          else {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+                errorMessage,
+              ),
+            ));
+          } else {
             isUpdatingProfile = false;
             savingDataIndicator();
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('something went wrong, please try again1',),));
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text(
+                'something went wrong, please try again1',
+              ),
+            ));
           }
-        }
-        else {
+        } else {
           isUpdatingProfile = false;
           savingDataIndicator();
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('server not responding, please try again',),));
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+              'server not responding, please try again',
+            ),
+          ));
         }
-
       } on Exception {
         isUpdatingProfile = false;
         savingDataIndicator();
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('something went wrong, please try again2',),));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            'something went wrong, please try again2',
+          ),
+        ));
       }
-    }
-    else {
-    isUpdatingProfile = false;
-    savingDataIndicator();
+    } else {
+      isUpdatingProfile = false;
+      savingDataIndicator();
     }
   }
 
   @override
   void didChangeDependencies() {
-    if(MediaQuery.of(context).viewInsets.bottom > 0) {
+    if (MediaQuery.of(context).viewInsets.bottom > 0) {
       isKeyboardOpen = true;
-    }
-    else {
-      if(isKeyboardOpen) {
+    } else {
+      if (isKeyboardOpen) {
         isKeyboardOpen = false;
         singleChildScrollController.jumpTo(0.0);
       }
@@ -207,7 +234,10 @@ class _UpdateProfileState extends State<UpdateProfile> with UpdateProfileBehavio
                 padding: const EdgeInsets.only(top: 10),
                 child: SingleChildScrollView(
                   controller: singleChildScrollController,
-                  physics: (isKeyboardOpen || MediaQuery.of(context).size.height < 900) ? const AlwaysScrollableScrollPhysics() : const NeverScrollableScrollPhysics(),
+                  physics: (isKeyboardOpen ||
+                          MediaQuery.of(context).size.height < 900)
+                      ? const AlwaysScrollableScrollPhysics()
+                      : const NeverScrollableScrollPhysics(),
                   child: Form(
                     key: updateProfileFormKey,
                     child: Column(
@@ -228,7 +258,10 @@ class _UpdateProfileState extends State<UpdateProfile> with UpdateProfileBehavio
                                 style: BorderStyle.solid,
                               ),
                               image: DecorationImage(
-                                image: CachedNetworkImageProvider(userProfilePicLink != null ? userProfilePicLink! : 'https://www.freeiconspng.com/uploads/profile-icon-1.png'),
+                                image: CachedNetworkImageProvider(
+                                    userProfilePicLink != null
+                                        ? userProfilePicLink!
+                                        : 'https://www.freeiconspng.com/uploads/profile-icon-1.png'),
                                 fit: BoxFit.contain,
                               ),
                             ),
@@ -238,7 +271,8 @@ class _UpdateProfileState extends State<UpdateProfile> with UpdateProfileBehavio
                         // change photo button
                         GestureDetector(
                           onTap: () async {
-                            profilePic = await imagePicker.pickImage(source: ImageSource.gallery);
+                            profilePic = await imagePicker.pickImage(
+                                source: ImageSource.gallery);
                             setState(() {});
                           },
                           child: SizedBox(
@@ -250,14 +284,16 @@ class _UpdateProfileState extends State<UpdateProfile> with UpdateProfileBehavio
                                 width: 130,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
-                                    color: const Color(InstaDaleelColors.primaryColor)
-                                ),
+                                    color: const Color(
+                                        InstaDaleelColors.primaryColor)),
                                 child: Center(
                                   child: Padding(
                                     padding: const EdgeInsets.all(4.0),
                                     child: SingleChildScrollView(
                                       child: Text(
-                                        profilePic == null ? 'Change Photo' : profilePic!.name,
+                                        profilePic == null
+                                            ? 'Change Photo'
+                                            : profilePic!.name,
                                         textAlign: TextAlign.center,
                                         style: const TextStyle(
                                           color: Colors.white,
@@ -287,7 +323,8 @@ class _UpdateProfileState extends State<UpdateProfile> with UpdateProfileBehavio
                         SignInAndSignUpTextField(
                           hintText: 'Type here',
                           labelText: 'About me',
-                          textEditingController: aboutFieldTextEditingController,
+                          textEditingController:
+                              aboutFieldTextEditingController,
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
                               return 'About can\'t be empty.';
@@ -299,7 +336,8 @@ class _UpdateProfileState extends State<UpdateProfile> with UpdateProfileBehavio
                         SignInAndSignUpTextField(
                           hintText: 'Type here',
                           labelText: 'Contact\nNumber',
-                          textEditingController: contactNumberFieldTextEditingController,
+                          textEditingController:
+                              contactNumberFieldTextEditingController,
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
                               return 'Contact can\'t be empty.';
@@ -311,7 +349,8 @@ class _UpdateProfileState extends State<UpdateProfile> with UpdateProfileBehavio
                         SignInAndSignUpTextField(
                           hintText: 'Type here',
                           labelText: 'Live in',
-                          textEditingController: liveInFieldTextEditingController,
+                          textEditingController:
+                              liveInFieldTextEditingController,
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
                               return 'Address can\'t be empty.';
@@ -323,7 +362,8 @@ class _UpdateProfileState extends State<UpdateProfile> with UpdateProfileBehavio
                         SignInAndSignUpTextField(
                           hintText: 'Type here',
                           labelText: 'Email\nAddress',
-                          textEditingController: emailAddressFieldTextEditingController,
+                          textEditingController:
+                              emailAddressFieldTextEditingController,
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
                               return 'Email can\'t be empty.';
@@ -335,7 +375,8 @@ class _UpdateProfileState extends State<UpdateProfile> with UpdateProfileBehavio
                         SignInAndSignUpTextField(
                           hintText: 'Type here',
                           labelText: 'Occupation',
-                          textEditingController: occupationFieldTextEditingController,
+                          textEditingController:
+                              occupationFieldTextEditingController,
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
                               return 'Occupation can\'t be empty.';
@@ -355,8 +396,10 @@ class _UpdateProfileState extends State<UpdateProfile> with UpdateProfileBehavio
                                 Expanded(
                                   child: RadioListTile(
                                     groupValue: radioButtonGroupValue,
-                                    contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                                    activeColor: const Color(InstaDaleelColors.primaryColor),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 0),
+                                    activeColor: const Color(
+                                        InstaDaleelColors.primaryColor),
                                     onChanged: (int? value) {
                                       setState(() {
                                         radioButtonGroupValue = value!;
@@ -366,7 +409,8 @@ class _UpdateProfileState extends State<UpdateProfile> with UpdateProfileBehavio
                                     title: const Text(
                                       'Male',
                                       style: TextStyle(
-                                        color: Color(InstaDaleelColors.primaryColor),
+                                        color: Color(
+                                            InstaDaleelColors.primaryColor),
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -375,9 +419,11 @@ class _UpdateProfileState extends State<UpdateProfile> with UpdateProfileBehavio
                                 ),
                                 Expanded(
                                   child: RadioListTile(
-                                    activeColor: const Color(InstaDaleelColors.primaryColor),
+                                    activeColor: const Color(
+                                        InstaDaleelColors.primaryColor),
                                     groupValue: radioButtonGroupValue,
-                                    contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 0),
                                     onChanged: (int? value) {
                                       setState(() {
                                         radioButtonGroupValue = value!;
@@ -387,7 +433,8 @@ class _UpdateProfileState extends State<UpdateProfile> with UpdateProfileBehavio
                                     title: const Text(
                                       'Female',
                                       style: TextStyle(
-                                        color: Color(InstaDaleelColors.primaryColor),
+                                        color: Color(
+                                            InstaDaleelColors.primaryColor),
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -403,7 +450,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UpdateProfileBehavio
                           onTap: () {
                             isKeyboardOpen = false;
                             if (updateProfileFormKey.currentState!.validate()) {
-                              if(!isUpdatingProfile) {
+                              if (!isUpdatingProfile) {
                                 updateProfile();
                               }
                             }
@@ -417,8 +464,8 @@ class _UpdateProfileState extends State<UpdateProfile> with UpdateProfileBehavio
                                 width: MediaQuery.of(context).size.width - 30,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(25),
-                                    color: const Color(InstaDaleelColors.primaryColor)
-                                ),
+                                    color: const Color(
+                                        InstaDaleelColors.primaryColor)),
                                 child: Center(
                                   child: saveDataButtonContent,
                                 ),

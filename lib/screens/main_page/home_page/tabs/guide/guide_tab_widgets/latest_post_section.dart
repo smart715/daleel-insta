@@ -7,44 +7,51 @@ import '../../../../../../widgets/intro_slider_dot.dart';
 import '../../community/community_tab_widgets/community_tab_small_card.dart';
 
 class LatestPost extends StatefulWidget {
-  const LatestPost({Key? key,})
-      : super(key: key);
+  const LatestPost({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<LatestPost> createState() => _LatestPost();
 }
 
-class _LatestPost extends State<LatestPost> with GuideTabBehavior, ConnectivityHandler {
-
+class _LatestPost extends State<LatestPost>
+    with GuideTabBehavior, ConnectivityHandler {
   Future<List<dynamic>> getGuideTabLatestPostResponseData() async {
     if (await checkForInternetServiceAvailability(context)) {
       try {
-         guideTabLatestPostResponse = await dio.get(
-          'https://insta-daleel.emicon.tech/api/latest-post',
+        guideTabLatestPostResponse = await dio.get(
+          '$baseUrl/api/latest-post',
           queryParameters: {
             'token': bearerToken,
           },
         );
 
-         GuideTabBehavior.isGuideTabLatestPostResponseDataListFutureLoaded = true;
+        GuideTabBehavior.isGuideTabLatestPostResponseDataListFutureLoaded =
+            true;
 
-         guideTabLatestPostResponseMap = guideTabLatestPostResponse.data is Map<String, dynamic>
-            ? guideTabLatestPostResponse.data
-            : {};
+        guideTabLatestPostResponseMap =
+            guideTabLatestPostResponse.data is Map<String, dynamic>
+                ? guideTabLatestPostResponse.data
+                : {};
 
         if (guideTabLatestPostResponseMap.isNotEmpty) {
-          String status = guideTabLatestPostResponseMap['status'] is String ? guideTabLatestPostResponseMap['status'] : '';
+          String status = guideTabLatestPostResponseMap['status'] is String
+              ? guideTabLatestPostResponseMap['status']
+              : '';
           if (status == 'success') {
-            Map<String, dynamic> dataMap = guideTabLatestPostResponseMap['data'] is Map<String, dynamic> ? guideTabLatestPostResponseMap['data'] : {};
-            if(dataMap.isNotEmpty) {
-              guideTabLatestPostDataList = dataMap['data'] is List<dynamic> ? dataMap['data'] : [];
+            Map<String, dynamic> dataMap =
+                guideTabLatestPostResponseMap['data'] is Map<String, dynamic>
+                    ? guideTabLatestPostResponseMap['data']
+                    : {};
+            if (dataMap.isNotEmpty) {
+              guideTabLatestPostDataList =
+                  dataMap['data'] is List<dynamic> ? dataMap['data'] : [];
               return guideTabLatestPostDataList;
-            }
-            else {
+            } else {
               return [];
             }
-          }
-          else {
+          } else {
             return [];
           }
         } else {
@@ -60,12 +67,14 @@ class _LatestPost extends State<LatestPost> with GuideTabBehavior, ConnectivityH
 
   @override
   void initState() {
-    GuideTabBehavior.setStateOfGuideTabLatestPostListView = (){
-      GuideTabBehavior.guideTabLatestPostResponseDataListFuture = getGuideTabLatestPostResponseData();
+    GuideTabBehavior.setStateOfGuideTabLatestPostListView = () {
+      GuideTabBehavior.guideTabLatestPostResponseDataListFuture =
+          getGuideTabLatestPostResponseData();
       setState(() {});
     };
     if (!GuideTabBehavior.isGuideTabLatestPostResponseDataListFutureLoaded) {
-      GuideTabBehavior.guideTabLatestPostResponseDataListFuture = getGuideTabLatestPostResponseData();
+      GuideTabBehavior.guideTabLatestPostResponseDataListFuture =
+          getGuideTabLatestPostResponseData();
     }
     super.initState();
   }
@@ -76,12 +85,13 @@ class _LatestPost extends State<LatestPost> with GuideTabBehavior, ConnectivityH
       future: GuideTabBehavior.guideTabLatestPostResponseDataListFuture,
       initialData: const [],
       builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
-        if(snapshot.connectionState == ConnectionState.waiting) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        }
-        else if(snapshot.connectionState == ConnectionState.done && snapshot.hasData && snapshot.data!.isNotEmpty) {
+        } else if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.hasData &&
+            snapshot.data!.isNotEmpty) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -93,69 +103,96 @@ class _LatestPost extends State<LatestPost> with GuideTabBehavior, ConnectivityH
                       GuideTabBehavior.latestPostSliderIndex = value;
                     });
                   },
-                  itemCount: snapshot.data!.length >= 3 ? 3 : snapshot.data!.length,
+                  itemCount:
+                      snapshot.data!.length >= 3 ? 3 : snapshot.data!.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) => GestureDetector(
                     onTap: () {
                       List<int> idsList = [];
 
-                      idsList.add(snapshot.data![index] is Map<String, dynamic> ?
-                      snapshot.data![index]['customer_id'] is int ?
-                      snapshot.data![index]['customer_id'] : -1 : -1);
+                      idsList.add(snapshot.data![index] is Map<String, dynamic>
+                          ? snapshot.data![index]['customer_id'] is int
+                              ? snapshot.data![index]['customer_id']
+                              : -1
+                          : -1);
 
-                      idsList.add(snapshot.data![index] is Map<String, dynamic> ?
-                      snapshot.data![index]['id'] is int ?
-                      snapshot.data![index]['id'] : -1 : -1);
+                      idsList.add(snapshot.data![index] is Map<String, dynamic>
+                          ? snapshot.data![index]['id'] is int
+                              ? snapshot.data![index]['id']
+                              : -1
+                          : -1);
 
-                      Navigator.pushNamed(context, 'PostDetailPage', arguments: idsList);
+                      Navigator.pushNamed(context, 'PostDetailPage',
+                          arguments: idsList);
                     },
                     child: CommunityTabSmallCard(
                       onTap: () {
-                        Navigator.pushNamed(context, 'GetSpecificPersonPost', arguments: snapshot.data![index] is Map<String, dynamic>
-                            ? snapshot.data![index]['customer_id'] is int ? snapshot.data![index]['customer_id'] : -1 : -1,);
+                        Navigator.pushNamed(
+                          context,
+                          'GetSpecificPersonPost',
+                          arguments:
+                              snapshot.data![index] is Map<String, dynamic>
+                                  ? snapshot.data![index]['customer_id'] is int
+                                      ? snapshot.data![index]['customer_id']
+                                      : -1
+                                  : -1,
+                        );
                       },
-                      customerId: snapshot.data![index] is Map<String, dynamic> ?
-                      snapshot.data![index]['customer_id'] is int ?
-                      snapshot.data![index]['customer_id'] : -1 : -1,
-
-                      personName: snapshot.data![index] is Map<String, dynamic> ?
-                      snapshot.data![index]['customer_data'] is Map<String, dynamic> ?
-                      snapshot.data![index]['customer_data']['name'] is String ?
-                      snapshot.data![index]['customer_data']['name'] : '---' : '---' : '---',
-
+                      customerId: snapshot.data![index] is Map<String, dynamic>
+                          ? snapshot.data![index]['customer_id'] is int
+                              ? snapshot.data![index]['customer_id']
+                              : -1
+                          : -1,
+                      personName: snapshot.data![index] is Map<String, dynamic>
+                          ? snapshot.data![index]['customer_data']
+                                  is Map<String, dynamic>
+                              ? snapshot.data![index]['customer_data']['name']
+                                      is String
+                                  ? snapshot.data![index]['customer_data']
+                                      ['name']
+                                  : '---'
+                              : '---'
+                          : '---',
                       postText: snapshot.data![index] is Map<String, dynamic>
                           ? snapshot.data![index]['description'] is String
-                          ? snapshot.data![index]['description']
-                          : '---'
+                              ? snapshot.data![index]['description']
+                              : '---'
                           : '---',
-
-                      personProfilePicLink: snapshot.data![index] is Map<String, dynamic> ?
-                      snapshot.data![index]['customer_data'] is Map<String, dynamic> ?
-                      snapshot.data![index]['customer_data']['image'] is String ?
-                      'https://insta-daleel.emicon.tech/images/customer/${snapshot.data![index]['customer_data']['image']}' :
-                      'https://www.freeiconspng.com/uploads/profile-icon-1.png' :
-                      'https://www.freeiconspng.com/uploads/profile-icon-1.png' :
-                      'https://www.freeiconspng.com/uploads/profile-icon-1.png',
-
+                      personProfilePicLink: snapshot.data![index]
+                              is Map<String, dynamic>
+                          ? snapshot.data![index]['customer_data']
+                                  is Map<String, dynamic>
+                              ? snapshot.data![index]['customer_data']['image']
+                                      is String
+                                  ? '$baseUrl/images/customer/${snapshot.data![index]['customer_data']['image']}'
+                                  : 'https://www.freeiconspng.com/uploads/profile-icon-1.png'
+                              : 'https://www.freeiconspng.com/uploads/profile-icon-1.png'
+                          : 'https://www.freeiconspng.com/uploads/profile-icon-1.png',
                       likesCount: snapshot.data![index] is Map<String, dynamic>
                           ? snapshot.data![index]['total_like'] is int
-                          ? snapshot.data![index]['total_like']
-                          : -1
+                              ? snapshot.data![index]['total_like']
+                              : -1
                           : -1,
-
-                      likesIconData: snapshot.data![index] is Map<String, dynamic> ?
-                      snapshot.data![index]['customer_data'] is Map<String, dynamic> ?
-                      snapshot.data![index]['customer_data']['id'] is int ?
-                      snapshot.data![index]['customer_data']['id']  == userId ?
-                      Icons.favorite  : Icons.favorite_border_outlined
-                          : Icons.favorite_border_outlined : Icons.favorite_border_outlined : Icons.favorite_border_outlined,
-
-                      commentsCount: snapshot.data![index] is Map<String, dynamic>
-                          ? snapshot.data![index]['total_comment'] is int
-                          ? snapshot.data![index]['total_comment']
-                          : -1
-                          : -1,
-
+                      likesIconData:
+                          snapshot.data![index] is Map<String, dynamic>
+                              ? snapshot.data![index]['customer_data']
+                                      is Map<String, dynamic>
+                                  ? snapshot.data![index]['customer_data']['id']
+                                          is int
+                                      ? snapshot.data![index]['customer_data']
+                                                  ['id'] ==
+                                              userId
+                                          ? Icons.favorite
+                                          : Icons.favorite_border_outlined
+                                      : Icons.favorite_border_outlined
+                                  : Icons.favorite_border_outlined
+                              : Icons.favorite_border_outlined,
+                      commentsCount:
+                          snapshot.data![index] is Map<String, dynamic>
+                              ? snapshot.data![index]['total_comment'] is int
+                                  ? snapshot.data![index]['total_comment']
+                                  : -1
+                              : -1,
                     ),
                   ),
                 ),
@@ -164,24 +201,30 @@ class _LatestPost extends State<LatestPost> with GuideTabBehavior, ConnectivityH
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    for(int i = 0; i < (snapshot.data!.length >= 3 ? 3 : snapshot.data!.length); i++)
-                      IntroSliderDot(color: Color(GuideTabBehavior.latestPostSliderIndex == i ? InstaDaleelColors.primaryColor : InstaDaleelColors.introSliderDotInActiveColor)),
+                    for (int i = 0;
+                        i <
+                            (snapshot.data!.length >= 3
+                                ? 3
+                                : snapshot.data!.length);
+                        i++)
+                      IntroSliderDot(
+                          color: Color(GuideTabBehavior.latestPostSliderIndex ==
+                                  i
+                              ? InstaDaleelColors.primaryColor
+                              : InstaDaleelColors.introSliderDotInActiveColor)),
                   ],
                 ),
               ),
             ],
           );
-        }
-        else {
+        } else {
           return const Center(
-            child: Text(
-              'no latest post'
-            ),
+            child: Text('no latest post'),
           );
         }
       },
     );
-      /*Column(
+    /*Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         SizedBox(

@@ -16,13 +16,13 @@ class CommunityTab extends StatefulWidget {
   State<CommunityTab> createState() => _CommunityTabState();
 }
 
-class _CommunityTabState extends State<CommunityTab> with CommunityTabBehavior, ConnectivityHandler {
-
+class _CommunityTabState extends State<CommunityTab>
+    with CommunityTabBehavior, ConnectivityHandler {
   Future<List<dynamic>> getLatestPostResponseData({int page = 1}) async {
     if (await checkForInternetServiceAvailability(context)) {
       try {
         getLatestPostResponse = await dio.get(
-          'https://insta-daleel.emicon.tech/api/latest-post',
+          '$baseUrl/api/latest-post',
           queryParameters: {
             'token': bearerToken,
             'page': page,
@@ -30,23 +30,30 @@ class _CommunityTabState extends State<CommunityTab> with CommunityTabBehavior, 
         );
         CommunityTabBehavior.isGetLatestPostResponseDataMapFutureLoaded = true;
 
-        getLatestPostResponseMap = getLatestPostResponse.data is Map<String, dynamic>
-            ? getLatestPostResponse.data
-            : {};
+        getLatestPostResponseMap =
+            getLatestPostResponse.data is Map<String, dynamic>
+                ? getLatestPostResponse.data
+                : {};
 
         if (getLatestPostResponseMap.isNotEmpty) {
-          String status = getLatestPostResponseMap['status'] is String ? getLatestPostResponseMap['status'] : '';
+          String status = getLatestPostResponseMap['status'] is String
+              ? getLatestPostResponseMap['status']
+              : '';
           if (status == 'success') {
-            CommunityTabBehavior.getLatestPostDataMap = getLatestPostResponseMap['data'] is Map<String, dynamic> ? getLatestPostResponseMap['data'] : {};
-            if(CommunityTabBehavior.getLatestPostDataMap.isNotEmpty) {
-              getLatestPostDataList = CommunityTabBehavior.getLatestPostDataMap['data'] is List<dynamic> ? CommunityTabBehavior.getLatestPostDataMap['data'] : [];
+            CommunityTabBehavior.getLatestPostDataMap =
+                getLatestPostResponseMap['data'] is Map<String, dynamic>
+                    ? getLatestPostResponseMap['data']
+                    : {};
+            if (CommunityTabBehavior.getLatestPostDataMap.isNotEmpty) {
+              getLatestPostDataList = CommunityTabBehavior
+                      .getLatestPostDataMap['data'] is List<dynamic>
+                  ? CommunityTabBehavior.getLatestPostDataMap['data']
+                  : [];
               return getLatestPostDataList;
-            }
-            else {
+            } else {
               return [];
             }
-          }
-          else {
+          } else {
             return [];
           }
         } else {
@@ -63,12 +70,14 @@ class _CommunityTabState extends State<CommunityTab> with CommunityTabBehavior, 
   @override
   void initState() {
     CommunityTabBehavior.isFromCommunity = false;
-    CommunityTabBehavior.setStateOfLatestPostListView = (){
-      CommunityTabBehavior.getLatestPostResponseDataListFuture = getLatestPostResponseData();
+    CommunityTabBehavior.setStateOfLatestPostListView = () {
+      CommunityTabBehavior.getLatestPostResponseDataListFuture =
+          getLatestPostResponseData();
       setState(() {});
     };
     if (!CommunityTabBehavior.isGetLatestPostResponseDataMapFutureLoaded) {
-      CommunityTabBehavior.getLatestPostResponseDataListFuture = getLatestPostResponseData();
+      CommunityTabBehavior.getLatestPostResponseDataListFuture =
+          getLatestPostResponseData();
     }
     super.initState();
   }
@@ -82,7 +91,8 @@ class _CommunityTabState extends State<CommunityTab> with CommunityTabBehavior, 
           // Search View
           Container(
             height: 55,
-            margin: const EdgeInsets.symmetric(horizontal: leftRightGlobalMargin, vertical: 15),
+            margin: const EdgeInsets.symmetric(
+                horizontal: leftRightGlobalMargin, vertical: 15),
             decoration: BoxDecoration(
                 color: const Color(InstaDaleelColors.primaryColor),
                 borderRadius: BorderRadius.circular(30)),
@@ -123,12 +133,12 @@ class _CommunityTabState extends State<CommunityTab> with CommunityTabBehavior, 
           Container(
             height: 60,
             width: MediaQuery.of(context).size.width,
-            margin: const EdgeInsets.symmetric(horizontal: leftRightGlobalMargin * 0.2, vertical: 10),
+            margin: const EdgeInsets.symmetric(
+                horizontal: leftRightGlobalMargin * 0.2, vertical: 10),
             child: Card(
               elevation: 2,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30)
-              ),
+                  borderRadius: BorderRadius.circular(30)),
               child: GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(context, 'AddPostScreen');
@@ -145,7 +155,6 @@ class _CommunityTabState extends State<CommunityTab> with CommunityTabBehavior, 
                       color: Color(InstaDaleelColors.primaryColor),
                       fontSize: 15,
                     ),
-
                   ),
                 ),
               ),
@@ -174,13 +183,14 @@ class _CommunityTabState extends State<CommunityTab> with CommunityTabBehavior, 
                     color: Color(InstaDaleelColors.primaryColor),
                     size: 25,
                   ),
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                   Text(
                     'Refresh',
                     style: TextStyle(
                         color: Color(InstaDaleelColors.primaryColor),
-                        fontWeight: FontWeight.bold
-                    ),
+                        fontWeight: FontWeight.bold),
                   )
                 ],
               ),
@@ -197,17 +207,20 @@ class _CommunityTabState extends State<CommunityTab> with CommunityTabBehavior, 
           FutureBuilder<List<dynamic>>(
             future: CommunityTabBehavior.getLatestPostResponseDataListFuture,
             initialData: const [],
-            builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+            builder:
+                (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
                   child: SizedBox(
-                    height: 20,
+                      height: 20,
                       width: 20,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
                       )),
                 );
-              } else if (snapshot.connectionState == ConnectionState.done && snapshot.hasData && snapshot.data!.isNotEmpty) {
+              } else if (snapshot.connectionState == ConnectionState.done &&
+                  snapshot.hasData &&
+                  snapshot.data!.isNotEmpty) {
                 return Column(
                   children: [
                     ListView.builder(
@@ -216,144 +229,243 @@ class _CommunityTabState extends State<CommunityTab> with CommunityTabBehavior, 
                       physics: const BouncingScrollPhysics(),
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
-
                         return GestureDetector(
-                        onTap: () {
-                          CommunityTabBehavior.isFromCommunity = true;
-                          List<int> idsList = [];
-
-                          idsList.add(snapshot.data![index] is Map<String, dynamic> ?
-                          snapshot.data![index]['customer_id'] is int ?
-                          snapshot.data![index]['customer_id'] : -1 : -1);
-
-                          idsList.add(snapshot.data![index] is Map<String, dynamic> ?
-                          snapshot.data![index]['id'] is int ?
-                          snapshot.data![index]['id'] : -1 : -1);
-
-                          Navigator.pushNamed(context, 'PostDetailPage', arguments: idsList);
-                          // Navigator.pushNamed(context, 'GetSpecificPersonPost', arguments: snapshot.data![index] is Map<String, dynamic>
-                          //     ? snapshot.data![index]['customer_id'] is int ? snapshot.data![index]['customer_id'] : -1 : -1,);
-                        },
-                        child: snapshot.data![index]['image'] == null || (jsonDecode(snapshot.data![index]['image'])).isEmpty ?
-                        CommunityTabSmallCard(
-                          onTap: () {
-                            Navigator.pushNamed(context, 'GetSpecificPersonPost', arguments: snapshot.data![index] is Map<String, dynamic>
-                                ? snapshot.data![index]['customer_id'] is int ? snapshot.data![index]['customer_id'] : -1 : -1,);
-                          },
-                          customerId: snapshot.data![index] is Map<String, dynamic> ?
-                          snapshot.data![index]['customer_id'] is int ?
-                          snapshot.data![index]['customer_id'] : -1 : -1,
-
-                          personName: snapshot.data![index] is Map<String, dynamic> ?
-                          snapshot.data![index]['customer_data'] is Map<String, dynamic> ?
-                          snapshot.data![index]['customer_data']['name'] is String ?
-                          snapshot.data![index]['customer_data']['name'] : '---' : '---' : '---',
-
-                          postText: snapshot.data![index] is Map<String, dynamic>
-                              ? snapshot.data![index]['description'] is String
-                              ? snapshot.data![index]['description']
-                              : '---'
-                              : '---',
-
-                          personProfilePicLink: snapshot.data![index] is Map<String, dynamic> ?
-                          snapshot.data![index]['customer_data'] is Map<String, dynamic> ?
-                          snapshot.data![index]['customer_data']['image'] is String ?
-                          'https://insta-daleel.emicon.tech/images/customer/${snapshot.data![index]['customer_data']['image']}' :
-                          'https://www.freeiconspng.com/uploads/profile-icon-1.png' :
-                          'https://www.freeiconspng.com/uploads/profile-icon-1.png' :
-                          'https://www.freeiconspng.com/uploads/profile-icon-1.png',
-
-                          likesCount: snapshot.data![index] is Map<String, dynamic>
-                              ? snapshot.data![index]['total_like'] is int
-                              ? snapshot.data![index]['total_like']
-                              : -1
-                              : -1,
-
-                          likesIconData: snapshot.data![index] is Map<String, dynamic> ?
-                          snapshot.data![index]['customer_data'] is Map<String, dynamic> ?
-                          snapshot.data![index]['customer_data']['id'] is int ?
-                          snapshot.data![index]['customer_data']['id']  == userId ?
-                          Icons.favorite  : Icons.favorite_border_outlined
-                            : Icons.favorite_border_outlined : Icons.favorite_border_outlined : Icons.favorite_border_outlined,
-
-                          commentsCount: snapshot.data![index] is Map<String, dynamic>
-                              ? snapshot.data![index]['total_comment'] is int
-                              ? snapshot.data![index]['total_comment']
-                              : -1
-                              : -1,
-
-                        )
-                        :
-                        GestureDetector(
                           onTap: () {
                             CommunityTabBehavior.isFromCommunity = true;
                             List<int> idsList = [];
 
-                            idsList.add(snapshot.data![index] is Map<String, dynamic> ?
-                            snapshot.data![index]['customer_id'] is int ?
-                            snapshot.data![index]['customer_id'] : -1 : -1);
+                            idsList.add(snapshot.data![index]
+                                    is Map<String, dynamic>
+                                ? snapshot.data![index]['customer_id'] is int
+                                    ? snapshot.data![index]['customer_id']
+                                    : -1
+                                : -1);
 
-                            idsList.add(snapshot.data![index] is Map<String, dynamic> ?
-                            snapshot.data![index]['id'] is int ?
-                            snapshot.data![index]['id'] : -1 : -1);
+                            idsList.add(
+                                snapshot.data![index] is Map<String, dynamic>
+                                    ? snapshot.data![index]['id'] is int
+                                        ? snapshot.data![index]['id']
+                                        : -1
+                                    : -1);
 
-                            Navigator.pushNamed(context, 'PostDetailPage', arguments: idsList);
+                            Navigator.pushNamed(context, 'PostDetailPage',
+                                arguments: idsList);
+                            // Navigator.pushNamed(context, 'GetSpecificPersonPost', arguments: snapshot.data![index] is Map<String, dynamic>
+                            //     ? snapshot.data![index]['customer_id'] is int ? snapshot.data![index]['customer_id'] : -1 : -1,);
                           },
-                          child: CommunityTabLargeCard(
-                            onTap: () {
-                              Navigator.pushNamed(context, 'GetSpecificPersonPost', arguments: snapshot.data![index] is Map<String, dynamic>
-                                  ? snapshot.data![index]['customer_id'] is int ? snapshot.data![index]['customer_id'] : -1 : -1,);
-                            },
-                            customerId: snapshot.data![index] is Map<String, dynamic> ?
-                            snapshot.data![index]['customer_id'] is int ?
-                            snapshot.data![index]['customer_id'] : -1 : -1,
+                          child: snapshot.data![index]['image'] == null ||
+                                  (jsonDecode(snapshot.data![index]['image']))
+                                      .isEmpty
+                              ? CommunityTabSmallCard(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      'GetSpecificPersonPost',
+                                      arguments: snapshot.data![index]
+                                              is Map<String, dynamic>
+                                          ? snapshot.data![index]['customer_id']
+                                                  is int
+                                              ? snapshot.data![index]
+                                                  ['customer_id']
+                                              : -1
+                                          : -1,
+                                    );
+                                  },
+                                  customerId: snapshot.data![index]
+                                          is Map<String, dynamic>
+                                      ? snapshot.data![index]['customer_id']
+                                              is int
+                                          ? snapshot.data![index]['customer_id']
+                                          : -1
+                                      : -1,
+                                  personName: snapshot.data![index]
+                                          is Map<String, dynamic>
+                                      ? snapshot.data![index]['customer_data']
+                                              is Map<String, dynamic>
+                                          ? snapshot.data![index]
+                                                      ['customer_data']['name']
+                                                  is String
+                                              ? snapshot.data![index]
+                                                  ['customer_data']['name']
+                                              : '---'
+                                          : '---'
+                                      : '---',
+                                  postText: snapshot.data![index]
+                                          is Map<String, dynamic>
+                                      ? snapshot.data![index]['description']
+                                              is String
+                                          ? snapshot.data![index]['description']
+                                          : '---'
+                                      : '---',
+                                  personProfilePicLink: snapshot.data![index]
+                                          is Map<String, dynamic>
+                                      ? snapshot.data![index]['customer_data']
+                                              is Map<String, dynamic>
+                                          ? snapshot.data![index]
+                                                      ['customer_data']['image']
+                                                  is String
+                                              ? '$baseUrl/images/customer/${snapshot.data![index]['customer_data']['image']}'
+                                              : 'https://www.freeiconspng.com/uploads/profile-icon-1.png'
+                                          : 'https://www.freeiconspng.com/uploads/profile-icon-1.png'
+                                      : 'https://www.freeiconspng.com/uploads/profile-icon-1.png',
+                                  likesCount: snapshot.data![index]
+                                          is Map<String, dynamic>
+                                      ? snapshot.data![index]['total_like']
+                                              is int
+                                          ? snapshot.data![index]['total_like']
+                                          : -1
+                                      : -1,
+                                  likesIconData: snapshot.data![index]
+                                          is Map<String, dynamic>
+                                      ? snapshot.data![index]['customer_data']
+                                              is Map<String, dynamic>
+                                          ? snapshot.data![index]
+                                                  ['customer_data']['id'] is int
+                                              ? snapshot.data![index]
+                                                              ['customer_data']
+                                                          ['id'] ==
+                                                      userId
+                                                  ? Icons.favorite
+                                                  : Icons
+                                                      .favorite_border_outlined
+                                              : Icons.favorite_border_outlined
+                                          : Icons.favorite_border_outlined
+                                      : Icons.favorite_border_outlined,
+                                  commentsCount: snapshot.data![index]
+                                          is Map<String, dynamic>
+                                      ? snapshot.data![index]['total_comment']
+                                              is int
+                                          ? snapshot.data![index]
+                                              ['total_comment']
+                                          : -1
+                                      : -1,
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    CommunityTabBehavior.isFromCommunity = true;
+                                    List<int> idsList = [];
 
-                            personName: snapshot.data![index] is Map<String, dynamic> ?
-                            snapshot.data![index]['customer_data'] is Map<String, dynamic> ?
-                            snapshot.data![index]['customer_data']['name'] is String ?
-                            snapshot.data![index]['customer_data']['name'] : '---' : '---' : '---',
+                                    idsList.add(snapshot.data![index]
+                                            is Map<String, dynamic>
+                                        ? snapshot.data![index]['customer_id']
+                                                is int
+                                            ? snapshot.data![index]
+                                                ['customer_id']
+                                            : -1
+                                        : -1);
 
-                            postText: snapshot.data![index] is Map<String, dynamic>
-                                ? snapshot.data![index]['description'] is String
-                                ? snapshot.data![index]['description']
-                                : '---'
-                                : '---',
+                                    idsList.add(snapshot.data![index]
+                                            is Map<String, dynamic>
+                                        ? snapshot.data![index]['id'] is int
+                                            ? snapshot.data![index]['id']
+                                            : -1
+                                        : -1);
 
-                            personProfilePicLink: snapshot.data![index] is Map<String, dynamic> ?
-                            snapshot.data![index]['customer_data'] is Map<String, dynamic> ?
-                            snapshot.data![index]['customer_data']['image'] is String ?
-                            'https://insta-daleel.emicon.tech/images/customer/${snapshot.data![index]['customer_data']['image']}' :
-                            'https://www.freeiconspng.com/uploads/profile-icon-1.png' :
-                            'https://www.freeiconspng.com/uploads/profile-icon-1.png' :
-                            'https://www.freeiconspng.com/uploads/profile-icon-1.png',
-
-                            likesCount: snapshot.data![index] is Map<String, dynamic>
-                                ? snapshot.data![index]['total_like'] is int
-                                ? snapshot.data![index]['total_like']
-                                : -1
-                                : -1,
-
-                            likesIconData: snapshot.data![index] is Map<String, dynamic> ?
-                            snapshot.data![index]['customer_data'] is Map<String, dynamic> ?
-                            snapshot.data![index]['customer_data']['id'] is int ?
-                            snapshot.data![index]['customer_data']['id']  == userId ?
-                            Icons.favorite  : Icons.favorite_border_outlined
-                                : Icons.favorite_border_outlined : Icons.favorite_border_outlined : Icons.favorite_border_outlined,
-
-                            commentsCount: snapshot.data![index] is Map<String, dynamic>
-                                ? snapshot.data![index]['total_comment'] is int
-                                ? snapshot.data![index]['total_comment']
-                                : -1
-                                : -1,
-                            postFirstPicLink: snapshot.data![index] is Map<String, dynamic>
-                                ? snapshot.data![index]['image'] is String
-                                ? jsonDecode(snapshot.data![index]['image']).isNotEmpty ?
-                            'https://insta-daleel.emicon.tech/images/post/${jsonDecode(snapshot.data![index]['image'])[0]['image']}' : 'https://bitsofco.de/content/images/2018/12/broken-1.png' :
-                            'https://bitsofco.de/content/images/2018/12/broken-1.png' :
-                            'https://bitsofco.de/content/images/2018/12/broken-1.png',
-                          ),
-                        ),
-                      );
+                                    Navigator.pushNamed(
+                                        context, 'PostDetailPage',
+                                        arguments: idsList);
+                                  },
+                                  child: CommunityTabLargeCard(
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        'GetSpecificPersonPost',
+                                        arguments: snapshot.data![index]
+                                                is Map<String, dynamic>
+                                            ? snapshot.data![index]
+                                                    ['customer_id'] is int
+                                                ? snapshot.data![index]
+                                                    ['customer_id']
+                                                : -1
+                                            : -1,
+                                      );
+                                    },
+                                    customerId: snapshot.data![index]
+                                            is Map<String, dynamic>
+                                        ? snapshot.data![index]['customer_id']
+                                                is int
+                                            ? snapshot.data![index]
+                                                ['customer_id']
+                                            : -1
+                                        : -1,
+                                    personName: snapshot.data![index]
+                                            is Map<String, dynamic>
+                                        ? snapshot.data![index]['customer_data']
+                                                is Map<String, dynamic>
+                                            ? snapshot.data![index]
+                                                        ['customer_data']
+                                                    ['name'] is String
+                                                ? snapshot.data![index]
+                                                    ['customer_data']['name']
+                                                : '---'
+                                            : '---'
+                                        : '---',
+                                    postText: snapshot.data![index]
+                                            is Map<String, dynamic>
+                                        ? snapshot.data![index]['description']
+                                                is String
+                                            ? snapshot.data![index]
+                                                ['description']
+                                            : '---'
+                                        : '---',
+                                    personProfilePicLink: snapshot.data![index]
+                                            is Map<String, dynamic>
+                                        ? snapshot.data![index]['customer_data']
+                                                is Map<String, dynamic>
+                                            ? snapshot.data![index]
+                                                        ['customer_data']
+                                                    ['image'] is String
+                                                ? '$baseUrl/images/customer/${snapshot.data![index]['customer_data']['image']}'
+                                                : 'https://www.freeiconspng.com/uploads/profile-icon-1.png'
+                                            : 'https://www.freeiconspng.com/uploads/profile-icon-1.png'
+                                        : 'https://www.freeiconspng.com/uploads/profile-icon-1.png',
+                                    likesCount: snapshot.data![index]
+                                            is Map<String, dynamic>
+                                        ? snapshot.data![index]['total_like']
+                                                is int
+                                            ? snapshot.data![index]
+                                                ['total_like']
+                                            : -1
+                                        : -1,
+                                    likesIconData: snapshot.data![index]
+                                            is Map<String, dynamic>
+                                        ? snapshot.data![index]['customer_data']
+                                                is Map<String, dynamic>
+                                            ? snapshot.data![index]
+                                                        ['customer_data']['id']
+                                                    is int
+                                                ? snapshot.data![index][
+                                                                'customer_data']
+                                                            ['id'] ==
+                                                        userId
+                                                    ? Icons.favorite
+                                                    : Icons
+                                                        .favorite_border_outlined
+                                                : Icons.favorite_border_outlined
+                                            : Icons.favorite_border_outlined
+                                        : Icons.favorite_border_outlined,
+                                    commentsCount: snapshot.data![index]
+                                            is Map<String, dynamic>
+                                        ? snapshot.data![index]['total_comment']
+                                                is int
+                                            ? snapshot.data![index]
+                                                ['total_comment']
+                                            : -1
+                                        : -1,
+                                    postFirstPicLink: snapshot.data![index]
+                                            is Map<String, dynamic>
+                                        ? snapshot.data![index]['image']
+                                                is String
+                                            ? jsonDecode(snapshot.data![index]
+                                                        ['image'])
+                                                    .isNotEmpty
+                                                ? '$baseUrl/images/post/${jsonDecode(snapshot.data![index]['image'])[0]['image']}'
+                                                : 'https://bitsofco.de/content/images/2018/12/broken-1.png'
+                                            : 'https://bitsofco.de/content/images/2018/12/broken-1.png'
+                                        : 'https://bitsofco.de/content/images/2018/12/broken-1.png',
+                                  ),
+                                ),
+                        );
                       },
                     ),
                     SizedBox(
@@ -362,23 +474,42 @@ class _CommunityTabState extends State<CommunityTab> with CommunityTabBehavior, 
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
                         physics: const BouncingScrollPhysics(),
-                        itemCount: CommunityTabBehavior.getLatestPostDataMap.isNotEmpty ?
-                        CommunityTabBehavior.getLatestPostDataMap['last_page'] is int ?
-                        CommunityTabBehavior.getLatestPostDataMap['last_page'] : 0 : 0 ,
+                        itemCount: CommunityTabBehavior
+                                .getLatestPostDataMap.isNotEmpty
+                            ? CommunityTabBehavior
+                                    .getLatestPostDataMap['last_page'] is int
+                                ? CommunityTabBehavior
+                                    .getLatestPostDataMap['last_page']
+                                : 0
+                            : 0,
                         itemBuilder: (context, index) {
-                          int currentPageIndex = CommunityTabBehavior.getLatestPostDataMap.isNotEmpty ?
-                          CommunityTabBehavior.getLatestPostDataMap['current_page'] is int ?
-                          CommunityTabBehavior.getLatestPostDataMap['current_page'] : 0 : 0;
+                          int currentPageIndex = CommunityTabBehavior
+                                  .getLatestPostDataMap.isNotEmpty
+                              ? CommunityTabBehavior
+                                          .getLatestPostDataMap['current_page']
+                                      is int
+                                  ? CommunityTabBehavior
+                                      .getLatestPostDataMap['current_page']
+                                  : 0
+                              : 0;
                           return IconButton(
-                            icon: Text('${index+1}',
+                            icon: Text(
+                              '${index + 1}',
                               style: TextStyle(
-                                color:  const Color(InstaDaleelColors.primaryColor),
-                                fontWeight: (index + 1) == currentPageIndex  ? FontWeight.bold : FontWeight.normal,
-                                fontSize: (index + 1) == currentPageIndex ? 20 : 14,
-                              ),),
+                                color:
+                                    const Color(InstaDaleelColors.primaryColor),
+                                fontWeight: (index + 1) == currentPageIndex
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                                fontSize:
+                                    (index + 1) == currentPageIndex ? 20 : 14,
+                              ),
+                            ),
                             onPressed: () {
                               setState(() {});
-                              CommunityTabBehavior.getLatestPostResponseDataListFuture = getLatestPostResponseData(page: index + 1);
+                              CommunityTabBehavior
+                                      .getLatestPostResponseDataListFuture =
+                                  getLatestPostResponseData(page: index + 1);
                             },
                           );
                         },
