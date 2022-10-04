@@ -3,7 +3,15 @@ import 'package:flutter/material.dart';
 import '../global_members.dart';
 
 class SignInAndSignUpTextField extends StatelessWidget {
-  const SignInAndSignUpTextField({Key? key, required this.labelText, required this.hintText, required this.textEditingController, this.isObscureText = false, required this.validator, this.textInputType}) : super(key: key);
+  const SignInAndSignUpTextField(
+      {Key? key,
+      required this.labelText,
+      required this.hintText,
+      required this.textEditingController,
+      this.isObscureText = false,
+      required this.validator,
+      this.textInputType})
+      : super(key: key);
 
   final String labelText, hintText;
   final TextEditingController textEditingController;
@@ -20,7 +28,8 @@ class SignInAndSignUpTextField extends StatelessWidget {
       decoration: BoxDecoration(
         image: const DecorationImage(
           fit: BoxFit.fitWidth,
-          image: AssetImage('assets/images/sign_in_sign_up_screens/sign_in_sign_up_text_field_background.png'),
+          image: AssetImage(
+              'assets/images/sign_in_sign_up_screens/sign_in_sign_up_text_field_background.png'),
         ),
         borderRadius: BorderRadius.circular(23),
         /*gradient: const LinearGradient(
@@ -37,23 +46,20 @@ class SignInAndSignUpTextField extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 15),
-                child: TextFormField(
-                  validator: validator,
-                  textInputAction: TextInputAction.next,
-                  keyboardType: textInputType,
-                  onTap: () {
-                    isKeyboardOpen = true;
-                  },
-                  obscureText: isObscureText,
-                  controller: textEditingController,
-                  textAlign: TextAlign.start,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.white
-                  ),
-                  decoration: InputDecoration(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: TextFormField(
+                validator: validator,
+                textInputAction: TextInputAction.next,
+                keyboardType: textInputType,
+                onTap: () {
+                  isKeyboardOpen = true;
+                },
+                obscureText: isObscureText,
+                controller: textEditingController,
+                textAlign: TextAlign.start,
+                style: const TextStyle(fontSize: 14, color: Colors.white),
+                decoration: InputDecoration(
                     contentPadding: const EdgeInsets.only(bottom: 4),
                     hintText: hintText,
                     hintTextDirection: TextDirection.rtl,
@@ -61,12 +67,10 @@ class SignInAndSignUpTextField extends StatelessWidget {
                       color: Colors.white,
                       fontSize: 13,
                     ),
-
-                    border: InputBorder.none
-                  ),
-                  cursorColor: Colors.white,
-                ),
+                    border: InputBorder.none),
+                cursorColor: Colors.white,
               ),
+            ),
           ),
           const Padding(
             padding: EdgeInsets.only(left: 5),
@@ -79,12 +83,12 @@ class SignInAndSignUpTextField extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(right: 20, left: 10),
-            child: Text(
-              labelText,
-              textAlign: TextAlign.end,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 12
+            child: SizedBox(
+              width: 72,
+              child: Text(
+                labelText,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.white, fontSize: 12),
               ),
             ),
           ),
