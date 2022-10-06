@@ -19,11 +19,11 @@ class EventDetail extends StatefulWidget {
 
 class _EventDetailState extends State<EventDetail>
     with EventDetailBehavior, ConnectivityHandler {
+
   Future<Map<String, dynamic>> getEventDetailResponseData() async {
     if (await checkForInternetServiceAvailability(context)) {
       try {
-        Response eventDetailResponse = await dio.get(
-          '$baseUrl/api/event-details',
+        Response eventDetailResponse = await dio.get('https://insta-daleel.emicon.tech/api/event-details',
           queryParameters: {
             'token': bearerToken,
             'customer_id': userId,
@@ -31,15 +31,10 @@ class _EventDetailState extends State<EventDetail>
           },
         );
 
-        Map<String, dynamic> eventDetailResponseMap =
-            eventDetailResponse.data is Map<String, dynamic>
-                ? eventDetailResponse.data
-                : {};
+        Map<String, dynamic> eventDetailResponseMap = eventDetailResponse.data is Map<String, dynamic> ? eventDetailResponse.data : {};
 
         if (eventDetailResponseMap.isNotEmpty) {
-          String status = eventDetailResponseMap['status'] is String
-              ? eventDetailResponseMap['status']
-              : '';
+          String status = eventDetailResponseMap['status'] is String ? eventDetailResponseMap['status'] : '';
           if (status == 'success') {
             Map<String, dynamic> eventDetailDataMap =
                 eventDetailResponseMap['data'] is Map<String, dynamic>
@@ -62,8 +57,7 @@ class _EventDetailState extends State<EventDetail>
 
   @override
   void initState() {
-    EventDetailBehavior.eventDetailResponseDataMapFuture =
-        getEventDetailResponseData();
+    EventDetailBehavior.eventDetailResponseDataMapFuture = getEventDetailResponseData();
     super.initState();
   }
 
@@ -268,9 +262,8 @@ class _EventDetailState extends State<EventDetail>
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 Text(
-                                  snapshot.data!['event_location'] is String
-                                      ? snapshot.data!['event_location']
-                                      : '---',
+                                  snapshot.data!['event_location'] is String ?
+                                  snapshot.data!['event_location'] : '---',
                                   style: const TextStyle(
                                     color: Colors.black,
                                   ),

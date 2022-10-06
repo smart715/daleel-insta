@@ -46,8 +46,8 @@ mixin ConnectivityHandler {
     if (await _checkMyInitialConnectionState(context,
         allowSnackBar: allowSnackBar)) {
       if (isConnectedToNetwork) {
+        return true;
         try {
-          return true;
           List<InternetAddress> result =
               await InternetAddress.lookup('example.com')
                   .timeout(const Duration(seconds: 10));

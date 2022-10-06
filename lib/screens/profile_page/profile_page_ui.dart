@@ -1,7 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:insta_daleel/domain/entities/history_note.dart';
+import 'package:insta_daleel/domain/repositories/repository.dart';
 import 'package:insta_daleel/screens/profile_page/profile_page_behavior.dart';
 import 'package:insta_daleel/screens/profile_page/profile_page_widgets/your_balance_dialog.dart';
+import 'package:insta_daleel/service_locator.dart';
 import '../../../constants/colors.dart';
 import '../../../global_members.dart';
 import '../main_page/home_page/home_page_ui.dart';
@@ -16,10 +19,11 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> with ProfilePageBehavior {
-
+  List<HistoryNote> historyList = [];
+  double totalCoin = 0;
   @override
   void initState() {
-    ProfilePageBehavior.setStateProfilePage = (){
+    ProfilePageBehavior.setStateProfilePage = () {
       print('set state called');
       setState(() {});
     };
@@ -89,7 +93,10 @@ class _ProfilePageState extends State<ProfilePage> with ProfilePageBehavior {
                           alignment: Alignment.center,
                           height: 90,
                           width: MediaQuery.of(context).size.width,
-                          margin: const EdgeInsets.only(left: leftRightGlobalMargin, right: leftRightGlobalMargin, top: 10),
+                          margin: const EdgeInsets.only(
+                              left: leftRightGlobalMargin,
+                              right: leftRightGlobalMargin,
+                              top: 10),
                           decoration: BoxDecoration(
                             color: const Color(InstaDaleelColors.primaryColor),
                             borderRadius: BorderRadius.circular(20),
@@ -102,7 +109,8 @@ class _ProfilePageState extends State<ProfilePage> with ProfilePageBehavior {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   SizedBox(
-                                    width: MediaQuery.of(context).size.width - 150,
+                                    width:
+                                        MediaQuery.of(context).size.width - 150,
                                     child: Text(
                                       userName,
                                       maxLines: 2,
@@ -125,14 +133,19 @@ class _ProfilePageState extends State<ProfilePage> with ProfilePageBehavior {
                                 ],
                               ),
                               Container(
-                                margin: const EdgeInsets.only(right: 10, left: 10),
+                                margin:
+                                    const EdgeInsets.only(right: 10, left: 10),
                                 height: 60,
                                 width: 60,
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(30),
                                   image: DecorationImage(
-                                    image: CachedNetworkImageProvider(userProfilePicLink != null ? userProfilePicLink! : 'https://www.freeiconspng.com/uploads/profile-icon-1.png',),
+                                    image: CachedNetworkImageProvider(
+                                      userProfilePicLink != null
+                                          ? userProfilePicLink!
+                                          : 'https://www.freeiconspng.com/uploads/profile-icon-1.png',
+                                    ),
                                     fit: BoxFit.contain,
                                   ),
                                 ),
@@ -152,18 +165,23 @@ class _ProfilePageState extends State<ProfilePage> with ProfilePageBehavior {
                       ],
                     ),
                   ),
-
                   GestureDetector(
                     onTap: () {
-                      showDialog(context: context, builder: (context) {
-                        return showBalanceDialog(context);
-                      },);
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return showBalanceDialog(context, historyList);
+                        },
+                      );
                     },
                     child: Container(
                       alignment: Alignment.center,
                       height: 60,
                       width: MediaQuery.of(context).size.width,
-                      margin: const EdgeInsets.only(left: leftRightGlobalMargin, right: leftRightGlobalMargin, top: 10),
+                      margin: const EdgeInsets.only(
+                          left: leftRightGlobalMargin,
+                          right: leftRightGlobalMargin,
+                          top: 10),
                       decoration: BoxDecoration(
                         color: const Color(InstaDaleelColors.primaryColor),
                         borderRadius: BorderRadius.circular(10),
@@ -171,21 +189,61 @@ class _ProfilePageState extends State<ProfilePage> with ProfilePageBehavior {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          RichText(
-                            text: const TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: 'Your Coins : ',
-                                ),
-                                TextSpan(
-                                  text: '50',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                          FutureBuilder(
+                              future: serviceLocator<Repository>().getHistory(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  final h = snapshot.data ?? [];
+                                  historyList.clear();
+                                  historyList.addAll(h);
+                                  if (h.isEmpty) {
+                                    totalCoin = 0;
+                                  } else {
+                                    totalCoin = h
+                                        .map((e) => e.amount)
+                                        .reduce((a, b) => a + b);
+                                  }
+                                  return RichText(
+                                    text: TextSpan(children: [
+                                      const TextSpan(
+                                        text: 'Your Coins : ',
+                                      ),
+                                      TextSpan(
+                                        text: '$totalCoin',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ]),
+                                  );
+                                }
+                                if (snapshot.hasError) {
+                                  return RichText(
+                                    text: const TextSpan(children: [
+                                      TextSpan(
+                                        text: 'Your Coins : ',
+                                      ),
+                                      TextSpan(
+                                        text: 'ERROR',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ]),
+                                  );
+                                }
+
+                                return const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 2,
+                                    ),
                                   ),
-                                ),
-                              ]
-                            ),
-                          ),
+                                );
+                              }),
                           const Padding(
                             padding: EdgeInsets.only(right: 20, left: 20),
                             child: Image(
@@ -201,7 +259,7 @@ class _ProfilePageState extends State<ProfilePage> with ProfilePageBehavior {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, 'AddCompany');
+                      Navigator.pushNamed(context, 'ManageAccount');
                     },
                     child: Stack(
                       children: [
@@ -209,16 +267,24 @@ class _ProfilePageState extends State<ProfilePage> with ProfilePageBehavior {
                           alignment: Alignment.center,
                           height: 60,
                           width: MediaQuery.of(context).size.width,
-                          margin: const EdgeInsets.only(left: leftRightGlobalMargin, right: leftRightGlobalMargin, top: 10),
-                          decoration: BoxDecoration(
-                            color: const Color(InstaDaleelColors.primaryColor),
-                            borderRadius: BorderRadius.circular(10),
+                          margin: const EdgeInsets.only(
+                            left: leftRightGlobalMargin,
+                            right: leftRightGlobalMargin,
+                            top: 10,
+                          ),
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.fitWidth,
+                              image: AssetImage(
+                                profileBtnBkg,
+                              ),
+                            ),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: const [
                               Text(
-                                'Add Company',
+                                'Manage my account',
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
@@ -253,7 +319,10 @@ class _ProfilePageState extends State<ProfilePage> with ProfilePageBehavior {
                         alignment: Alignment.center,
                         height: 60,
                         width: MediaQuery.of(context).size.width,
-                        margin: const EdgeInsets.only(left: leftRightGlobalMargin, right: leftRightGlobalMargin, top: 10),
+                        margin: const EdgeInsets.only(
+                            left: leftRightGlobalMargin,
+                            right: leftRightGlobalMargin,
+                            top: 10),
                         decoration: BoxDecoration(
                           color: const Color(InstaDaleelColors.primaryColor),
                           borderRadius: BorderRadius.circular(10),
@@ -296,7 +365,10 @@ class _ProfilePageState extends State<ProfilePage> with ProfilePageBehavior {
                         alignment: Alignment.center,
                         height: 60,
                         width: MediaQuery.of(context).size.width,
-                        margin: const EdgeInsets.only(left: leftRightGlobalMargin, right: leftRightGlobalMargin, top: 10),
+                        margin: const EdgeInsets.only(
+                            left: leftRightGlobalMargin,
+                            right: leftRightGlobalMargin,
+                            top: 10),
                         decoration: BoxDecoration(
                           color: const Color(InstaDaleelColors.primaryColor),
                           borderRadius: BorderRadius.circular(10),
@@ -338,7 +410,10 @@ class _ProfilePageState extends State<ProfilePage> with ProfilePageBehavior {
                     alignment: Alignment.center,
                     height: 60,
                     width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.only(left: leftRightGlobalMargin, right: leftRightGlobalMargin, top: 10),
+                    margin: const EdgeInsets.only(
+                        left: leftRightGlobalMargin,
+                        right: leftRightGlobalMargin,
+                        top: 10),
                     decoration: BoxDecoration(
                       color: const Color(InstaDaleelColors.primaryColor),
                       borderRadius: BorderRadius.circular(10),

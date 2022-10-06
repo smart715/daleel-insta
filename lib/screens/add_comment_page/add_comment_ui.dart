@@ -20,10 +20,10 @@ class AddCommentScreen extends StatefulWidget {
   State<AddCommentScreen> createState() => _AddCommentScreenState();
 }
 
-class _AddCommentScreenState extends State<AddCommentScreen>
-    with AddCommentBehavior, ConnectivityHandler {
+class _AddCommentScreenState extends State<AddCommentScreen> with AddCommentBehavior, ConnectivityHandler {
+
   void addCommentIndicator() {
-    if (isPostingComment) {
+    if(isPostingComment) {
       setState(() {
         commentButtonContent = const SizedBox(
           height: 20,
@@ -34,7 +34,8 @@ class _AddCommentScreenState extends State<AddCommentScreen>
           ),
         );
       });
-    } else {
+    }
+    else {
       setState(() {
         commentButtonContent = const Text(
           'Comment',
@@ -50,12 +51,9 @@ class _AddCommentScreenState extends State<AddCommentScreen>
     late Response response;
     isPostingComment = true;
     addCommentIndicator();
-    if (await checkForInternetServiceAvailability(context)) {
+    if(await checkForInternetServiceAvailability(context)) {
       try {
-        response = await dio.post('$baseUrl/api/post-comment',
-            queryParameters: {
-              'token': bearerToken,
-            },
+        response = await dio.post('https://insta-daleel.emicon.tech/api/post-comment', queryParameters: {'token': bearerToken,},
             options: Options(contentType: 'multipart/form-data'),
             data: FormData.fromMap(
               {
@@ -64,73 +62,57 @@ class _AddCommentScreenState extends State<AddCommentScreen>
                 'comment': commentTextEditingController.text,
                 'images[]': multipartFileList,
               },
-            ));
+            )
+        );
 
-        Map<String, dynamic> postCommentResponseMap =
-            response.data is Map<String, dynamic> ? response.data : {};
+        Map<String, dynamic> postCommentResponseMap = response.data is Map<String, dynamic> ?
+        response.data : {};
 
-        if (postCommentResponseMap.isNotEmpty) {
-          String postCommentResponseStatus =
-              postCommentResponseMap['status'] is String
-                  ? postCommentResponseMap['status']
-                  : '';
+        if(postCommentResponseMap.isNotEmpty) {
+          String postCommentResponseStatus = postCommentResponseMap['status'] is String ? postCommentResponseMap['status'] : '';
 
-          if (postCommentResponseStatus == 'success') {
-            Map<String, dynamic> postCommentDataMap =
-                postCommentResponseMap['data'] is Map<String, dynamic>
-                    ? postCommentResponseMap['data']
-                    : {};
+          if(postCommentResponseStatus == 'success') {
 
-            if (postCommentDataMap.isNotEmpty) {}
+            Map<String, dynamic> postCommentDataMap = postCommentResponseMap['data'] is Map<String, dynamic> ?
+            postCommentResponseMap['data'] : {};
+
+            if(postCommentDataMap.isNotEmpty) {
+
+            }
 
             isPostingComment = false;
             commentTextEditingController.clear();
             CommunityTabBehavior.setStateOfLatestPostListView();
             // profilePic = null;
             addCommentIndicator();
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text(
-                'comment added successfully',
-              ),
-            ));
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('comment added successfully',),));
             PostDetailBehavior.setStateOfPostDetailListView();
             Navigator.pop(context);
-          } else if (postCommentResponseStatus == 'error') {
-            isPostingComment = false;
-            addCommentIndicator();
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text(
-                'unable to post comment, please try again later',
-              ),
-            ));
-          } else {
-            isPostingComment = false;
-            addCommentIndicator();
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text(
-                'something went wrong, please try again1',
-              ),
-            ));
           }
-        } else {
+          else if(postCommentResponseStatus == 'error') {
+            isPostingComment = false;
+            addCommentIndicator();
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('unable to post comment, please try again later',),));
+          }
+          else {
+            isPostingComment = false;
+            addCommentIndicator();
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('something went wrong, please try again1',),));
+          }
+        }
+        else {
           isPostingComment = false;
           addCommentIndicator();
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text(
-              'server not responding, please try again',
-            ),
-          ));
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('server not responding, please try again',),));
         }
+
       } on Exception {
         isPostingComment = false;
         addCommentIndicator();
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-            'something went wrong, please try again2',
-          ),
-        ));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('something went wrong, please try again2',),));
       }
-    } else {
+    }
+    else {
       isPostingComment = false;
       addCommentIndicator();
     }
@@ -214,8 +196,7 @@ class _AddCommentScreenState extends State<AddCommentScreen>
                         children: [
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: leftRightGlobalMargin),
+                              padding: const EdgeInsets.only(left: leftRightGlobalMargin),
                               child: Scrollbar(
                                 thickness: 1,
                                 controller: scrollController,
@@ -239,8 +220,7 @@ class _AddCommentScreenState extends State<AddCommentScreen>
                                         fontSize: 13,
                                       ),
                                       border: InputBorder.none),
-                                  cursorColor: const Color(
-                                      InstaDaleelColors.primaryColor),
+                                  cursorColor: const Color(InstaDaleelColors.primaryColor),
                                 ),
                               ),
                             ),
@@ -256,14 +236,10 @@ class _AddCommentScreenState extends State<AddCommentScreen>
                           ),
                           GestureDetector(
                             onTap: () async {
-                              commentPicsList =
-                                  await imagePicker.pickMultiImage();
-                              if (commentPicsList != null) {
+                              commentPicsList = await imagePicker.pickMultiImage();
+                              if(commentPicsList != null) {
                                 for (XFile element in commentPicsList!) {
-                                  multipartFileList.add(MultipartFile(
-                                      File(element.path).openRead(),
-                                      await element.length(),
-                                      filename: element.name));
+                                  multipartFileList.add(MultipartFile(File(element.path).openRead(), await element.length(), filename: element.name));
                                 }
                               }
                             },
@@ -272,7 +248,8 @@ class _AddCommentScreenState extends State<AddCommentScreen>
                                 child: Icon(
                                   Icons.camera_alt_outlined,
                                   color: Color(InstaDaleelColors.primaryColor),
-                                )),
+                                )
+                            ),
                           ),
                         ],
                       ),
@@ -282,7 +259,7 @@ class _AddCommentScreenState extends State<AddCommentScreen>
                     onTap: () {
                       FocusManager.instance.primaryFocus?.unfocus();
                       isKeyboardOpen = false;
-                      if (!isPostingComment) {
+                      if(!isPostingComment) {
                         addComment();
                       }
                     },
@@ -295,8 +272,8 @@ class _AddCommentScreenState extends State<AddCommentScreen>
                           width: MediaQuery.of(context).size.width - 30,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(25),
-                              color:
-                                  const Color(InstaDaleelColors.primaryColor)),
+                              color: const Color(InstaDaleelColors.primaryColor)
+                          ),
                           child: Center(
                             child: commentButtonContent,
                           ),
@@ -304,10 +281,7 @@ class _AddCommentScreenState extends State<AddCommentScreen>
                       ),
                     ),
                   ),
-                  Expanded(
-                      child: Container(
-                    color: Colors.transparent,
-                  ))
+                  Expanded(child: Container(color: Colors.transparent,))
                 ],
               ),
             ),

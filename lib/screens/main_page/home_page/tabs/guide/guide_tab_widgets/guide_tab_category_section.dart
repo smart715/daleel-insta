@@ -12,13 +12,13 @@ class GuideTabCategorySection extends StatefulWidget {
       _GuideTabCategorySectionState();
 }
 
-class _GuideTabCategorySectionState extends State<GuideTabCategorySection>
-    with GuideTabBehavior, ConnectivityHandler {
+class _GuideTabCategorySectionState extends State<GuideTabCategorySection> with GuideTabBehavior, ConnectivityHandler {
+
   Future<List<dynamic>> getCategoryResponseData() async {
     if (await checkForInternetServiceAvailability(context)) {
       try {
         categoryResponse = await dio.get(
-          '$baseUrl/api/get-categories/4',
+          'https://insta-daleel.emicon.tech/api/get-categories/4',
           queryParameters: {
             'token': bearerToken,
           },
@@ -89,7 +89,7 @@ class _GuideTabCategorySectionState extends State<GuideTabCategorySection>
                 GuideTabCategorySectionCircularAvatar(
               iconLink: snapshot.data![index] is Map<String, dynamic>
                   ? snapshot.data![index]['icon'] is String
-                      ? '$baseUrl/images/category/${snapshot.data![index]['icon']}'
+                      ? 'https://insta-daleel.emicon.tech/images/category/${snapshot.data![index]['icon']}'
                       : 'https://cdn-icons-png.flaticon.com/512/159/159469.png'
                   : 'https://cdn-icons-png.flaticon.com/512/159/159469.png',
               name: snapshot.data![index] is Map<String, dynamic>
@@ -98,19 +98,14 @@ class _GuideTabCategorySectionState extends State<GuideTabCategorySection>
                       : '---'
                   : '---',
               onTap: () {
-                Navigator.pushNamed(context, 'SubCategories',
-                    arguments: <String>[
-                      snapshot.data![index] is Map<String, dynamic>
-                          ? snapshot.data![index]['id'] is int
-                              ? snapshot.data![index]['id'].toString()
-                              : '---'
-                          : '---',
-                      snapshot.data![index] is Map<String, dynamic>
-                          ? snapshot.data![index]['name'] is String
-                              ? snapshot.data![index]['name']
-                              : '---'
-                          : '---',
-                    ]);
+                Navigator.pushNamed(context, 'SubCategories', arguments: <String>[
+                  snapshot.data![index] is Map<String, dynamic> ?
+                  snapshot.data![index]['id'] is int ?
+                  snapshot.data![index]['id'].toString() : '---' : '---',
+                  snapshot.data![index] is Map<String, dynamic> ?
+                  snapshot.data![index]['name'] is String ?
+                  snapshot.data![index]['name'] : '---' : '---',
+                ]);
               },
             ),
           );

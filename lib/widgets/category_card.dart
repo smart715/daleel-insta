@@ -4,7 +4,12 @@ import '../../../constants/colors.dart';
 import '../../../global_members.dart';
 
 class CategoryCard extends StatelessWidget {
-  const CategoryCard({Key? key, required this.title, required this.imageLink, required this.onTap}) : super(key: key);
+  const CategoryCard(
+      {Key? key,
+      required this.title,
+      required this.imageLink,
+      required this.onTap})
+      : super(key: key);
 
   final String title, imageLink;
   final VoidCallback onTap;
@@ -12,10 +17,11 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
-      margin: const EdgeInsets.only(top: 15, left: leftRightGlobalMargin, right: leftRightGlobalMargin), // it was 10.0
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(25)
-      ),
+      margin: const EdgeInsets.only(
+          top: 15,
+          left: leftRightGlobalMargin,
+          right: leftRightGlobalMargin), // it was 10.0
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
       child: GestureDetector(
         onTap: onTap,
         child: Container(
@@ -46,7 +52,9 @@ class CategoryCard extends StatelessWidget {
                 ),
               ),
               Container(
-                margin: const EdgeInsets.only(right: 20,),
+                margin: const EdgeInsets.only(
+                  right: 20,
+                ),
                 height: 50,
                 width: 50,
                 decoration: BoxDecoration(
@@ -59,13 +67,18 @@ class CategoryCard extends StatelessWidget {
                     width: 25,
                     fit: BoxFit.fill,
                     imageUrl: imageLink,
-                    placeholder: (BuildContext context, String url) => const Center(
+                    placeholder: (BuildContext context, String url) =>
+                        const Center(
                       child: CircularProgressIndicator(
                         color: Colors.white,
                         strokeWidth: 1,
                       ),
                     ),
-                    errorWidget: (context, url, error) => const Center(child: Icon(Icons.error_outline_outlined, color: Colors.black,)),
+                    errorWidget: (context, url, error) => const Center(
+                        child: Icon(
+                      Icons.error_outline_outlined,
+                      color: Colors.black,
+                    )),
                   ),
                 ),
               ),

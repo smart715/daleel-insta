@@ -10,9 +10,7 @@ import '../get_specific_person_post_page/get_specific_person_post_behavior.dart'
 import '../main_page/home_page/tabs/community/community_tab_widgets/community_tab_behavior.dart';
 
 class UpdatePostScreen extends StatefulWidget {
-  const UpdatePostScreen(
-      {Key? key, required this.postId, required this.descriptionToBeUpdated})
-      : super(key: key);
+  const UpdatePostScreen({Key? key, required this.postId, required this.descriptionToBeUpdated}) : super(key: key);
 
   final int postId;
   final String descriptionToBeUpdated;
@@ -23,10 +21,10 @@ class UpdatePostScreen extends StatefulWidget {
   State<UpdatePostScreen> createState() => _UpdatePostScreenState();
 }
 
-class _UpdatePostScreenState extends State<UpdatePostScreen>
-    with UpdatePostBehavior, ConnectivityHandler {
+class _UpdatePostScreenState extends State<UpdatePostScreen> with UpdatePostBehavior, ConnectivityHandler {
+
   void updatePostIndicator() {
-    if (isUpdating) {
+    if(isUpdating) {
       setState(() {
         updateButtonContent = const SizedBox(
           height: 20,
@@ -37,7 +35,8 @@ class _UpdatePostScreenState extends State<UpdatePostScreen>
           ),
         );
       });
-    } else {
+    }
+    else {
       setState(() {
         updateButtonContent = const Text(
           'Update Post',
@@ -53,12 +52,9 @@ class _UpdatePostScreenState extends State<UpdatePostScreen>
     late Response response;
     isUpdating = true;
     updatePostIndicator();
-    if (await checkForInternetServiceAvailability(context)) {
+    if(await checkForInternetServiceAvailability(context)) {
       try {
-        response = await dio.post('$baseUrl/api/update-post',
-            queryParameters: {
-              'token': bearerToken,
-            },
+        response = await dio.post('https://insta-daleel.emicon.tech/api/update-post', queryParameters: {'token': bearerToken,},
             options: Options(contentType: 'multipart/form-data'),
             data: FormData.fromMap(
               {
@@ -67,24 +63,23 @@ class _UpdatePostScreenState extends State<UpdatePostScreen>
                 'description': updatePostTextEditingController.text,
                 'images[]': multipartFileList,
               },
-            ));
+            )
+        );
 
-        Map<String, dynamic> updatePostResponseMap =
-            response.data is Map<String, dynamic> ? response.data : {};
+        Map<String, dynamic> updatePostResponseMap = response.data is Map<String, dynamic> ?
+        response.data : {};
 
-        if (updatePostResponseMap.isNotEmpty) {
-          String addPostResponseStatus =
-              updatePostResponseMap['status'] is String
-                  ? updatePostResponseMap['status']
-                  : '';
+        if(updatePostResponseMap.isNotEmpty) {
+          String addPostResponseStatus = updatePostResponseMap['status'] is String ? updatePostResponseMap['status'] : '';
 
-          if (addPostResponseStatus == 'success') {
-            Map<String, dynamic> updatePostDataMap =
-                updatePostResponseMap['data'] is Map<String, dynamic>
-                    ? updatePostResponseMap['data']
-                    : {};
+          if(addPostResponseStatus == 'success') {
 
-            if (updatePostDataMap.isNotEmpty) {}
+            Map<String, dynamic> updatePostDataMap = updatePostResponseMap['data'] is Map<String, dynamic> ?
+            updatePostResponseMap['data'] : {};
+
+            if(updatePostDataMap.isNotEmpty) {
+
+            }
 
             /*userName = updateProfileResponseMap['data'] is Map<String, dynamic> ?
             updateProfileResponseMap['data']['name'] is String ?
@@ -100,59 +95,45 @@ class _UpdatePostScreenState extends State<UpdatePostScreen>
             // profilePic = null;
             updatePostIndicator();
 
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text(
-                'post updated successfully',
-              ),
-            ));
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('post updated successfully',),));
             Navigator.pop(context);
             Navigator.pop(context);
 
-            if (CommunityTabBehavior.isFromCommunity) {
+            if(CommunityTabBehavior.isFromCommunity) {
               CommunityTabBehavior.setStateOfLatestPostListView();
-            } else {
-              GetSpecificPersonPostBehavior
-                  .setStateOfSpecificPersonPostListView();
+            }
+            else {
+              GetSpecificPersonPostBehavior.setStateOfSpecificPersonPostListView();
               CommunityTabBehavior.setStateOfLatestPostListView();
             }
 
             CommunityTabBehavior.isFromCommunity = false;
-          } else if (addPostResponseStatus == 'error') {
-            isUpdating = false;
-            updatePostIndicator();
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text(
-                'unable to update post, please try again later',
-              ),
-            ));
-          } else {
-            isUpdating = false;
-            updatePostIndicator();
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text(
-                'something went wrong, please try again1',
-              ),
-            ));
+
           }
-        } else {
+          else if(addPostResponseStatus == 'error') {
+            isUpdating = false;
+            updatePostIndicator();
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('unable to update post, please try again later',),));
+          }
+          else {
+            isUpdating = false;
+            updatePostIndicator();
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('something went wrong, please try again1',),));
+          }
+        }
+        else {
           isUpdating = false;
           updatePostIndicator();
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text(
-              'server not responding, please try again',
-            ),
-          ));
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('server not responding, please try again',),));
         }
+
       } on Exception {
         isUpdating = false;
         updatePostIndicator();
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-            'something went wrong, please try again2',
-          ),
-        ));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('something went wrong, please try again2',),));
       }
-    } else {
+    }
+    else {
       isUpdating = false;
       updatePostIndicator();
     }
@@ -239,8 +220,7 @@ class _UpdatePostScreenState extends State<UpdatePostScreen>
                           children: [
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: leftRightGlobalMargin),
+                                padding: const EdgeInsets.only(left: leftRightGlobalMargin),
                                 child: Scrollbar(
                                   thickness: 1,
                                   controller: scrollController,
@@ -264,8 +244,7 @@ class _UpdatePostScreenState extends State<UpdatePostScreen>
                                           fontSize: 13,
                                         ),
                                         border: InputBorder.none),
-                                    cursorColor: const Color(
-                                        InstaDaleelColors.primaryColor),
+                                    cursorColor: const Color(InstaDaleelColors.primaryColor),
                                   ),
                                 ),
                               ),
@@ -279,17 +258,14 @@ class _UpdatePostScreenState extends State<UpdatePostScreen>
                                 endIndent: 8,
                               ),
                             ),
+
                             GestureDetector(
                               onTap: () async {
-                                updatePicsList =
-                                    await imagePicker.pickMultiImage();
+                                updatePicsList = await imagePicker.pickMultiImage();
 
-                                if (updatePicsList != null) {
+                                if(updatePicsList != null) {
                                   for (XFile element in updatePicsList!) {
-                                    multipartFileList.add(MultipartFile(
-                                        File(element.path).openRead(),
-                                        await element.length(),
-                                        filename: element.name));
+                                    multipartFileList.add(MultipartFile(File(element.path).openRead(), await element.length(), filename: element.name));
                                   }
                                 }
                                 setState(() {});
@@ -298,9 +274,9 @@ class _UpdatePostScreenState extends State<UpdatePostScreen>
                                   padding: EdgeInsets.only(right: 20, left: 10),
                                   child: Icon(
                                     Icons.camera_alt_outlined,
-                                    color:
-                                        Color(InstaDaleelColors.primaryColor),
-                                  )),
+                                    color: Color(InstaDaleelColors.primaryColor),
+                                  )
+                              ),
                             ),
                           ],
                         ),
@@ -310,8 +286,7 @@ class _UpdatePostScreenState extends State<UpdatePostScreen>
                     ListView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount:
-                          updatePicsList != null ? updatePicsList!.length : 0,
+                      itemCount: updatePicsList != null ? updatePicsList!.length : 0,
                       itemBuilder: (context, index) => SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         physics: const BouncingScrollPhysics(),
@@ -327,7 +302,7 @@ class _UpdatePostScreenState extends State<UpdatePostScreen>
                       onTap: () {
                         FocusManager.instance.primaryFocus?.unfocus();
                         isKeyboardOpen = false;
-                        if (!isUpdating) {
+                        if(!isUpdating) {
                           updatePost();
                         }
                       },
@@ -340,8 +315,8 @@ class _UpdatePostScreenState extends State<UpdatePostScreen>
                             width: MediaQuery.of(context).size.width - 30,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(25),
-                                color: const Color(
-                                    InstaDaleelColors.primaryColor)),
+                                color: const Color(InstaDaleelColors.primaryColor)
+                            ),
                             child: Center(
                               child: updateButtonContent,
                             ),

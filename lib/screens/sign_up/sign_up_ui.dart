@@ -1,3 +1,4 @@
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:insta_daleel/constants/colors.dart';
 import 'package:insta_daleel/network_connectivity_handler.dart';
@@ -15,6 +16,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp>
     with SignUpBehavior, ConnectivityHandler {
+  Country? c;
   void signingUpIndicator() {
     if (isSigningUp) {
       setState(() {
@@ -44,15 +46,17 @@ class _SignUpState extends State<SignUp>
     signingUpIndicator();
     if (await checkForInternetServiceAvailability(context)) {
       try {
-        response =
-            await dio.post('$baseUrl/api/auth/register', queryParameters: {
-          'name': signUpFullNameFieldTextEditingController.text,
-          'email': signUpEmailAddressFieldTextEditingController.text,
-          'phone': signUpMobileNumberFieldTextEditingController.text,
-          'password': signUpPasswordFieldTextEditingController.text,
-          'password_confirmation':
-              signUpConfirmPasswordFieldTextEditingController.text,
-        });
+        response = await dio.post(
+            'https://insta-daleel.emicon.tech/api/auth/register',
+            queryParameters: {
+              'name': signUpFullNameFieldTextEditingController.text,
+              'email': signUpEmailAddressFieldTextEditingController.text,
+              'phone':
+                  '+${c!.phoneCode}${signUpMobileNumberFieldTextEditingController.text}',
+              'password': signUpPasswordFieldTextEditingController.text,
+              'password_confirmation':
+                  signUpConfirmPasswordFieldTextEditingController.text,
+            });
       } on Exception {
         isSigningUp = false;
         signingUpIndicator();
@@ -270,12 +274,31 @@ class _SignUpState extends State<SignUp>
                         return null;
                       },
                     ),
-                    SignInAndSignUpTextField(
-                      labelText: 'Mobile\nNumber',
-                      hintText: 'Enter mobile number',
+                    // SignInAndSignUpTextField(
+                    //   labelText: 'Mobile\nNumber',
+                    //   hintText: 'Enter mobile number',
+                    //   textEditingController: signUpMobileNumberFieldTextEditingController,
+                    //   textInputType: TextInputType.number,
+                    //   validator: (value) {
+                    //     if (value == null || value.trim().isEmpty) {
+                    //       return 'Mobile number can\'t be empty.';
+                    //     }
+                    //     return null;
+                    //   },
+                    // ),
+                    ContactInputDisplay(
+                      hintText: 'Type Number',
+                      labelText: 'Contact\nNumber',
+                      textInputType: TextInputType.number,
                       textEditingController:
                           signUpMobileNumberFieldTextEditingController,
-                      textInputType: TextInputType.number,
+                      country: c,
+                      onChange: (country, value) {
+                        setState(() {
+                          c = country;
+                        });
+                      },
+                      showDefault: true,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
                           return 'Mobile number can\'t be empty.';
