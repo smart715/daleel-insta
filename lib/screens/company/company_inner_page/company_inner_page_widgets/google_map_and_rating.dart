@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:insta_daleel/global_members.dart';
-
-import '../../../constants/colors.dart';
+import 'package:insta_daleel/constants/colors.dart';
 
 class GoogleMapAndRating extends StatelessWidget {
-  const GoogleMapAndRating({Key? key, required this.ratingText1, required this.ratingText2}) : super(key: key);
+  const GoogleMapAndRating(
+      {Key? key, required this.ratingText1, required this.ratingText2})
+      : super(key: key);
 
   final String ratingText1, ratingText2;
 
@@ -13,19 +13,20 @@ class GoogleMapAndRating extends StatelessWidget {
     return Stack(
       children: [
         Column(
-          children: [
-            Container(
+          children: const [
+            SizedBox(
               height: 160,
-              width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.symmetric(horizontal: leftRightGlobalMargin),
-              child: const Image(
+              // width: MediaQuery.of(context).size.width,
+              // margin:
+              //     const EdgeInsets.symmetric(horizontal: leftRightGlobalMargin),
+              child: Image(
                 fit: BoxFit.fill,
                 image: AssetImage(
                   'assets/images/comapny_inner_page/map.png',
                 ),
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 35,
             ),
           ],
@@ -35,16 +36,13 @@ class GoogleMapAndRating extends StatelessWidget {
           left: 10,
           child: Card(
             elevation: 8,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30)
-            ),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             child: Container(
               height: 60,
               width: 60,
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30)
-              ),
+                  color: Colors.white, borderRadius: BorderRadius.circular(30)),
               child: const Center(
                 child: Image(
                   height: 25,
@@ -63,24 +61,28 @@ class GoogleMapAndRating extends StatelessWidget {
           right: 30,
           child: Card(
             elevation: 8,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10)
-            ),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             child: Container(
               height: 30,
               width: 65,
               decoration: BoxDecoration(
-                  color: const Color(InstaDaleelColors.primaryColor),
-                  borderRadius: BorderRadius.circular(10)
+                color: const Color(InstaDaleelColors.primaryColor),
+                borderRadius: BorderRadius.circular(10),
+                image: const DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage(
+                      'assets/images/main_page/featured_page/sbb.png'),
+                ),
               ),
               child: const Center(
                   child: Text(
-                    '@77527',
-                    style: TextStyle(
-                        color: Colors.white
-                    ),
-                  )
-              ),
+                '@77527',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                ),
+              )),
             ),
           ),
         ),
@@ -98,17 +100,18 @@ class GoogleMapAndRating extends StatelessWidget {
                   const Icon(
                     Icons.star,
                     color: Color(0xFFFFCE31),
+                    size: 18,
                   ),
                   Text(
                     ' $ratingText1   ($ratingText2+ ratings)',
                     style: const TextStyle(
-                        color: Color(InstaDaleelColors.primaryColor)
+                      color: Color(InstaDaleelColors.primaryColor),
+                      fontSize: 12,
                     ),
                   ),
                 ],
               ),
-            )
-        ),
+            )),
       ],
     );
   }

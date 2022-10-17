@@ -82,6 +82,7 @@ flutter:
     - assets/images/main_page/bottom_navigation_bar/setting.png
     - assets/images/main_page/app_bar/dp_to_delete.png
     - assets/images/main_page/home_page/guide_tab/first_slider_image.png
+    - assets/images/main_page/home_page/guide_tab/banner_bkg.png
     - assets/images/main_page/home_page/guide_tab/guid_tab_guide_section_circular_avatar_background.png
     - assets/images/main_page/home_page/guide_tab/hospital.png
     - assets/images/main_page/home_page/guide_tab/shopping_cart.png
@@ -135,6 +136,9 @@ flutter:
     - assets/images/comapny_inner_page/image_two.png
     - assets/images/comapny_inner_page/review_and_rating_image1.png
     - assets/images/comapny_inner_page/review_and_rating_image2.png
+    - assets/images/comapny_inner_page/more.png
+    - assets/images/comapny_inner_page/map_sq.png
+    - assets/images/comapny_inner_page/sh.png
     - assets/images/main_page/home_page/community_tab/bg1.png
     - assets/images/main_page/home_page/community_tab/bg2.png
     - assets/images/main_page/home_page/community_tab/dp1.png
@@ -187,6 +191,10 @@ flutter:
     - assets/images/main_page/featured_page/4.png
     - assets/images/main_page/featured_page/5.png
     - assets/images/main_page/featured_page/carbon_badge.png
+    - assets/images/main_page/featured_page/cat_bkg.png
+    - assets/images/main_page/featured_page/sf.png
+    - assets/images/main_page/featured_page/f.png
+    - assets/images/main_page/featured_page/sbb.png
     # gold buying and selling page
     - assets/images/gold_buying_and_selling_price/gold.png
     # profile page
@@ -195,7 +203,27 @@ flutter:
     - assets/images/profile_page/3.png
     - assets/images/profile_page/4.png
     - assets/images/profile_page/5.png
+    - assets/images/profile_page/6.png
+    - assets/images/profile_page/7.png
     - assets/images/profile_page/bkg.png
+    # company page
+    - assets/images/company_page/btn_bkg.png
+    - assets/images/company_page/card_bkg.png
+    - assets/images/company_page/rec.png
+    # payment page
+    - assets/images/payment_page/apple.png
+    - assets/images/payment_page/google.png
+    - assets/images/payment_page/card.png
+    - assets/images/payment_page/payment_banner.png
+    - assets/images/payment_page/successful.png
+    # navigate bar
+    - assets/images/nav/nav_bkg.png
+    # guide page
+    - assets/images/guide_page/2_bkg.jpg
+    # comments
+    - assets/images/comment/1.png
+    - assets/images/comment/2.png
+    - assets/images/comment/3.png
     # offer details page
     - assets/images/offer_details/offer_detail_image.png
     # latest reviews

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:insta_daleel/global_members.dart';
 import '../../../../constants/colors.dart';
 import '../../../widgets/sign_in_and_sign_up_text_field.dart';
 
@@ -148,56 +149,70 @@ class _AddCompanyState extends State<AddCompany> {
                         return null;
                       },
                     ),
+                    Container(
+                      height: 80,
+                      margin: const EdgeInsets.only(top: 10),
+                      width: MediaQuery.of(context).size.width - 30,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(40),
+                        image: const DecorationImage(
+                          fit: BoxFit.cover,
+                          image: AssetImage(buttonBkg),
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Text(
+                            'Add Company Logo',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Icon(
+                            Icons.add_circle_outline_rounded,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
                     SizedBox(
-                      height: 90,
+                      height: 75,
                       width: MediaQuery.of(context).size.width,
                       child: Center(
-                        child: Container(
-                          height: 70,
-                          width: MediaQuery.of(context).size.width - 30,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(40),
-                              color:
-                                  const Color(InstaDaleelColors.primaryColor)),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: const [
-                              Text(
-                                'Add Company Logo',
+                        child: InkWell(
+                          onTap: () {},
+                          child: Container(
+                            height: 75,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                              image: const DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage(submitBtnBkg),
+                              ),
+                            ),
+                            child: const Center(
+                              child: Text(
+                                'Submit',
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
-                              ),
-                              Icon(
-                                Icons.add_circle_outline_rounded,
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 70,
-                      width: MediaQuery.of(context).size.width,
-                      child: Center(
-                        child: Container(
-                          height: 45,
-                          width: MediaQuery.of(context).size.width - 30,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(25),
-                              color:
-                                  const Color(InstaDaleelColors.primaryColor)),
-                          child: const Center(
-                            child: Text(
-                              'Submit',
-                              style: TextStyle(
-                                color: Colors.white,
+                                textAlign: TextAlign.center,
                               ),
                             ),
                           ),
                         ),
                       ),
+                    ),
+                    const SizedBox(
+                      height: 30,
                     ),
                   ],
                 ),

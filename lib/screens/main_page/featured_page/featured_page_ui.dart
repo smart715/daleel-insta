@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:insta_daleel/screens/company/company_widgets/company_card_display.dart';
+import 'package:insta_daleel/screens/main_page/search_widget.dart';
 import '../../../constants/colors.dart';
-import '../../../global_members.dart';
 import 'featured_page_widgets/featured_company_rating_card.dart';
 
 class FeaturedCompanies extends StatefulWidget {
@@ -11,45 +12,43 @@ class FeaturedCompanies extends StatefulWidget {
 }
 
 class _FeaturedCompaniesState extends State<FeaturedCompanies> {
-
   List<FeaturedCompanyRatingCardModel> featuredCompanyRatingCardModelList = [
     FeaturedCompanyRatingCardModel(
-      onTap: (){},
+      onTap: () {},
       title: 'Software & Solutions',
       description: 'Lorem ipsum dolor sit amet, consectetur ',
       imageAssetPath: 'assets/images/main_page/featured_page/1.png',
       rating: 4.0,
     ),
     FeaturedCompanyRatingCardModel(
-      onTap: (){},
+      onTap: () {},
       title: 'Global Architecture',
       description: 'Lorem ipsum dolor sit amet, consectetur ',
       imageAssetPath: 'assets/images/main_page/featured_page/2.png',
       rating: 5.0,
     ),
     FeaturedCompanyRatingCardModel(
-      onTap: (){},
+      onTap: () {},
       title: 'Infotech Systems',
       description: 'Lorem ipsum dolor sit amet, consectetur ',
       imageAssetPath: 'assets/images/main_page/featured_page/3.png',
       rating: 5.0,
     ),
     FeaturedCompanyRatingCardModel(
-      onTap: (){},
+      onTap: () {},
       title: 'Infosys System And Co',
       description: 'Lorem ipsum dolor sit amet, consectetur ',
       imageAssetPath: 'assets/images/main_page/featured_page/4.png',
       rating: 4.0,
     ),
     FeaturedCompanyRatingCardModel(
-      onTap: (){},
+      onTap: () {},
       title: 'IDEA TECH Services',
       description: 'Lorem ipsum dolor sit amet, consectetur ',
       imageAssetPath: 'assets/images/main_page/featured_page/5.png',
       rating: 5.0,
     ),
   ];
-
 
   @override
   Widget build(BuildContext context) {
@@ -93,113 +92,47 @@ class _FeaturedCompaniesState extends State<FeaturedCompanies> {
           ),
         ),
         //search view
-        Card(
-          elevation: 2,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          margin: const EdgeInsets.only(left: leftRightGlobalMargin, right: leftRightGlobalMargin, top: 10),
-          child: Container(
-            height: 50,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Colors.white,
-            ),
-            child: Row(
-              children: const [
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 15),
-                    child: TextField(
-                      textInputAction: TextInputAction.next,
-                      // controller: textEditingController,
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black,
-                      ),
-                      decoration: InputDecoration(
-                          hintText: 'Search Here',
-                          hintTextDirection: TextDirection.rtl,
-                          hintStyle: TextStyle(
-                            color: Color(0xFFB1B1B1),
-                            fontSize: 13,
-                          ),
-                          border: InputBorder.none),
-                      cursorColor: Color(InstaDaleelColors.primaryColor),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 5),
-                  child: VerticalDivider(
-                    color: Color(0xFFB1B1B1),
-                    thickness: 0.5,
-                    indent: 8,
-                    endIndent: 8,
-                  ),
-                ),
-                Padding(
-                    padding: EdgeInsets.only(right: 20, left: 10),
-                    child: Image(
-                      height: 25,
-                      width: 25,
-                      fit: BoxFit.fill,
-                      color: Color(InstaDaleelColors.primaryColor),
-                      image: AssetImage(
-                          'assets/images/main_page/bottom_navigation_bar/search.png'
-                      ),
-                    )
-                ),
-              ],
-            ),
-          ),
+        const SizedBox(
+          height: 20,
+        ),
+        SearchWidget(
+          onChanged: (searchedText) {
+            debugPrint("Search of $searchedText");
+          },
+        ),
+        const SizedBox(
+          height: 15,
         ),
         // body
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 130,
-                    width: MediaQuery.of(context).size.width,
-                    child: FeaturedCompanyRatingCard(
-                      featuredCompanyRatingCardModel: featuredCompanyRatingCardModelList[0],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 130,
-                    width: MediaQuery.of(context).size.width,
-                    child: FeaturedCompanyRatingCard(
-                      featuredCompanyRatingCardModel: featuredCompanyRatingCardModelList[1],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 130,
-                    width: MediaQuery.of(context).size.width,
-                    child: FeaturedCompanyRatingCard(
-                      featuredCompanyRatingCardModel: featuredCompanyRatingCardModelList[2],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 130,
-                    width: MediaQuery.of(context).size.width,
-                    child: FeaturedCompanyRatingCard(
-                      featuredCompanyRatingCardModel: featuredCompanyRatingCardModelList[3],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 130,
-                    width: MediaQuery.of(context).size.width,
-                    child: FeaturedCompanyRatingCard(
-                      featuredCompanyRatingCardModel: featuredCompanyRatingCardModelList[4],
-                    ),
-                  ),
-                ],
-              )
+          child:
+              // rating cards
+              Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: RefreshIndicator(
+              onRefresh: () async {
+                Future.delayed(const Duration(seconds: 1));
+              },
+              child: ListView.builder(
+                itemCount: featuredCompanyRatingCardModelList.length * 2,
+                physics: const BouncingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  if (index.isOdd) {
+                    return const SizedBox(
+                      height: 10,
+                    );
+                  }
+                  int i = index ~/ 2;
+                  final c = featuredCompanyRatingCardModelList[i];
+                  return CompanyDisplayCard(
+                    isFeatured: true,
+                    title: c.title,
+                    description: c.description,
+                    image: c.imageAssetPath,
+                    rating: c.rating,
+                  );
+                },
+              ),
             ),
           ),
         ),

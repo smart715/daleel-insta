@@ -3,30 +3,31 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:insta_daleel/data/dtos/user_profile_dto.dart';
 import 'package:insta_daleel/domain/entities/user_profile.dart';
-import 'package:insta_daleel/domain/repositories/repository.dart';
 import 'package:insta_daleel/network_connectivity_handler.dart';
 import 'package:insta_daleel/screens/edit_profile_page/update_profile_behavior.dart';
-import 'package:insta_daleel/service_locator.dart';
+import 'package:insta_daleel/screens/profile_page/profile_state_controller.dart';
 import 'package:insta_daleel/widgets/simple_progress_indicator.dart';
+// ignore: implementation_imports
 import 'package:country_picker/src/res/country_codes.dart';
 import '../../../constants/colors.dart';
 import '../../global_members.dart';
 import '../../widgets/sign_in_and_sign_up_text_field.dart';
 import '../profile_page/profile_page_behavior.dart';
 
-class UpdateProfile extends StatefulWidget {
+class UpdateProfile extends ConsumerStatefulWidget {
   const UpdateProfile({Key? key}) : super(key: key);
 
   static const String editProfileRoute = 'EditProfile';
 
   @override
-  State<UpdateProfile> createState() => _UpdateProfileState();
+  ConsumerState<UpdateProfile> createState() => _UpdateProfileState();
 }
 
-class _UpdateProfileState extends State<UpdateProfile>
+class _UpdateProfileState extends ConsumerState<UpdateProfile>
     with UpdateProfileBehavior, ConnectivityHandler {
   ValueNotifier<double> progressNotifier = ValueNotifier(0);
   Country? country, countryContact;
@@ -202,12 +203,10 @@ class _UpdateProfileState extends State<UpdateProfile>
   void initState() {
     isKeyboardOpen = false;
     savingDataIndicator();
-    initProfile();
     super.initState();
   }
 
   initProfile() {
-    profile = serviceLocator<Repository>().getUserProfile();
     firstNameFieldTextEditingController.text = profile.firstName ?? '';
     lastNameFieldTextEditingController.text = profile.lastName ?? '';
     nickNameFieldTextEditingController.text = profile.nickName ?? '';
@@ -296,6 +295,8 @@ class _UpdateProfileState extends State<UpdateProfile>
 
   @override
   Widget build(BuildContext context) {
+    profile = ref.watch(profileStateProvider).profile;
+    initProfile();
     computeProgress();
     return Scaffold(
       backgroundColor: const Color(InstaDaleelColors.backgroundColor),

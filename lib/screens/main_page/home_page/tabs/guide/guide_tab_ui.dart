@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:insta_daleel/constants/colors.dart';
-import 'package:insta_daleel/screens/main_page/home_page/tabs/guide/guide_tab_behavior.dart';
+import 'package:insta_daleel/screens/company/company_widgets/company_card_display.dart';
 import 'package:insta_daleel/screens/main_page/home_page/tabs/guide/guide_tab_widgets/guide_tab_rating_card.dart';
 import 'package:insta_daleel/screens/main_page/home_page/tabs/guide/guide_tab_widgets/guide_tab_rating_slider.dart';
 import 'package:insta_daleel/screens/main_page/home_page/tabs/guide/guide_tab_widgets/guide_tab_second_slider.dart';
 import 'package:insta_daleel/screens/main_page/home_page/tabs/guide/guide_tab_widgets/latest_post_section.dart';
 import 'package:insta_daleel/screens/main_page/main_page_behavior.dart';
 import '../../../../../global_members.dart';
-import '../../home_page_behavior.dart';
 import 'guide_tab_widgets/guide_tab_box_section.dart';
 import 'guide_tab_widgets/guide_tab_contact_us_section.dart';
 import 'guide_tab_widgets/guide_tab_ad_banner.dart';
@@ -22,7 +21,6 @@ class GuideTab extends StatefulWidget {
 }
 
 class _GuideTabState extends State<GuideTab> {
-
   List<GuideTabSecondSliderModel> guideTabSecondSliderModel = [
     GuideTabSecondSliderModel(
       title: 'Queen Arwa University',
@@ -59,10 +57,9 @@ class _GuideTabState extends State<GuideTab> {
   List<GuideTabRatingCardModel> guideTabRatingCardModelList = [
     GuideTabRatingCardModel(
       title: 'Beauty Parlour & Spa',
-      description:
-      'Lorem ipsum dolor sit amet, consectetur ',
+      description: 'Lorem ipsum dolor sit amet, consectetur ',
       imageAssetPath:
-      'assets/images/main_page/home_page/guide_tab/rating_image_one.png',
+          'assets/images/main_page/home_page/guide_tab/rating_image_one.png',
       rating: 4,
       onTap: () {
         debugPrint('1');
@@ -70,10 +67,9 @@ class _GuideTabState extends State<GuideTab> {
     ),
     GuideTabRatingCardModel(
       title: 'IDEA TECH Services',
-      description:
-      'Lorem ipsum dolor sit amet, consectetur ',
+      description: 'Lorem ipsum dolor sit amet, consectetur ',
       imageAssetPath:
-      'assets/images/main_page/home_page/guide_tab/rating_image_two.png',
+          'assets/images/main_page/home_page/guide_tab/rating_image_two.png',
       rating: 5,
       onTap: () {
         debugPrint('3');
@@ -81,10 +77,9 @@ class _GuideTabState extends State<GuideTab> {
     ),
     GuideTabRatingCardModel(
       title: 'Doctor & Medical Service',
-      description:
-      'Lorem ipsum dolor sit amet, consectetur ',
+      description: 'Lorem ipsum dolor sit amet, consectetur ',
       imageAssetPath:
-      'assets/images/main_page/home_page/guide_tab/rating_image_three.png',
+          'assets/images/main_page/home_page/guide_tab/rating_image_three.png',
       rating: 4,
       onTap: () {
         debugPrint('3');
@@ -95,10 +90,9 @@ class _GuideTabState extends State<GuideTab> {
   List<GuideTabRatingCardSliderModel> guideTabRatingCardSliderModelList = [
     GuideTabRatingCardSliderModel(
       title: 'Global Architecture',
-      description:
-      'Lorem ipsum dolor sit amet, consectetur ',
+      description: 'Lorem ipsum dolor sit amet, consectetur ',
       imageAssetPath:
-      'assets/images/main_page/home_page/guide_tab/rating_card_slider_image.png',
+          'assets/images/main_page/home_page/guide_tab/rating_card_slider_image.png',
       rating: 5,
       onTap: () {
         debugPrint('1');
@@ -106,10 +100,9 @@ class _GuideTabState extends State<GuideTab> {
     ),
     GuideTabRatingCardSliderModel(
       title: 'Global Architecture',
-      description:
-      'Lorem ipsum dolor sit amet, consectetur ',
+      description: 'Lorem ipsum dolor sit amet, consectetur ',
       imageAssetPath:
-      'assets/images/main_page/home_page/guide_tab/rating_card_slider_image.png',
+          'assets/images/main_page/home_page/guide_tab/rating_card_slider_image.png',
       rating: 5,
       onTap: () {
         debugPrint('2');
@@ -117,10 +110,9 @@ class _GuideTabState extends State<GuideTab> {
     ),
     GuideTabRatingCardSliderModel(
       title: 'Global Architecture',
-      description:
-      'Lorem ipsum dolor sit amet, consectetur ',
+      description: 'Lorem ipsum dolor sit amet, consectetur ',
       imageAssetPath:
-      'assets/images/main_page/home_page/guide_tab/rating_card_slider_image.png',
+          'assets/images/main_page/home_page/guide_tab/rating_card_slider_image.png',
       rating: 5,
       onTap: () {
         debugPrint('3');
@@ -134,28 +126,43 @@ class _GuideTabState extends State<GuideTab> {
       physics: const BouncingScrollPhysics(),
       child: Column(
         children: [
+          const SizedBox(
+            height: 20,
+          ),
           // Ad Banner
           const GuideTabAdBanner(),
 
+          const SizedBox(
+            height: 10,
+          ),
           // search view
           Container(
-            height: 55,
-            margin: const EdgeInsets.symmetric(horizontal: leftRightGlobalMargin),
+            height: 45,
+            margin: const EdgeInsets.symmetric(horizontal: 8),
             decoration: BoxDecoration(
-                color: const Color(InstaDaleelColors.primaryColor),
-                borderRadius: BorderRadius.circular(30)),
+              color: const Color(0xff22A8F3),
+              borderRadius: BorderRadius.circular(40),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color.fromRGBO(34, 168, 243, 0.5),
+                  offset: Offset(2.0, 2.0),
+                  blurRadius: 5.0,
+                ),
+              ],
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: const [
                 Expanded(
                   child: TextField(
                     style: TextStyle(fontSize: 16, color: Colors.white),
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.only(left: 20),
+                      contentPadding: EdgeInsets.only(left: 30),
                       hintText: 'Search Here.....',
                       hintStyle: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                       ),
                       border: InputBorder.none,
                     ),
@@ -163,7 +170,7 @@ class _GuideTabState extends State<GuideTab> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(right: 15.0),
+                  padding: EdgeInsets.only(right: 20.0),
                   child: Image(
                     height: 25,
                     width: 25,
@@ -178,10 +185,8 @@ class _GuideTabState extends State<GuideTab> {
           ),
 
           // View All button section
-          Container(
+          SizedBox(
             height: 60,
-            margin: const EdgeInsets.symmetric(horizontal: leftRightGlobalMargin),
-            width: MediaQuery.of(context).size.width,
             child: Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -213,43 +218,35 @@ class _GuideTabState extends State<GuideTab> {
           ),
 
           // circular avatar (guide) section
-          Container(
-            alignment: Alignment.center,
-            height: 130,
-            width: MediaQuery.of(context).size.width,
-            child: const GuideTabCategorySection(),
-          ),
+          const GuideTabCategorySection(),
 
           // second slider
-          SizedBox(
-            height: 250,
-            width: MediaQuery.of(context).size.width,
-            child: GuideTabSecondSlider(
-              guideTabSecondSliderModelList: guideTabSecondSliderModel,
-            ),
+          GuideTabSecondSlider(
+            guideTabSecondSliderModelList: guideTabSecondSliderModel,
+          ),
+
+          const SizedBox(
+            height: 8,
           ),
 
           // box section
-          Container(
-            alignment: Alignment.topCenter,
-            height: 100,
-            width: MediaQuery.of(context).size.width,
-            child: const BoxSection(),
+          const BoxSection(),
+
+          const SizedBox(
+            height: 10,
           ),
-
           // Latest Addition button
-          Container(
-            padding: const EdgeInsets.only(right: leftRightGlobalMargin),
-            height: 50,
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              onPressed: () {
-
-              },
+          InkWell(
+            child: Container(
+              padding: const EdgeInsets.only(right: leftRightGlobalMargin),
+              height: 30,
+              alignment: Alignment.centerRight,
               child: const Text(
                 'Latest Addition',
                 style: TextStyle(
-                  fontSize: 18,
+                  color: Color(InstaDaleelColors.primaryColor),
+                  fontWeight: FontWeight.w500,
+                  fontSize: 15,
                 ),
               ),
             ),
@@ -257,39 +254,39 @@ class _GuideTabState extends State<GuideTab> {
 
           // rating cards
           SizedBox(
-            height: 130,
-            width: MediaQuery.of(context).size.width,
-            child: GuideTabRatingCard(
-              guideTabRatingCardModel: guideTabRatingCardModelList[0],
-            ),
-          ),
-          SizedBox(
-            height: 130,
-            width: MediaQuery.of(context).size.width,
-            child: GuideTabRatingCard(
-              guideTabRatingCardModel: guideTabRatingCardModelList[1],
-            ),
-          ),
-          SizedBox(
-            height: 130,
-            width: MediaQuery.of(context).size.width,
-            child: GuideTabRatingCard(
-              guideTabRatingCardModel: guideTabRatingCardModelList[2],
-            ),
-          ),
-
-          // first 'see more'
-          Container(
-            padding: const EdgeInsets.only(right: leftRightGlobalMargin),
-            height: 50,
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              onPressed: () {
+            height: 3 * 105,
+            child: ListView.builder(
+              itemCount: guideTabRatingCardModelList.length * 2,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                if (index.isOdd) {
+                  return const SizedBox(
+                    height: 10,
+                  );
+                }
+                int i = index ~/ 2;
+                final c = guideTabRatingCardModelList[i];
+                return CompanyDisplayCard(
+                  title: c.title,
+                  description: c.description,
+                  image: c.imageAssetPath,
+                  rating: c.rating,
+                );
               },
+            ),
+          ),
+          // first 'see more'
+          InkWell(
+            child: Container(
+              padding: const EdgeInsets.only(right: leftRightGlobalMargin),
+              height: 30,
+              alignment: Alignment.centerRight,
               child: const Text(
                 'See More',
                 style: TextStyle(
-                  fontSize: 18,
+                  color: Color(InstaDaleelColors.primaryColor),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
@@ -298,50 +295,48 @@ class _GuideTabState extends State<GuideTab> {
           // divider
           const Divider(
             color: Colors.white,
-            height: 30,
+            height: 15,
             thickness: 3,
           ),
 
           // Latest Review button
-          Container(
-            padding: const EdgeInsets.only(right: leftRightGlobalMargin),
-            height: 50,
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, 'LatestCompanyReviews');
-              },
+          InkWell(
+            child: Container(
+              padding: const EdgeInsets.only(right: leftRightGlobalMargin),
+              height: 30,
+              // color: Colors.red,
+              alignment: Alignment.centerRight,
               child: const Text(
                 'Latest Review',
                 style: TextStyle(
-                  fontSize: 18,
+                  color: Color(InstaDaleelColors.primaryColor),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
           ),
 
           // rating card slider
-          SizedBox(
-            height: 150,
-            width: MediaQuery.of(context).size.width,
-            child: GuideTabRatingCardSlider(
-              guideTabRatingCardSliderModelList: guideTabRatingCardSliderModelList,
-            ),
+          GuideTabRatingCardSlider(
+            guideTabRatingCardSliderModelList:
+                guideTabRatingCardSliderModelList,
           ),
 
           // second 'see more'
-          Container(
-            padding: const EdgeInsets.only(right: leftRightGlobalMargin),
-            height: 50,
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              onPressed: () {
-
-              },
+          // Latest Review button
+          InkWell(
+            child: Container(
+              padding: const EdgeInsets.only(right: leftRightGlobalMargin),
+              height: 30,
+              // color: Colors.red,
+              alignment: Alignment.centerRight,
               child: const Text(
                 'See More',
                 style: TextStyle(
-                  fontSize: 18,
+                  color: Color(InstaDaleelColors.primaryColor),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
@@ -350,69 +345,63 @@ class _GuideTabState extends State<GuideTab> {
           // divider
           const Divider(
             color: Colors.white,
-            height: 30,
+            height: 20,
             thickness: 3,
           ),
 
           // Latest Community text
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // refresh post
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: InkWell(
-                  onTap: () {
-                    GuideTabBehavior.latestPostSliderIndex = 0;
-                    GuideTabBehavior.setStateOfGuideTabLatestPostListView();
-                  },
-                  child: SizedBox(
-                    height: 40,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(
-                          Icons.replay_circle_filled_rounded,
-                          color: Color(InstaDaleelColors.primaryColor),
-                          size: 25,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(right: leftRightGlobalMargin),
-                child: Text(
-                  'Latest Community',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Color(InstaDaleelColors.primaryColor)
-                  ),
-                ),
-              ),
-            ],
-          ),
 
+          InkWell(
+            child: Container(
+              padding: const EdgeInsets.only(right: leftRightGlobalMargin),
+              height: 30,
+              // color: Colors.red,
+              alignment: Alignment.centerRight,
+              child: const Text(
+                'Latest Community',
+                style: TextStyle(
+                  color: Color(InstaDaleelColors.primaryColor),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
+          // const CommunityPostCard(
+          //   personName: 'Abdul Rashid',
+          //   imageUrl:
+          //       'https://scontent-lhr8-1.xx.fbcdn.net/v/t39.30808-6/311233719_2264720030344593_3533777974738364520_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=8bfeb9&_nc_ohc=_Fda4M2Yb_YAX-fZb1s&_nc_ht=scontent-lhr8-1.xx&oh=00_AT_b1OEOXfeod1Y5Ct7OKxHgMd3kToBcuGI0QF3aMjUXkw&oe=63467267',
+          //   personProfilePicLink:
+          //       'https://www.elitesingles.co.uk/wp-content/uploads/sites/59/2019/11/2b_en_articleslide_sm2-350x264.jpg',
+          //   postText:
+          //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vitae, at orci mattis augue est eu. Ac ullamcorper amet amet nullam sagittis malesuada. ',
+          //   likesCount: 23,
+          //   commentsCount: 32,
+          //   showImage: true,
+          //   isLiked: false,
+          //   customerId: -1,
+          // ),
+
+          // const SizedBox(
+          //   height: 10,
+          // ),
           // Latest Posts PageView.Builder
-          SizedBox(
-              height: 175,
-              width: MediaQuery.of(context).size.width,
-              child: const LatestPost()),
+          const LatestPost(),
 
           // third 'see more'
-          Container(
-            padding: const EdgeInsets.only(right: leftRightGlobalMargin),
-            height: 50,
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              onPressed: () {
-                HomePageBehavior.homePageTabController.index = 3;
-              },
+
+          InkWell(
+            child: Container(
+              padding: const EdgeInsets.only(right: leftRightGlobalMargin),
+              height: 30,
+              // color: Colors.red,
+              alignment: Alignment.centerRight,
               child: const Text(
                 'See More',
                 style: TextStyle(
-                  fontSize: 18,
+                  color: Color(InstaDaleelColors.primaryColor),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
@@ -421,7 +410,7 @@ class _GuideTabState extends State<GuideTab> {
           // divider
           const Divider(
             color: Colors.white,
-            height: 30,
+            height: 20,
             thickness: 3,
           ),
 
@@ -441,7 +430,7 @@ class _GuideTabState extends State<GuideTab> {
           // divider
           const Divider(
             color: Colors.white,
-            height: 30,
+            height: 20,
             thickness: 3,
           ),
 

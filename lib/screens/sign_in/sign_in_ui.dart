@@ -171,6 +171,9 @@ class _SignInState extends State<SignIn>
   @override
   void initState() {
     signingInIndicator();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      singleChildScrollController.jumpTo(0.0);
+    });
     super.initState();
   }
 
@@ -181,7 +184,7 @@ class _SignInState extends State<SignIn>
     } else {
       if (isKeyboardOpen) {
         isKeyboardOpen = false;
-        singleChildScrollController.jumpTo(0.0);
+        // singleChildScrollController.jumpTo(0.0);
       }
     }
     super.didChangeDependencies();
@@ -189,15 +192,15 @@ class _SignInState extends State<SignIn>
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusManager.instance.primaryFocus?.unfocus();
-        isKeyboardOpen = false;
-        singleChildScrollController.jumpTo(0.0);
-      },
-      child: Scaffold(
-        backgroundColor: const Color(InstaDaleelColors.backgroundColor),
-        body: SingleChildScrollView(
+    return Scaffold(
+      backgroundColor: const Color(InstaDaleelColors.backgroundColor),
+      body: GestureDetector(
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+          isKeyboardOpen = false;
+          singleChildScrollController.jumpTo(0.0);
+        },
+        child: SingleChildScrollView(
           controller: singleChildScrollController,
           physics: (isKeyboardOpen || MediaQuery.of(context).size.height < 650)
               ? const AlwaysScrollableScrollPhysics()

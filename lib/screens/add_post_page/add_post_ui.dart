@@ -17,10 +17,10 @@ class AddPostScreen extends StatefulWidget {
   State<AddPostScreen> createState() => _AddPostScreenState();
 }
 
-class _AddPostScreenState extends State<AddPostScreen> with AddPostBehavior, ConnectivityHandler {
-
+class _AddPostScreenState extends State<AddPostScreen>
+    with AddPostBehavior, ConnectivityHandler {
   void addPostIndicator() {
-    if(isPosting) {
+    if (isPosting) {
       setState(() {
         postButtonContent = const SizedBox(
           height: 20,
@@ -31,8 +31,7 @@ class _AddPostScreenState extends State<AddPostScreen> with AddPostBehavior, Con
           ),
         );
       });
-    }
-    else {
+    } else {
       setState(() {
         postButtonContent = const Text(
           'Post',
@@ -48,33 +47,37 @@ class _AddPostScreenState extends State<AddPostScreen> with AddPostBehavior, Con
     late Response response;
     isPosting = true;
     addPostIndicator();
-    if(await checkForInternetServiceAvailability(context)) {
+    if (await checkForInternetServiceAvailability(context)) {
       try {
-        response = await dio.post('https://insta-daleel.emicon.tech/api/add-post', queryParameters: {'token': bearerToken,},
-            options: Options(contentType: 'multipart/form-data'),
-            data: FormData.fromMap(
-              {
-                'customer_id': userId,
-                'description': postTextEditingController.text,
-                'images[]': multipartFileList,
-              },
-            )
-        );
+        response =
+            await dio.post('https://insta-daleel.emicon.tech/api/add-post',
+                queryParameters: {
+                  'token': bearerToken,
+                },
+                options: Options(contentType: 'multipart/form-data'),
+                data: FormData.fromMap(
+                  {
+                    'customer_id': userId,
+                    'description': postTextEditingController.text,
+                    'images[]': multipartFileList,
+                  },
+                ));
 
-        Map<String, dynamic> addPostResponseMap = response.data is Map<String, dynamic> ?
-        response.data : {};
+        Map<String, dynamic> addPostResponseMap =
+            response.data is Map<String, dynamic> ? response.data : {};
 
-        if(addPostResponseMap.isNotEmpty) {
-          String addPostResponseStatus = addPostResponseMap['status'] is String ? addPostResponseMap['status'] : '';
+        if (addPostResponseMap.isNotEmpty) {
+          String addPostResponseStatus = addPostResponseMap['status'] is String
+              ? addPostResponseMap['status']
+              : '';
 
-          if(addPostResponseStatus == 'success') {
+          if (addPostResponseStatus == 'success') {
+            Map<String, dynamic> addPostDataMap =
+                addPostResponseMap['data'] is Map<String, dynamic>
+                    ? addPostResponseMap['data']
+                    : {};
 
-            Map<String, dynamic> addPostDataMap = addPostResponseMap['data'] is Map<String, dynamic> ?
-            addPostResponseMap['data'] : {};
-
-            if(addPostDataMap.isNotEmpty) {
-
-            }
+            if (addPostDataMap.isNotEmpty) {}
 
             /*userName = updateProfileResponseMap['data'] is Map<String, dynamic> ?
             updateProfileResponseMap['data']['name'] is String ?
@@ -89,33 +92,48 @@ class _AddPostScreenState extends State<AddPostScreen> with AddPostBehavior, Con
             CommunityTabBehavior.setStateOfLatestPostListView();
             // profilePic = null;
             addPostIndicator();
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('post added successfully',),));
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text(
+                'post added successfully',
+              ),
+            ));
             Navigator.pop(context);
-          }
-          else if(addPostResponseStatus == 'error') {
+          } else if (addPostResponseStatus == 'error') {
             isPosting = false;
             addPostIndicator();
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('unable to post, please try again later',),));
-          }
-          else {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text(
+                'unable to post, please try again later',
+              ),
+            ));
+          } else {
             isPosting = false;
             addPostIndicator();
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('something went wrong, please try again1',),));
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text(
+                'something went wrong, please try again1',
+              ),
+            ));
           }
-        }
-        else {
+        } else {
           isPosting = false;
           addPostIndicator();
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('server not responding, please try again',),));
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+              'server not responding, please try again',
+            ),
+          ));
         }
-
       } on Exception {
         isPosting = false;
         addPostIndicator();
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('something went wrong, please try again2',),));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            'something went wrong, please try again2',
+          ),
+        ));
       }
-    }
-    else {
+    } else {
       isPosting = false;
       addPostIndicator();
     }
@@ -181,132 +199,143 @@ class _AddPostScreenState extends State<AddPostScreen> with AddPostBehavior, Con
             ),
 
             Expanded(
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  children: [
-                    Card(
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Container(
-                      height: 150,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: Colors.white,
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: leftRightGlobalMargin),
-                              child: Scrollbar(
-                                thickness: 1,
-                                controller: scrollController,
-                                child: TextField(
-                                  onTap: () {
-                                    isKeyboardOpen = true;
-                                  },
-                                  scrollController: scrollController,
-                                  textInputAction: TextInputAction.newline,
-                                  maxLines: 7,
-                                  controller: postTextEditingController,
-                                  textAlign: TextAlign.start,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                  ),
-                                  decoration: const InputDecoration(
-                                      hintText: 'what\'s in your mind?',
-                                      hintStyle: TextStyle(
-                                        color: Color(0xFFB1B1B1),
-                                        fontSize: 13,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      Card(
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Container(
+                          height: 150,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Colors.white,
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: leftRightGlobalMargin),
+                                  child: Scrollbar(
+                                    thickness: 1,
+                                    controller: scrollController,
+                                    child: TextField(
+                                      onTap: () {
+                                        isKeyboardOpen = true;
+                                      },
+                                      scrollController: scrollController,
+                                      textInputAction: TextInputAction.newline,
+                                      maxLines: 7,
+                                      controller: postTextEditingController,
+                                      textAlign: TextAlign.start,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black,
                                       ),
-                                      border: InputBorder.none),
-                                  cursorColor: const Color(InstaDaleelColors.primaryColor),
+                                      decoration: const InputDecoration(
+                                          contentPadding: EdgeInsets.all(8),
+                                          hintText: 'what\'s in your mind?',
+                                          hintStyle: TextStyle(
+                                            color: Color(0xFFB1B1B1),
+                                            fontSize: 13,
+                                          ),
+                                          border: InputBorder.none),
+                                      cursorColor: const Color(
+                                          InstaDaleelColors.primaryColor),
+                                    ),
+                                  ),
                                 ),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.only(left: 5),
+                                child: VerticalDivider(
+                                  color: Color(InstaDaleelColors.primaryColor),
+                                  thickness: 0.5,
+                                  indent: 8,
+                                  endIndent: 8,
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () async {
+                                  postPicsList =
+                                      await imagePicker.pickMultiImage();
+
+                                  if (postPicsList != null) {
+                                    for (XFile element in postPicsList!) {
+                                      multipartFileList.add(MultipartFile(
+                                          File(element.path).openRead(),
+                                          await element.length(),
+                                          filename: element.name));
+                                    }
+                                  }
+                                  setState(() {});
+                                },
+                                child: const Padding(
+                                    padding:
+                                        EdgeInsets.only(right: 20, left: 10),
+                                    child: Icon(
+                                      Icons.camera_alt_outlined,
+                                      color:
+                                          Color(InstaDaleelColors.primaryColor),
+                                    )),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount:
+                            postPicsList != null ? postPicsList!.length : 0,
+                        itemBuilder: (context, index) => SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          physics: const BouncingScrollPhysics(),
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 10, top: 5),
+                            child: Text(
+                              '${index + 1} - ${postPicsList![index].name}',
+                            ),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          isKeyboardOpen = false;
+                          if (!isPosting) {
+                            addPost();
+                          }
+                        },
+                        child: SizedBox(
+                          height: 70,
+                          width: MediaQuery.of(context).size.width,
+                          child: Center(
+                            child: Container(
+                              height: 45,
+                              width: MediaQuery.of(context).size.width - 30,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25),
+                                  color: const Color(
+                                      InstaDaleelColors.primaryColor)),
+                              child: Center(
+                                child: postButtonContent,
                               ),
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(left: 5),
-                            child: VerticalDivider(
-                              color: Color(InstaDaleelColors.primaryColor),
-                              thickness: 0.5,
-                              indent: 8,
-                              endIndent: 8,
-                            ),
-                          ),
-
-                          GestureDetector(
-                            onTap: () async {
-                              postPicsList = await imagePicker.pickMultiImage();
-
-                              if(postPicsList != null) {
-                                for (XFile element in postPicsList!) {
-                                  multipartFileList.add(MultipartFile(File(element.path).openRead(), await element.length(), filename: element.name));
-                                }
-                              }
-                              setState(() {});
-                            },
-                            child: const Padding(
-                                padding: EdgeInsets.only(right: 20, left: 10),
-                                child: Icon(
-                                  Icons.camera_alt_outlined,
-                                  color: Color(InstaDaleelColors.primaryColor),
-                                )
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
+
+                      // Expanded(child: Container(color: Colors.transparent,))
+                    ],
                   ),
-
-                    ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: postPicsList != null ? postPicsList!.length : 0,
-                      itemBuilder: (context, index) => SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        physics: const BouncingScrollPhysics(),
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 10, top: 5),
-                          child: Text(
-                            '${index + 1} - ${postPicsList![index].name}',
-                          ),
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        FocusManager.instance.primaryFocus?.unfocus();
-                        isKeyboardOpen = false;
-                        if(!isPosting) {
-                          addPost();
-                        }
-                      },
-                      child: SizedBox(
-                        height: 70,
-                        width: MediaQuery.of(context).size.width,
-                        child: Center(
-                          child: Container(
-                            height: 45,
-                            width: MediaQuery.of(context).size.width - 30,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25),
-                                color: const Color(InstaDaleelColors.primaryColor)
-                            ),
-                            child: Center(
-                              child: postButtonContent,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    // Expanded(child: Container(color: Colors.transparent,))
-                  ],
                 ),
               ),
             ),

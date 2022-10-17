@@ -13,57 +13,65 @@ class EventsTab extends StatefulWidget {
   State<EventsTab> createState() => _EventsTabState();
 }
 
-class _EventsTabState extends State<EventsTab> with EventTabBehavior, ConnectivityHandler {
-
+class _EventsTabState extends State<EventsTab>
+    with EventTabBehavior, ConnectivityHandler {
   Future<List<dynamic>> getEventResponseData({int page = 1}) async {
-    if(await checkForInternetServiceAvailability(context)) {
+    if (await checkForInternetServiceAvailability(context)) {
       try {
-        eventResponse = await dio.get('https://insta-daleel.emicon.tech/api/get-event', queryParameters: {
-          'token': bearerToken,
-          'page': page,
-        },);
+        eventResponse = await dio.get(
+          'https://insta-daleel.emicon.tech/api/get-event',
+          queryParameters: {
+            'token': bearerToken,
+            'page': page,
+          },
+        );
 
         EventTabBehavior.isEventResponseDataListFutureLoaded = true;
 
-        Map<String, dynamic> eventResponseMap = eventResponse.data is Map<String, dynamic> ? eventResponse.data : {};
+        Map<String, dynamic> eventResponseMap =
+            eventResponse.data is Map<String, dynamic>
+                ? eventResponse.data
+                : {};
 
-        if(eventResponseMap.isNotEmpty) {
-          String status = eventResponseMap['status'] is String ? eventResponseMap['status'] : '';
-          if(status == 'success') {
-            EventTabBehavior.eventDataMap = eventResponseMap['data'] is Map<String, dynamic> ? eventResponseMap['data'] : {};
-            if(EventTabBehavior.eventDataMap.isNotEmpty) {
-              List<dynamic> eventDataList = EventTabBehavior.eventDataMap['data'] is List<dynamic> ? EventTabBehavior.eventDataMap['data'] : [];
+        if (eventResponseMap.isNotEmpty) {
+          String status = eventResponseMap['status'] is String
+              ? eventResponseMap['status']
+              : '';
+          if (status == 'success') {
+            EventTabBehavior.eventDataMap =
+                eventResponseMap['data'] is Map<String, dynamic>
+                    ? eventResponseMap['data']
+                    : {};
+            if (EventTabBehavior.eventDataMap.isNotEmpty) {
+              List<dynamic> eventDataList =
+                  EventTabBehavior.eventDataMap['data'] is List<dynamic>
+                      ? EventTabBehavior.eventDataMap['data']
+                      : [];
               return eventDataList;
-            }
-            else {
+            } else {
               return [];
             }
-          }
-          else {
+          } else {
             return [];
           }
-        }
-        else {
+        } else {
           return [];
         }
-      }
-      catch(e) {
+      } catch (e) {
         return [];
       }
-    }
-    else {
+    } else {
       return [];
     }
   }
 
   @override
   void initState() {
-    if(!EventTabBehavior.isEventResponseDataListFutureLoaded) {
+    if (!EventTabBehavior.isEventResponseDataListFutureLoaded) {
       EventTabBehavior.eventResponseDataListFuture = getEventResponseData();
     }
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -72,25 +80,31 @@ class _EventsTabState extends State<EventsTab> with EventTabBehavior, Connectivi
       child: Column(
         children: [
           // City and Time Drop down
+          const SizedBox(
+            height: 20,
+          ),
           Container(
             alignment: Alignment.bottomCenter,
-            height: 70,
-            margin: const EdgeInsets.only(bottom: 15),
+            height: 50,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Card(
-                  elevation: 3,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
+                Expanded(
                   child: Container(
                     padding: const EdgeInsets.only(left: 15, right: 15),
-                    height: 50,
-                    width: 150,
+                    height: 45,
+                    // width: ,
                     decoration: BoxDecoration(
                       color: const Color(InstaDaleelColors.primaryColor),
                       borderRadius: BorderRadius.circular(30),
+                      boxShadow: const [
+                        BoxShadow(
+                          blurRadius: 5,
+                          offset: Offset(2, 2),
+                          color: Color.fromRGBO(34, 168, 243, 0.5),
+                        )
+                      ],
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -109,18 +123,23 @@ class _EventsTabState extends State<EventsTab> with EventTabBehavior, Connectivi
                     ),
                   ),
                 ),
-                Card(
-                  elevation: 3,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
+                const SizedBox(
+                  width: 20,
+                ),
+                Expanded(
                   child: Container(
                     padding: const EdgeInsets.only(left: 15, right: 15),
-                    height: 50,
-                    width: 150,
+                    height: 45,
                     decoration: BoxDecoration(
                       color: const Color(InstaDaleelColors.primaryColor),
                       borderRadius: BorderRadius.circular(30),
+                      boxShadow: const [
+                        BoxShadow(
+                          blurRadius: 5,
+                          offset: Offset(2, 2),
+                          color: Color.fromRGBO(34, 168, 243, 0.5),
+                        )
+                      ],
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -144,130 +163,167 @@ class _EventsTabState extends State<EventsTab> with EventTabBehavior, Connectivi
           ),
 
           // divider
-          const Divider(
-            color: Colors.white,
-            height: 20,
-            thickness: 3,
-          ),
+          // const Divider(
+          //   color: Colors.white,
+          //   height: 20,
+          //   thickness: 3,
+          // ),
 
           // refresh post
-          InkWell(
-            onTap: () {
-              setState(() {});
-              EventTabBehavior.eventResponseDataListFuture = getEventResponseData();
-            },
-            child: SizedBox(
-              height: 40,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(
-                    Icons.replay_circle_filled_rounded,
-                    color: Color(InstaDaleelColors.primaryColor),
-                    size: 25,
-                  ),
-                  SizedBox(width: 10,),
-                  Text(
-                    'Refresh',
-                    style: TextStyle(
-                        color: Color(InstaDaleelColors.primaryColor),
-                        fontWeight: FontWeight.bold
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
+          // InkWell(
+          //   onTap: () {
+          //     setState(() {});
+          //     EventTabBehavior.eventResponseDataListFuture = getEventResponseData();
+          //   },
+          //   child: SizedBox(
+          //     height: 40,
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       children: const [
+          //         Icon(
+          //           Icons.replay_circle_filled_rounded,
+          //           color: Color(InstaDaleelColors.primaryColor),
+          //           size: 25,
+          //         ),
+          //         SizedBox(width: 10,),
+          //         Text(
+          //           'Refresh',
+          //           style: TextStyle(
+          //               color: Color(InstaDaleelColors.primaryColor),
+          //               fontWeight: FontWeight.bold
+          //           ),
+          //         )
+          //       ],
+          //     ),
+          //   ),
+          // ),
 
           // divider
-          const Divider(
-            color: Colors.white,
-            height: 20,
-            thickness: 3,
-          ),
+          // const Divider(
+          //   color: Colors.white,
+          //   height: 20,
+          //   thickness: 3,
+          // ),
 
-          const SizedBox(height: 15,),
+          const SizedBox(
+            height: 25,
+          ),
 
           // Event Cards
           FutureBuilder<List<dynamic>>(
             future: EventTabBehavior.eventResponseDataListFuture,
             initialData: const [],
-            builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
-              if(snapshot.connectionState == ConnectionState.waiting) {
+            builder:
+                (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
-              }
-              else if(snapshot.connectionState == ConnectionState.done && snapshot.hasData && snapshot.data!.isNotEmpty) {
+              } else if (snapshot.connectionState == ConnectionState.done &&
+                  snapshot.hasData &&
+                  snapshot.data!.isNotEmpty) {
                 return Column(
                   children: [
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        String date = snapshot.data![index] is Map<String, dynamic> ?
-                        snapshot.data![index]['date'] is String ?
-                        snapshot.data![index]['date'] : '---' : '---';
-
-                        String time = snapshot.data![index] is Map<String, dynamic> ?
-                        snapshot.data![index]['time'] is String ?
-                        snapshot.data![index]['time'] : '---' : '---';
-
-                        return EventCard(
-                        onTap: (){
-                          int eventId = snapshot.data![index] is Map<String, dynamic> ?
-                          snapshot.data![index]['id'] is int ?
-                          snapshot.data![index]['id'] : -1 : -1;
-
-                          Navigator.pushNamed(context, 'EventDetail', arguments: eventId);
-                        },
-                        title: snapshot.data![index] is Map<String, dynamic> ?
-                        snapshot.data![index]['title'] is String ?
-                        snapshot.data![index]['title'] : '---' : '---',
-                        dateAndTime: '$date At $time',
-                        backgroundImageLink: snapshot.data![index] is Map<String, dynamic> ?
-                        snapshot.data![index]['image'] is String ?
-                        'https://insta-daleel.emicon.tech/images/event/${snapshot.data![index]['image']}' :
-                        'https://bitsofco.de/content/images/2018/12/broken-1.png'
-                            :
-                        'https://bitsofco.de/content/images/2018/12/broken-1.png',
-                        iconPath: 'assets/images/main_page/home_page/events_tab/calender_add_icon.png',
-                      );
+                    RefreshIndicator(
+                      onRefresh: () async {
+                        EventTabBehavior.eventResponseDataListFuture =
+                            getEventResponseData();
+                        setState(() {});
                       },
-                    ),
-                    SizedBox(
-                      height: 70,
                       child: ListView.builder(
                         shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
                         physics: const BouncingScrollPhysics(),
-                        itemCount:EventTabBehavior.eventDataMap.isNotEmpty ?
-                        EventTabBehavior.eventDataMap['last_page'] is int ?
-                        EventTabBehavior.eventDataMap['last_page'] : 0 : 0 ,
+                        itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
-                          int currentPageIndex = EventTabBehavior.eventDataMap.isNotEmpty ?
-                          EventTabBehavior.eventDataMap['current_page'] is int ?
-                          EventTabBehavior.eventDataMap['current_page'] : 0 : 0;
-                          return IconButton(
-                            icon: Text('${index+1}',
-                              style: TextStyle(
-                                color:  const Color(InstaDaleelColors.primaryColor),
-                                fontWeight: (index + 1) == currentPageIndex  ? FontWeight.bold : FontWeight.normal,
-                                fontSize: (index + 1) == currentPageIndex ? 20 : 14,
-                              ),),
-                            onPressed: () {
-                              setState(() {});
-                              EventTabBehavior.eventResponseDataListFuture = getEventResponseData(page: index + 1);
+                          String date =
+                              snapshot.data![index] is Map<String, dynamic>
+                                  ? snapshot.data![index]['date'] is String
+                                      ? snapshot.data![index]['date']
+                                      : '---'
+                                  : '---';
+
+                          String time =
+                              snapshot.data![index] is Map<String, dynamic>
+                                  ? snapshot.data![index]['time'] is String
+                                      ? snapshot.data![index]['time']
+                                      : '---'
+                                  : '---';
+
+                          return EventCard(
+                            onTap: () {
+                              int eventId =
+                                  snapshot.data![index] is Map<String, dynamic>
+                                      ? snapshot.data![index]['id'] is int
+                                          ? snapshot.data![index]['id']
+                                          : -1
+                                      : -1;
+
+                              Navigator.pushNamed(context, 'EventDetail',
+                                  arguments: eventId);
                             },
+                            title: snapshot.data![index] is Map<String, dynamic>
+                                ? snapshot.data![index]['title'] is String
+                                    ? snapshot.data![index]['title']
+                                    : '---'
+                                : '---',
+                            dateAndTime: '$date At $time',
+                            backgroundImageLink: snapshot.data![index]
+                                    is Map<String, dynamic>
+                                ? snapshot.data![index]['image'] is String
+                                    ? 'https://insta-daleel.emicon.tech/images/event/${snapshot.data![index]['image']}'
+                                    : 'https://bitsofco.de/content/images/2018/12/broken-1.png'
+                                : 'https://bitsofco.de/content/images/2018/12/broken-1.png',
+                            iconPath:
+                                'assets/images/main_page/home_page/events_tab/calender_add_icon.png',
                           );
                         },
                       ),
                     ),
+                    // SizedBox(
+                    //   height: 70,
+                    //   child: ListView.builder(
+                    //     shrinkWrap: true,
+                    //     scrollDirection: Axis.horizontal,
+                    //     physics: const BouncingScrollPhysics(),
+                    //     itemCount: EventTabBehavior.eventDataMap.isNotEmpty
+                    //         ? EventTabBehavior.eventDataMap['last_page'] is int
+                    //             ? EventTabBehavior.eventDataMap['last_page']
+                    //             : 0
+                    //         : 0,
+                    //     itemBuilder: (context, index) {
+                    //       int currentPageIndex = EventTabBehavior
+                    //               .eventDataMap.isNotEmpty
+                    //           ? EventTabBehavior.eventDataMap['current_page']
+                    //                   is int
+                    //               ? EventTabBehavior
+                    //                   .eventDataMap['current_page']
+                    //               : 0
+                    //           : 0;
+                    //       return IconButton(
+                    //         icon: Text(
+                    //           '${index + 1}',
+                    //           style: TextStyle(
+                    //             color:
+                    //                 const Color(InstaDaleelColors.primaryColor),
+                    //             fontWeight: (index + 1) == currentPageIndex
+                    //                 ? FontWeight.bold
+                    //                 : FontWeight.normal,
+                    //             fontSize:
+                    //                 (index + 1) == currentPageIndex ? 20 : 14,
+                    //           ),
+                    //         ),
+                    //         onPressed: () {
+                    //           setState(() {});
+                    //           EventTabBehavior.eventResponseDataListFuture =
+                    //               getEventResponseData(page: index + 1);
+                    //         },
+                    //       );
+                    //     },
+                    //   ),
+                    // ),
                   ],
                 );
-              }
-              else {
+              } else {
                 return const Center(
                   child: Text('no event'),
                 );

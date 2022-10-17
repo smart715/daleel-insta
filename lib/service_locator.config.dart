@@ -12,12 +12,14 @@ import 'package:internet_connection_checker/internet_connection_checker.dart'
 
 import 'commons/network/api_client.dart' as _i4;
 import 'commons/network/network_info.dart' as _i6;
-import 'data/datasources/remote_datasource.dart' as _i7;
-import 'data/repositories/repository_impl.dart' as _i9;
-import 'domain/repositories/repository.dart' as _i8;
-import 'module_registry.dart' as _i10;
+import 'data/datasources/remote_datasource.dart' as _i8;
+import 'data/repositories/repository_impl.dart' as _i10;
+import 'domain/repositories/repository.dart' as _i9;
+import 'module_registry.dart' as _i11;
 import 'screens/manage_account/account_page/states/account_notifier.dart'
-    as _i3; // ignore_for_file: unnecessary_lambdas
+    as _i3;
+import 'screens/profile_page/profile_state_controller.dart'
+    as _i7; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars
 /// initializes the registration of provided dependencies inside of [GetIt]
@@ -38,13 +40,15 @@ _i1.GetIt $initGetIt(
       () => registerModule.connectionChecker);
   gh.factory<_i6.NetworkInfo>(() => _i6.NetworkInfoImpl(
       connectionChecker: get<_i5.InternetConnectionChecker>()));
-  gh.lazySingleton<_i7.RemoteDataSource>(
-      () => _i7.RemoteDataSource(apiClient: get<_i4.ApiClient>()));
-  gh.lazySingleton<_i8.Repository>(() => _i9.RepositoryImpl(
+  gh.lazySingleton<_i7.ProfileStateController>(
+      () => _i7.ProfileStateController());
+  gh.lazySingleton<_i8.RemoteDataSource>(
+      () => _i8.RemoteDataSource(apiClient: get<_i4.ApiClient>()));
+  gh.lazySingleton<_i9.Repository>(() => _i10.RepositoryImpl(
         networkInfo: get<_i6.NetworkInfo>(),
-        remoteDataSource: get<_i7.RemoteDataSource>(),
+        remoteDataSource: get<_i8.RemoteDataSource>(),
       ));
   return get;
 }
 
-class _$RegisterModule extends _i10.RegisterModule {}
+class _$RegisterModule extends _i11.RegisterModule {}

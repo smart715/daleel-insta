@@ -12,8 +12,8 @@ class GuideTabCategorySection extends StatefulWidget {
       _GuideTabCategorySectionState();
 }
 
-class _GuideTabCategorySectionState extends State<GuideTabCategorySection> with GuideTabBehavior, ConnectivityHandler {
-
+class _GuideTabCategorySectionState extends State<GuideTabCategorySection>
+    with GuideTabBehavior, ConnectivityHandler {
   Future<List<dynamic>> getCategoryResponseData() async {
     if (await checkForInternetServiceAvailability(context)) {
       try {
@@ -70,7 +70,7 @@ class _GuideTabCategorySectionState extends State<GuideTabCategorySection> with 
       builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return SizedBox(
-            height: 250,
+            height: 145,
             width: MediaQuery.of(context).size.width,
             child: const Center(
               child: CircularProgressIndicator(),
@@ -79,34 +79,42 @@ class _GuideTabCategorySectionState extends State<GuideTabCategorySection> with 
         } else if (snapshot.connectionState == ConnectionState.done &&
             snapshot.hasData &&
             snapshot.data!.isNotEmpty) {
-          return ListView.builder(
-            shrinkWrap: true,
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) =>
-                GuideTabCategorySectionCircularAvatar(
-              iconLink: snapshot.data![index] is Map<String, dynamic>
-                  ? snapshot.data![index]['icon'] is String
-                      ? 'https://insta-daleel.emicon.tech/images/category/${snapshot.data![index]['icon']}'
-                      : 'https://cdn-icons-png.flaticon.com/512/159/159469.png'
-                  : 'https://cdn-icons-png.flaticon.com/512/159/159469.png',
-              name: snapshot.data![index] is Map<String, dynamic>
-                  ? snapshot.data![index]['name'] is String
-                      ? snapshot.data![index]['name']
-                      : '---'
-                  : '---',
-              onTap: () {
-                Navigator.pushNamed(context, 'SubCategories', arguments: <String>[
-                  snapshot.data![index] is Map<String, dynamic> ?
-                  snapshot.data![index]['id'] is int ?
-                  snapshot.data![index]['id'].toString() : '---' : '---',
-                  snapshot.data![index] is Map<String, dynamic> ?
-                  snapshot.data![index]['name'] is String ?
-                  snapshot.data![index]['name'] : '---' : '---',
-                ]);
-              },
+          return SizedBox(
+            height: 145,
+            child: ListView.builder(
+              shrinkWrap: false,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              physics: const BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) =>
+                  GuideTabCategorySectionCircularAvatar(
+                iconLink: snapshot.data![index] is Map<String, dynamic>
+                    ? snapshot.data![index]['icon'] is String
+                        ? 'https://insta-daleel.emicon.tech/images/category/${snapshot.data![index]['icon']}'
+                        : 'https://cdn-icons-png.flaticon.com/512/159/159469.png'
+                    : 'https://cdn-icons-png.flaticon.com/512/159/159469.png',
+                name: snapshot.data![index] is Map<String, dynamic>
+                    ? snapshot.data![index]['name'] is String
+                        ? snapshot.data![index]['name']
+                        : '---'
+                    : '---',
+                onTap: () {
+                  Navigator.pushNamed(context, 'SubCategories',
+                      arguments: <String>[
+                        snapshot.data![index] is Map<String, dynamic>
+                            ? snapshot.data![index]['id'] is int
+                                ? snapshot.data![index]['id'].toString()
+                                : '---'
+                            : '---',
+                        snapshot.data![index] is Map<String, dynamic>
+                            ? snapshot.data![index]['name'] is String
+                                ? snapshot.data![index]['name']
+                                : '---'
+                            : '---',
+                      ]);
+                },
+              ),
             ),
           );
         } else {
@@ -138,22 +146,45 @@ class GuideTabCategorySectionCircularAvatar extends StatelessWidget {
       onTap: onTap,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 4.0),
-            height: 75,
-            width: 75,
+            margin: const EdgeInsets.only(right: 20.0),
+            height: 80,
+            width: 80,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(40),
-                image: const DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage(
-                      'assets/images/main_page/home_page/guide_tab/guid_tab_guide_section_circular_avatar_background.png',
-                    ))),
+              borderRadius: BorderRadius.circular(40),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color.fromRGBO(34, 168, 243, 1),
+                  offset: Offset(2.0, 1.0),
+                  blurRadius: 6.0,
+                ),
+              ],
+              gradient: const LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: <Color>[
+                  Color.fromRGBO(6, 122, 225, 0.79),
+                  Color.fromRGBO(0, 175, 251, 0.79),
+                ],
+                stops: [
+                  0.0,
+                  1.0,
+                ],
+                tileMode: TileMode.mirror,
+              ),
+              // image: const DecorationImage(
+              //   fit: BoxFit.cover,
+              //   image: AssetImage(
+              //     'assets/images/main_page/home_page/guide_tab/guid_tab_guide_section_circular_avatar_background.png',
+              //   ),
+              // ),
+            ),
             child: Center(
               child: CachedNetworkImage(
-                height: 30,
-                width: 30,
+                height: 36,
+                width: 36,
                 fit: BoxFit.fill,
                 imageUrl: iconLink,
                 placeholder: (BuildContext context, String url) => const Center(
@@ -170,20 +201,29 @@ class GuideTabCategorySectionCircularAvatar extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
+            height: 8,
+          ),
+          Container(
+            margin: const EdgeInsets.only(right: 20.0),
+            // color: Colors.red,
             width: 75,
             height: 45,
-            child: Center(
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Text(
-                  name,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 12,
+            child: SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    name,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           )
