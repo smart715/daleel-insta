@@ -64,7 +64,10 @@ class UserProfileDto with _$UserProfileDto {
       maritalStatus: enumFromString<MaritalStatus>(marital_status),
       occupation: enumFromString<Occupation>(occupation),
       profileImage: (image != null)
-          ? 'https://insta-daleel.emicon.tech/images/customer/$image'
+          ? (!image!.contains(
+                  'https://insta-daleel.emicon.tech/images/customer/'))
+              ? 'https://insta-daleel.emicon.tech/images/customer/$image'
+              : image
           : null,
     );
   }

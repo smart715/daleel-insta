@@ -28,7 +28,7 @@ class ProfilePage extends ConsumerStatefulWidget {
 
 class _ProfilePageState extends ConsumerState<ProfilePage>
     with ProfilePageBehavior {
-  late UserProfile profile;
+  // late UserProfile profile;
   List<HistoryNote> historyList = [];
   double totalCoin = 0;
   @override
@@ -42,7 +42,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
-    profile = ref.watch(profileStateProvider).profile;
+    final profileNotifier = ref.watch(profileStateProvider);
+    UserProfile profile = profileNotifier.profile;
     return Scaffold(
       backgroundColor: const Color(InstaDaleelColors.backgroundColor),
       body: Column(

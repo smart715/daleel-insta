@@ -2,16 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:injectable/injectable.dart';
 import 'package:insta_daleel/domain/entities/user_profile.dart';
 import 'package:insta_daleel/domain/repositories/repository.dart';
 import 'package:insta_daleel/service_locator.dart';
 
-final profileStateProvider = ChangeNotifierProvider((ref) {
-  return serviceLocator<ProfileStateController>();
+final profileStateProvider = ChangeNotifierProvider.autoDispose((ref) {
+  return ProfileStateController();
 });
 
-@LazySingleton()
+// @LazySingleton()
 class ProfileStateController extends ChangeNotifier {
   ProfileStateController() {
     _init();
@@ -21,7 +20,10 @@ class ProfileStateController extends ChangeNotifier {
     profile = serviceLocator<Repository>().getUserProfile();
   }
 
-  updateProfile(UserProfile profile, {File? image}) async {
-    // profile = await
+  setNewProfile(UserProfile p) {
+    profile = p;
+    notifyListeners();
   }
+
+  updateProfile(UserProfile p, {File? image}) async {}
 }

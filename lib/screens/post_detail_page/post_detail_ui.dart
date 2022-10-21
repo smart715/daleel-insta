@@ -332,15 +332,16 @@ class _PostDetailPageState extends State<PostDetailPage>
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(40),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    offset: Offset(3, 3),
-                                    blurRadius: 11,
-                                    color: Color.fromRGBO(177, 177, 177, 0.3),
-                                  )
-                                ],),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(40),
+                              boxShadow: const [
+                                BoxShadow(
+                                  offset: Offset(3, 3),
+                                  blurRadius: 11,
+                                  color: Color.fromRGBO(177, 177, 177, 0.3),
+                                )
+                              ],
+                            ),
                             child: Column(
                               // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [

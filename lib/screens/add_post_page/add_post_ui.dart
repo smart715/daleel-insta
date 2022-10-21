@@ -1,23 +1,25 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:insta_daleel/network_connectivity_handler.dart';
 import 'package:insta_daleel/screens/add_post_page/add_post_behavior.dart';
+import 'package:insta_daleel/screens/profile_page/profile_state_controller.dart';
 import '../../constants/colors.dart';
 import '../../global_members.dart';
 import '../main_page/home_page/tabs/community/community_tab_widgets/community_tab_behavior.dart';
 
-class AddPostScreen extends StatefulWidget {
+class AddPostScreen extends ConsumerStatefulWidget {
   const AddPostScreen({Key? key}) : super(key: key);
 
   static const addPostScreenRoute = 'AddPostScreen';
 
   @override
-  State<AddPostScreen> createState() => _AddPostScreenState();
+  ConsumerState<AddPostScreen> createState() => _AddPostScreenState();
 }
 
-class _AddPostScreenState extends State<AddPostScreen>
+class _AddPostScreenState extends ConsumerState<AddPostScreen>
     with AddPostBehavior, ConnectivityHandler {
   void addPostIndicator() {
     if (isPosting) {
@@ -44,6 +46,7 @@ class _AddPostScreenState extends State<AddPostScreen>
   }
 
   void addPost() async {
+    userId = ref.read(profileStateProvider).profile.id;
     late Response response;
     isPosting = true;
     addPostIndicator();

@@ -1,25 +1,27 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:insta_daleel/network_connectivity_handler.dart';
+import 'package:insta_daleel/screens/profile_page/profile_state_controller.dart';
 import '../../constants/colors.dart';
 import '../../global_members.dart';
 import '../main_page/home_page/tabs/community/community_tab_widgets/community_tab_behavior.dart';
 import '../post_detail_page/post_detail_behavior.dart';
 import 'add_comment_behavior.dart';
 
-class AddCommentScreen extends StatefulWidget {
+class AddCommentScreen extends ConsumerStatefulWidget {
   const AddCommentScreen({Key? key, required this.postId}) : super(key: key);
 
   static const addCommentScreenRoute = 'AddCommentScreen';
   final int postId;
 
   @override
-  State<AddCommentScreen> createState() => _AddCommentScreenState();
+  ConsumerState<AddCommentScreen> createState() => _AddCommentScreenState();
 }
 
-class _AddCommentScreenState extends State<AddCommentScreen>
+class _AddCommentScreenState extends ConsumerState<AddCommentScreen>
     with AddCommentBehavior, ConnectivityHandler {
   void addCommentIndicator() {
     if (isPostingComment) {
@@ -46,6 +48,7 @@ class _AddCommentScreenState extends State<AddCommentScreen>
   }
 
   void addComment() async {
+    userId = ref.read(profileStateProvider).profile.id;
     late Response response;
     isPostingComment = true;
     addCommentIndicator();

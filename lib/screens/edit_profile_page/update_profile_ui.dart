@@ -115,6 +115,7 @@ class _UpdateProfileState extends ConsumerState<UpdateProfile>
             profile = UserProfileDto.fromJson(updateProfileResponseMap['data'])
                 .toDomain();
 
+            ref.read(profileStateProvider).setNewProfile(profile);
             userName = updateProfileResponseMap['data'] is Map<String, dynamic>
                 ? updateProfileResponseMap['data']['name'] is String
                     ? updateProfileResponseMap['data']['name']
@@ -203,10 +204,13 @@ class _UpdateProfileState extends ConsumerState<UpdateProfile>
   void initState() {
     isKeyboardOpen = false;
     savingDataIndicator();
+
+    initProfile();
     super.initState();
   }
 
   initProfile() {
+    profile = ref.read(profileStateProvider).profile;
     firstNameFieldTextEditingController.text = profile.firstName ?? '';
     lastNameFieldTextEditingController.text = profile.lastName ?? '';
     nickNameFieldTextEditingController.text = profile.nickName ?? '';
@@ -296,7 +300,6 @@ class _UpdateProfileState extends ConsumerState<UpdateProfile>
   @override
   Widget build(BuildContext context) {
     profile = ref.watch(profileStateProvider).profile;
-    initProfile();
     computeProgress();
     return Scaffold(
       backgroundColor: const Color(InstaDaleelColors.backgroundColor),
